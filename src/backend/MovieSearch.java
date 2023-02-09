@@ -1,3 +1,4 @@
+package backend;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -5,7 +6,6 @@ import org.json.simple.parser.JSONParser;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class MovieSearch {
                     String title = (String) movie.get("title");
                     this.movieNames.add(new Movie(title, ""));
                 }
-//                for (Movie movie : movieNames) {
+//                for (backend.Movie movie : movieNames) {
 //                    System.out.println(movie.getTitle());
 //                }
 
@@ -150,7 +150,7 @@ public class MovieSearch {
                 }
                 //System.out.println(title);
 
-//                for (Movie movie : MovieNames) {
+//                for (backend.Movie movie : MovieNames) {
 //                    System.out.println(movie.getTitle());
 //                }
             }
