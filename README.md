@@ -1,3 +1,3 @@
 # Bookmark
 
-<img alt="Bookmark Demo" src="bookmark_demo.gif" >
+<img alt="Bookmark Demo" src="demo_bookmark.gif" >
