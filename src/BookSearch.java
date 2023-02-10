@@ -10,10 +10,13 @@ import java.util.Set;
 
 public class BookSearch {
 
+    private Set<Book> books = new HashSet<Book>();
+
     public BookSearch () {
     }
 
     public void searchBookName (String search) {
+        this.books.clear();
         search = search.replaceAll(" ", "+");
         try {
             URL url = new URL("https://openlibrary.org/search.json?q=" + search);
@@ -41,23 +44,21 @@ public class BookSearch {
 
                 JSONArray arr = (JSONArray) bookData.get("docs");
 
-                Set<Book> bookSet = new HashSet<Book>();
 
                 for (Object o : arr) {
                     JSONObject book = (JSONObject) o;
                     String title = (String) book.get("title_suggest");
                     String author = (String) book.get("author");
-                    bookSet.add(new Book(title, author,""));
-                }
-                for (Book book : bookSet) {
-                    System.out.println(book.getTitle());
+                    this.books.add(new Book(title, author,""));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return this.books;
     }
     public void searchBookAuthor (String search) {
+        this.books.clear();
         search = search.replaceAll(" ", "%20");
         try {
             URL url = new URL("https://openlibrary.org/search.json?author=" + search + "&sort=new");
@@ -85,24 +86,22 @@ public class BookSearch {
 
                 JSONArray arr = (JSONArray) bookData.get("docs");
 
-                Set<Book> bookSet = new HashSet<Book>();
 
                 for (Object o : arr) {
                     JSONObject book = (JSONObject) o;
                     String title = (String) book.get("title_suggest");
                     String author = (String) book.get("author");
-                    bookSet.add(new Book(title, author, ""));
-                }
-                for (Book book : bookSet) {
-                    System.out.println(book.getTitle());
+                    this.books.add(new Book(title, author, ""));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return this.books;
     }
 
     public void SearchBookGenre(String search){
+        this.books.clear();
             search = search.replaceAll(" ", "%20");
             try {
                 URL url = new URL("https://openlibrary.org/search.json?subject=" + search + "&sort=new");
@@ -136,14 +135,12 @@ public class BookSearch {
                         JSONObject book = (JSONObject) o;
                         String title = (String) book.get("title_suggest");
                         String author = (String) book.get("author");
-                        bookSet.add(new Book(title, author,""));
-                    }
-                    for (Book book : bookSet) {
-                        System.out.println(book.getTitle());
+                        this.books.add(new Book(title, author,""));
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return this.books;
     }
 }
