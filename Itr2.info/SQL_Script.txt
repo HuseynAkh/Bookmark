@@ -1,3 +1,5 @@
+CREATE SCHEMA bookmark; 
+
 CREATE TABLE bookmark.my_book_list(
 	book_ID INT NOT NULL AUTO_INCREMENT,
     user_ID INT NOT NULL,
