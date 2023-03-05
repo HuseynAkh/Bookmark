@@ -11,11 +11,11 @@
 <?import javafx.scene.control.ListView?>
 <AnchorPane prefHeight="1080" prefWidth="1920.0" style="-fx-background-color: #0f0e26;" xmlns:fx="http://javafx.com/fxml" fx:controller="home.BookmarkController">
 
-    <Label fx:id="searchingText"/>
+    <Label fx:id="ErrorChecking"/>
 
     <children>
         <TextField fx:id="searchText" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
-        <ChoiceBox fx:id="firstChoiceBox" value="Type" layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="78.0" onAction="#onChoiceClick">
+        <ChoiceBox fx:id="searchType" value="Type" layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="78.0">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Movies" />
@@ -23,37 +23,37 @@
                 </FXCollections>
             </items>
         </ChoiceBox>
-        <ChoiceBox fx:id="secondChoiceBox" value="Search by" layoutX="125.0" layoutY="33.0" prefHeight="24.0" prefWidth="150.0" onAction="#onSecondChoiceClick"><!--fix x and width-->
+        <ChoiceBox fx:id="searchBy" value="Search by" layoutX="125.0" layoutY="33.0" prefHeight="24.0" prefWidth="150.0" ><!--fix x and width-->
             <items>
                 <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Movie-Search by Title" />
-                    <String fx:value="Movie-Search by Actor" />
-                    <String fx:value="Book-Search by Title" />
-                    <String fx:value="Book-Search by Genre" />
-                    <String fx:value="Book-Search by Author" />
+                    <String fx:value="-- Please choose a type first --" />
                 </FXCollections>
             </items>
         </ChoiceBox>
         <Button fx:id="searchButton" layoutX="520.0" layoutY="33.0" mnemonicParsing="false" text="Search" onAction="#onSearchButtonClick"/>
 
-        <ListView fx:id="myListView" layoutX="24.0" layoutY="85.0" prefHeight="284.0" prefWidth="554.0">
+        <ListView fx:id="myListView" layoutX="24.0" layoutY="85.0" prefHeight="284.0" prefWidth="554.0" onMouseClicked="#callDescription">
         </ListView>
 
-        <Label layoutX="118.0" layoutY="420.0" text="My Book List" textFill="white"/>
-        <ListView fx:id="myBookList" layoutX="24.0" layoutY="440.0" prefHeight="224.0" prefWidth="263.0">
+        <Label layoutX="265.0" layoutY="380.0" text="Description" textFill="white"/>
+        <TextField fx:id="description" layoutX="24.0" layoutY="400.0" prefHeight="184.0" prefWidth="554.0">
+        </TextField>
+
+        <Label layoutX="690.0" layoutY="65.0" text="My Book List" textFill="white"/>
+        <ListView fx:id="myBookList" layoutX="600.0" layoutY="85.0" prefHeight="224.0" prefWidth="263.0">
         </ListView>
 
-        <Label layoutX="410.0" layoutY="420.0" text="My Movie List" textFill="white"/>
-        <ListView fx:id="myMovieList" layoutX="314.0" layoutY="440.0" prefHeight="224.0" prefWidth="263.0">
+        <Label layoutX="690.0" layoutY="380.0" text="My Movie List" textFill="white"/>
+        <ListView fx:id="myMovieList" layoutX="600.0" layoutY="400.0" prefHeight="224.0" prefWidth="263.0">
         </ListView>
 
-        <Button fx:id="saveToList" layoutX="260.0" layoutY="388.0" mnemonicParsing="false" text="Save To List" onAction="#saveToList" />
+        <Button fx:id="saveToList" layoutX="260.0" layoutY="610.0" mnemonicParsing="false" text="Save To List" onAction="#saveToList" />
 
-        <Button fx:id="favouriteButtonBook" layoutX="100.0" layoutY="685.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
-        <Button fx:id="favouriteButtonMovie" layoutX="400.0" layoutY="685.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addMovieToFavourites"/>
+        <Button fx:id="favouriteButtonBook" layoutX="620.0" layoutY="330.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
+        <Button fx:id="favouriteButtonMovie" layoutX="620.0" layoutY="640.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addMovieToFavourites"/>
 
-        <Button fx:id="removeMovie" layoutX="427.0" layoutY="730.0" mnemonicParsing="false" text="Remove" onAction="#removeMovie"/>
-        <Button fx:id="removeBook" layoutX="127.0" layoutY="730.0" mnemonicParsing="false" text="Remove" onAction="#removeBook"/>
+        <Button fx:id="removeMovie" layoutX="760.0" layoutY="640.0" mnemonicParsing="false" text="Remove" onAction="#removeMovie"/>
+        <Button fx:id="removeBook" layoutX="760.0" layoutY="330.0" mnemonicParsing="false" text="Remove" onAction="#removeBook"/>
 
 
     </children>

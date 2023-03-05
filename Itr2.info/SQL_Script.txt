@@ -1,0 +1,19 @@
+CREATE TABLE bookmark.my_book_list(
+	book_ID INT NOT NULL AUTO_INCREMENT,
+    user_ID INT NOT NULL,
+    title VARCHAR(255) NOT NULL, 
+    author VARCHAR(255) NOT NULL,
+    genre VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    PRIMARY KEY(book_ID)
+);
+
+CREATE TABLE bookmark.my_movie_list(
+	movie_ID INT NOT NULL AUTO_INCREMENT,
+    user_ID INT NOT NULL,
+    title VARCHAR(255) NOT NULL, 
+    actor VARCHAR(255) NOT NULL,
+    genre VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL, 
+    PRIMARY KEY(movie_ID)
+);
