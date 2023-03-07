@@ -2,6 +2,8 @@ package home.backend;
 
 public class Movie {
     private String title;
+
+    private String identifier = "Movie";
     private String overview;
     private String releaseDate;
 
@@ -18,5 +20,7 @@ public class Movie {
     }
 
     public String getReleaseDate(){return this.releaseDate;}
+
+    public String getIdentifier(){return this.identifier;}
 
 }
