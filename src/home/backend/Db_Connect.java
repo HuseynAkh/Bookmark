@@ -6,9 +6,9 @@ public class Db_Connect {
     private Connection connection = null;
     public void connect() {
         try {
-            String url = "jdbc:mysql://localhost:3306/bookmark";
-            String user = "root";
-            String password = "MyDataConnect01$";
+            String url = "jdbc:mariadb://sql958.main-hosting.eu/u880453721_Bookmark";
+            String user = "u880453721_user";
+            String password = "@BookmarkDbcp01";
             connection = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to database.");
         } catch (SQLException e) {

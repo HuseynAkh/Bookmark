@@ -51,7 +51,10 @@ public class MovieSearch {
                 for (Object o : arr) {
                     JSONObject movie = (JSONObject) o;
                     String title = (String) movie.get("title");
-                    this.movieNames.add(new Movie(title, ""));
+                    String overview = (String) movie.get("overview");
+                    String releaseDate = (String) movie.get("release_date");
+
+                    this.movieNames.add(new Movie(title,releaseDate, overview));
                 }
 //                for (backend.Movie movie : movieNames) {
 //                    System.out.println(movie.getTitle());
@@ -146,7 +149,10 @@ public class MovieSearch {
                 for (Object o : arr) {
                     JSONObject actor = (JSONObject) o;
                     String title = (String) actor.get("title");
-                    this.movieNames.add(new Movie(title, ""));
+                    String overview = (String) actor.get("overview");
+                    String releaseDate = (String) actor.get("release_date");
+
+                    this.movieNames.add(new Movie(title,releaseDate, overview));
                 }
                 //System.out.println(title);
 

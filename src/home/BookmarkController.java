@@ -164,7 +164,7 @@ public class BookmarkController {
           //  connector.insertBook(01, selectedItem, "Anonymous", "NULL", "This will be the book description");
             bookList.add(selectedItem);
         }else if(searchType.getValue().equals("Movies")){
-         //   connector.insertMovie(01, selectedItem, "Anonymous", "NULL", "This will be the movie description");
+           // connector.insertMovie(01, selectedItem, "Anonymous", "NULL", "This will be the movie description");
             movieList.add(selectedItem);
         }else{
             //error checking
