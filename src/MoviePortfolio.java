@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+
+import java.util.ArrayList;
+
 public class MoviePortfolio {
 
     private ArrayList<Movie> FavouriteMovies = new ArrayList<Movie>();
@@ -25,3 +28,4 @@ public class MoviePortfolio {
         return this.SavedMovies;
     }
 }
+
