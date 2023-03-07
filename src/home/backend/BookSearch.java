@@ -64,9 +64,9 @@ public class BookSearch {
                     }
                     String id = (String)book.get("key");
                     //String BookDescription = GetBookDescription(id);
-                    ;
 
-                    //this.books.add(new Book(title, author,""));
+
+                    this.books.add(new Book(title, authors,""));
                     System.out.println(title +"||"+authors);
                 }
             }
@@ -145,8 +145,21 @@ public class BookSearch {
                 for (Object o : arr) {
                     JSONObject book = (JSONObject) o;
                     String title = (String) book.get("title_suggest");
-                    String author = (String) book.get("author");
-                    this.books.add(new Book(title, author, ""));
+                    JSONArray authorArr = (JSONArray) book.get("author_name");
+
+                    ArrayList<String> authors = new ArrayList<String>();
+                    if(authorArr == null){
+                        authors.add("Unknown");
+                    }
+                    else {
+                        for (Object author : authorArr) {
+                            authors.add((String) author);
+                        }
+                    }
+                    String id = (String)book.get("key");
+                    //String BookDescription = GetBookDescription(id);
+
+                    this.books.add(new Book(title, authors, ""));
                 }
             }
         } catch (Exception e) {
@@ -189,8 +202,21 @@ public class BookSearch {
                 for (Object o : arr) {
                     JSONObject book = (JSONObject) o;
                     String title = (String) book.get("title_suggest");
-                    String author = (String) book.get("author");
-                    this.books.add(new Book(title, author,""));
+                    JSONArray authorArr = (JSONArray) book.get("author_name");
+
+                    ArrayList<String> authors = new ArrayList<String>();
+                    if(authorArr == null){
+                        authors.add("Unknown");
+                    }
+                    else {
+                        for (Object author : authorArr) {
+                            authors.add((String) author);
+                        }
+                    }
+                    String id = (String)book.get("key");
+                    //String BookDescription = GetBookDescription(id);
+
+                    this.books.add(new Book(title, authors,""));
                 }
             }
         } catch (Exception e) {
