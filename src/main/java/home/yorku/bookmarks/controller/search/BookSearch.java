@@ -16,36 +16,29 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+//Strategy design pattern: Context and Client implementation
 public class BookSearch {
+
+    BookSearchStrategyIF bookSearchStrategy = null;
+
     public Set searchBook (SearchCriteria searchCriteria){
         Set<Book> books = new HashSet<Book>();
         URL url = null;
         if(searchCriteria != null){
             if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_NAME)){
-                String search = searchCriteria.getValue().replaceAll(" ", "+");
-                try {
-                    url = new URL("https://openlibrary.org/search.json?q=" + search);
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-                searchBooksAPI(books, url);
+                BookNameSearchStrategy bookNameSearchStrategy = new BookNameSearchStrategy();
+                this.bookSearchStrategy = bookNameSearchStrategy;
             }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_AUTHOR)){
-                String search = searchCriteria.getValue().replaceAll(" ", "%20");
-                try {
-                    url = new URL("https://openlibrary.org/search.json?author=" + search + "&sort=new");
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-                searchBooksAPI(books, url);
+                BookAuthorSearchStrategy bookAuthorSearchStrategy = new BookAuthorSearchStrategy();
+                this.bookSearchStrategy = bookAuthorSearchStrategy;
             }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_GENRE)){
-                String search = searchCriteria.getValue().replaceAll(" ", "%20");
-                try {
-                    url = new URL("https://openlibrary.org/search.json?subject=" + search + "&sort=new");
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-                searchBooksAPI(books, url);
+                BookGenreSearchStrategy bookGenreSearchStrategy = new BookGenreSearchStrategy();
+                this.bookSearchStrategy = bookGenreSearchStrategy;
             }
+
+            //using the strategy
+            searchBooksAPI(books, bookSearchStrategy.getSearchURL(searchCriteria));
+
         }
         return books;
     }
