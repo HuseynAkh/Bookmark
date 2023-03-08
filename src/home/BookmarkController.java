@@ -1,6 +1,7 @@
 package home;
 import home.Database.ConnectionMethods;
-import home.Database.DatabaseConnection;
+import home.Search.BookSearch;
+import home.Search.MovieSearch;
 import home.backend.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

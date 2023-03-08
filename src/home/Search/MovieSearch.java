@@ -1,5 +1,6 @@
-package home.backend;
+package home.Search;
 
+import home.backend.Movie;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
