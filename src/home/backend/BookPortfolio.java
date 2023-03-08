@@ -3,8 +3,8 @@ package home.backend;
 import java.util.ArrayList;
 
 public class BookPortfolio {
-    private ArrayList<Book> FavouriteBooks = new ArrayList<Book>();
-    private ArrayList<Book> SavedBooks = new ArrayList<Book>();
+    private ArrayList<Book> FavouriteBooks = new ArrayList<Book>(); //list of a users favourite books
+    private ArrayList<Book> SavedBooks = new ArrayList<Book>(); //list of a users saved books
 
     public BookPortfolio (){
 

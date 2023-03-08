@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class MoviePortfolio {
 
-    private ArrayList<Movie> FavouriteMovies = new ArrayList<Movie>();
-    private ArrayList<Movie> SavedMovies = new ArrayList<Movie>();
+    private ArrayList<Movie> FavouriteMovies = new ArrayList<Movie>(); //list of a users favourite movies
+    private ArrayList<Movie> SavedMovies = new ArrayList<Movie>(); //list of a users saved movies
 
     public MoviePortfolio(){
 
