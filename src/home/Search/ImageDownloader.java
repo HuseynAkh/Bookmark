@@ -1,4 +1,4 @@
-package home.backend;
+package home.Search;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;

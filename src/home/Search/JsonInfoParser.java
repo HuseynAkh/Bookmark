@@ -1,4 +1,4 @@
-package home.backend;
+package home.Search;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

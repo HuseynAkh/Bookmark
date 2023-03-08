@@ -1,8 +1,6 @@
 package home.Search;
 
 import home.backend.Book;
-import home.backend.CoverUrlExtractor;
-import home.backend.ImageDownloader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
