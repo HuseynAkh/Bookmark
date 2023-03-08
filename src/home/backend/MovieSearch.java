@@ -58,7 +58,7 @@ public class MovieSearch {
                 }
 //                for (backend.Movie movie : movieNames) {
 //                    System.out.println(movie.getTitle());
-//                }
+//                    }
 
                 //System.out.println(bookData.get("id")); // will change according to search variable
             }

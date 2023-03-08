@@ -9,13 +9,13 @@ public class Book {
     private String identifier = "Book";
     private ArrayList<String> author;
 
-    private String genre;
+    private String isbn;
     private String description;
 
-    public Book(String title, ArrayList<String> author, String genre, String description) {
+    public Book(String title, ArrayList<String> author, String isbn, String description) {
         this.title = title;
         this.author = author;
-        this.genre = genre;
+        this.isbn = isbn;
         this.description = description;
     }
     public String getTitle(){
@@ -24,8 +24,8 @@ public class Book {
     public ArrayList<String> getAuthor(){
         return this.author;
     }
-    public String getGenre(){
-        return this.genre;
+    public String getIsbn(){
+        return this.isbn;
     }
     public String getDescription(){
         return this.description;

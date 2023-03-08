@@ -11,11 +11,16 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+
 public class BookSearch {
 
     private Set<Book> books = new HashSet<Book>();
+    private ImageDownloader imgDL;
+    private CoverUrlExtractor cue;
 
     public BookSearch () {
+        this.imgDL = new ImageDownloader();
+        this.cue = new CoverUrlExtractor();
     }
 
     public Set searchBookName (String search) {
@@ -52,6 +57,9 @@ public class BookSearch {
                     JSONObject book = (JSONObject) o;
                     String title = (String) book.get("title_suggest");
                     JSONArray authorArr = (JSONArray) book.get("author_name");
+                    JSONArray isbnArr = (JSONArray) book.get("edition_key");
+
+                    String isbn = (String)isbnArr.get(0);
 
                     ArrayList<String> authors = new ArrayList<String>();
                     if(authorArr == null){
@@ -62,12 +70,11 @@ public class BookSearch {
                             authors.add((String) author);
                         }
                     }
-                    String id = (String)book.get("key");
-                    //String BookDescription = GetBookDescription(id);
+
+                    Book b = new Book(title, authors, isbn, "");
+                    this.books.add(b);
 
 
-                    this.books.add(new Book(title, authors,""));
-                    System.out.println(title +"||"+authors);
                 }
             }
         } catch (Exception e) {
@@ -101,17 +108,17 @@ public class BookSearch {
                 array.add(obj);
                 JSONObject data = (JSONObject) array.get(0);
 
-                bookDescription = (String) data.get("description");
-                System.out.println(bookDescription);
+                    bookDescription = (String) data.get("description");
 
-
-            }
+                }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return bookDescription;
     }
+
+
     public Set searchBookAuthor (String search) {
         this.books.clear();
         search = search.replaceAll(" ", "%20");
@@ -157,9 +164,13 @@ public class BookSearch {
                         }
                     }
                     String id = (String)book.get("key");
-                    //String BookDescription = GetBookDescription(id);
+                    String BookDescription = GetBookDescription(id);
+                    if(BookDescription == null){
+                        BookDescription = "There is no description for this book yet.";
+                    }
 
-                    this.books.add(new Book(title, authors, ""));
+
+                    this.books.add(new Book(title, authors,"", BookDescription));
                 }
             }
         } catch (Exception e) {
@@ -214,9 +225,13 @@ public class BookSearch {
                         }
                     }
                     String id = (String)book.get("key");
-                    //String BookDescription = GetBookDescription(id);
+                    String BookDescription = GetBookDescription(id);
+                    if(BookDescription == null){
+                        BookDescription = "There is no description for this book yet.";
+                    }
 
-                    this.books.add(new Book(title, authors,""));
+
+                    this.books.add(new Book(title, authors,"", BookDescription));
                 }
             }
         } catch (Exception e) {
