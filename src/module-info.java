@@ -3,6 +3,7 @@ module com.example.hello {
     requires javafx.fxml;
     requires json.simple;
     requires java.sql;
+    requires java.desktop;
 
 
     opens home to javafx.fxml;

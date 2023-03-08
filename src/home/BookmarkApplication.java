@@ -11,10 +11,10 @@ public class BookmarkApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(BookmarkApplication.class.getResource("bookmark.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1080, 1080);
+        Scene scene = new Scene(fxmlLoader.load(), 890, 785);
         stage.setTitle("Bookmark");
-        stage.setWidth(910);
-        stage.setHeight(740);
+        stage.setWidth(890);
+        stage.setHeight(785);
         stage.setScene(scene);
         stage.show();
 
