@@ -12,13 +12,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.collections.FXCollections?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080" prefWidth="1920.0"
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="785.0" prefWidth="890.0"
          tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: #0f0e26;" xmlns:fx="http://javafx.com/fxml" fx:controller="home.BookmarkController">
 
     <tabs>
         <Tab id="SearchPane" text="Search">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1080" prefWidth="1920.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
                     <children>
                         <Label fx:id="ErrorChecking"/>
                         <TextField fx:id="searchText" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
