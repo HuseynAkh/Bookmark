@@ -1,19 +1,20 @@
 package home;
 import home.backend.*;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ListView;
+import javafx.util.Callback;
+
 import java.util.Set;
 
 public class BookmarkController {
+
     @FXML
     private ChoiceBox<String> searchType;
     private ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
@@ -30,19 +31,19 @@ public class BookmarkController {
     @FXML
     private Label ErrorChecking;
     private String searchString = "";
-
     @FXML
     private ListView<String> myListView;
     private ObservableList<String> items = FXCollections.observableArrayList();
-    private ObservableList<String> description = FXCollections.observableArrayList();
     @FXML
     private ListView<String> myBookList;
     private ObservableList<String> bookList = FXCollections.observableArrayList();
-
     @FXML
     private ListView<String> myMovieList;
     private ObservableList<String> movieList = FXCollections.observableArrayList();
-
+    @FXML
+    private Label description;
+    private Set<Movie> MovieSet;
+    private Set<Book> BookSet;
 
     @FXML
     private void initialize() { //Initializes all Listview items
@@ -50,7 +51,6 @@ public class BookmarkController {
         myBookList.setItems(bookList);
         myMovieList.setItems(movieList);
 
-       // firstChoiceBox.getItems().addAll("Movies", "Books");
         searchType.setOnAction(event -> {
             if (searchType.getValue().equals("Movies")) {
                 searchBy.setItems(moviesSearchOptions);
@@ -78,18 +78,26 @@ public class BookmarkController {
                 case "Title": {
                     ErrorChecking.setText("Searching Movies by Title: " + searchString + "...");
 
-                    Set<Movie> arr = ms.MovieByTitle(searchString);
-                    for (Movie m : arr) {
-                        items.add(m.getTitle());
+                    if(MovieSet != null){
+                        MovieSet.clear();
+                    }
+
+                    MovieSet = ms.MovieByTitle(searchString);
+                    for (Movie m : MovieSet) {
+                        items.add("Title: " + m.getTitle() + "Release Date" + m.getReleaseDate());
                     }
                     break;
                 }
                 case "Actor": {
                     ErrorChecking.setText("Searching Movies by Actor: " + searchString + "...");
 
-                    Set<Movie> arr = ms.MovieByActor(searchString);
-                    for (Movie m : arr) {
-                        items.add(m.getTitle());
+                    if(MovieSet != null){
+                        MovieSet.clear();
+                    }
+
+                    MovieSet = ms.MovieByActor(searchString);
+                    for (Movie m : MovieSet) {
+                        items.add("Title: " + m.getTitle() + "Release Date" + m.getReleaseDate());
                     }
                     break;
                 }
@@ -146,6 +154,22 @@ public class BookmarkController {
     @FXML
     private void callDescription(MouseEvent event){
 
+        if(searchType.getValue().equals("Movies")){
+            description.setText("");//Clear the descriptions
+            final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
+            int i = 0;
+            for (Movie m : MovieSet) {
+                if(i == selectedIndex ){
+                    description.setText(m.getOverview());
+                    description.setPadding(new Insets(5, 5, 5, 5));
+                }
+                i++;
+            }
+        }
+        if(searchType.getValue().equals("Books")){
+            description.setText("");//Clear the description
+        }
+
         System.out.println("clicked on " + myListView.getSelectionModel().getSelectedItem());
 
     }
@@ -158,13 +182,20 @@ public class BookmarkController {
     @FXML
     private void saveToList(ActionEvent event){
         Db_Connect connector = new Db_Connect();
-
         final String selectedItem = myListView.getSelectionModel().getSelectedItem();
+        final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
         if(searchType.getValue().equals("Books")){
-          //  connector.insertBook(01, selectedItem, "Anonymous", "NULL", "This will be the book description");
+            connector.insertBook(01, selectedItem, "Anonymous", "NULL", "This will be the book description");
             bookList.add(selectedItem);
         }else if(searchType.getValue().equals("Movies")){
-           // connector.insertMovie(01, selectedItem, "Anonymous", "NULL", "This will be the movie description");
+            int i = 0;
+            for (Movie m : MovieSet) {
+                if(i == selectedIndex ){
+                    System.out.println("Title: " + m.getTitle() + "\n" + "Description: " + m.getOverview() + "\n" + "Release Date: " + m.getReleaseDate());
+                    connector.insertMovie(01, m.getTitle(), m.getReleaseDate(), m.getOverview() );
+                }
+                i++;
+            }
             movieList.add(selectedItem);
         }else{
             //error checking

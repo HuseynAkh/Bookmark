@@ -48,17 +48,16 @@ public class Db_Connect {
         }
     }
 
-    public void insertMovie(int user_id, String title, String actor, String genre, String description) {
+    public void insertMovie(int user_id, String title, String release_date, String description) {
 
         try {
             connect();
-            String sql = "INSERT INTO my_movie_list (user_ID, title, actor, genre, description) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO my_movie_list (user_ID, title, release_date, description) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, user_id);
             statement.setString(2, title);
-            statement.setString(3, actor);
-            statement.setString(4, genre);
-            statement.setString(5, description);
+            statement.setString(3, release_date);
+            statement.setString(4, description);
             int rowsInserted = statement.executeUpdate();
 
             if (rowsInserted > 0) {
