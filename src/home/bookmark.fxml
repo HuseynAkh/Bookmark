@@ -13,7 +13,7 @@
 <?import javafx.collections.FXCollections?>
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="785.0" prefWidth="890.0"
-         tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: #0f0e26;" xmlns:fx="http://javafx.com/fxml" fx:controller="home.BookmarkController">
+         tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: #0f0e26;" xmlns:fx="http://javafx.com/fxml" fx:controller="home.Controllers.BookmarkController">
 
     <tabs>
         <Tab id="SearchPane" text="Search">
@@ -40,8 +40,7 @@
 
                         <Button fx:id="searchButton" layoutX="520.0" layoutY="33.0" mnemonicParsing="false" text="Search" onAction="#onSearchButtonClick"/>
 
-                        <ListView fx:id="myListView" layoutX="24.0" layoutY="85.0" prefHeight="284.0" prefWidth="554.0" onMouseClicked="#callDescription">
-                        </ListView>
+                        <ListView fx:id="myListView" layoutX="24.0" layoutY="85.0" prefHeight="284.0" prefWidth="554.0" onMouseEntered="#buttonControl" onMouseClicked="#callDescription"/>
 
                         <Label layoutX="265.0" layoutY="380.0" text="Description" textFill="white"/>
                         <ScrollPane fx:id="descriptionPane" layoutX="24.0" layoutY="400.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
@@ -51,14 +50,11 @@
                         <Label layoutX="690.0" layoutY="65.0" text="My Book List" textFill="white"/>
                         <ListView fx:id="myBookList" layoutX="600.0" layoutY="85.0" prefHeight="224.0" prefWidth="263.0"/>
 
-                        <Label layoutX="690.0" layoutY="380.0" text="My Movie List" textFill="white"/>
-                        <ListView fx:id="myMovieList" layoutX="600.0" layoutY="400.0" prefHeight="224.0" prefWidth="263.0"/>
+                        <Label layoutX="690.0" layoutY="320.0" text="My Movie List" textFill="white"/>
+                        <ListView fx:id="myMovieList" layoutX="600.0" layoutY="340.0" prefHeight="224.0" prefWidth="263.0"/>
 
-                        <Button fx:id="saveToList" layoutX="260.0" layoutY="610.0" mnemonicParsing="false" text="Save To List" onAction="#saveToList" />
-                        <Button fx:id="favouriteButtonBook" layoutX="620.0" layoutY="330.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
-                        <Button fx:id="removeBook" layoutX="760.0" layoutY="330.0" mnemonicParsing="false" text="Remove" onAction="#removeBook"/>
-                        <Button fx:id="favouriteButtonMovie" layoutX="620.0" layoutY="640.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addMovieToFavourites"/>
-                        <Button fx:id="removeMovie" layoutX="760.0" layoutY="640.0" mnemonicParsing="false" text="Remove" onAction="#removeMovie"/>
+                       <!-- <Button fx:id="saveToList" layoutX="260.0" layoutY="605.0" mnemonicParsing="false" text="Save To List" onAction="#saveToList" />
+                       !-->
 
                     </children>
                 </AnchorPane>
@@ -66,9 +62,26 @@
         </Tab>
         <Tab id="MyListPane" text="MyList">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" >
+                    <children>
+                        <Label layoutX="265.0" layoutY="380.0" text="Description" textFill="white"/>
+                        <ScrollPane fx:id="ML_descriptionPane" layoutX="24.0" layoutY="400.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
+                            <Label fx:id="ML_description" wrapText="true"/>
+                        </ScrollPane>
+
+                        <Label layoutX="690.0" layoutY="5.0" text="My Book List" textFill="white"/>
+                        <ListView fx:id="ML_myBookList" layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
+
+                        <Label layoutX="690.0" layoutY="320.0" text="My Movie List" textFill="white"/>
+                        <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="350.0" prefHeight="224.0" prefWidth="263.0"/>
+
+                        <Button fx:id="favouriteButtonBook" layoutX="630.0" layoutY="265.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
+                        <Button fx:id="removeBook" layoutX="770.0" layoutY="265.0" mnemonicParsing="false" text="Remove" onAction="#removeBook"/>
+                        <Button fx:id="favouriteButtonMovie" layoutX="630.0" layoutY="590.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addMovieToFavourites"/>
+                        <Button fx:id="removeMovie" layoutX="770.0" layoutY="590.0" mnemonicParsing="false" text="Remove" onAction="#removeMovie"/>
+                    </children>
+                </AnchorPane>
             </content>
         </Tab>
     </tabs>
-
 </TabPane>

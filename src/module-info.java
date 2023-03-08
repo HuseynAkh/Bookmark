@@ -8,4 +8,6 @@ module com.example.hello {
 
     opens home to javafx.fxml;
     exports home;
+    exports home.Controllers;
+    opens home.Controllers to javafx.fxml;
 }

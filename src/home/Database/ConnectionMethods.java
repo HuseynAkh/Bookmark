@@ -21,6 +21,8 @@ public class ConnectionMethods {
                 System.out.println("A new book was inserted successfully.");
             }
 
+            connection.closeConnection();
+
         } catch (SQLException e) {
             System.out.println("Error inserting book: " + e.getMessage());
         }
@@ -29,7 +31,6 @@ public class ConnectionMethods {
     public void insertMovie(int user_id, String title, String release_date, String description) {
 
         try {
-
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Movie");
             statement.setInt(1, user_id);
@@ -42,6 +43,7 @@ public class ConnectionMethods {
                 System.out.println("A new movie was inserted successfully.");
             }
 
+            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error inserting movie: " + e.getMessage());

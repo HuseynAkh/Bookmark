@@ -32,6 +32,14 @@ public class DatabaseConnection {
 
         return instance;
     }
+
+    public void closeConnection() throws SQLException {
+        if (connection != null) {
+            connection.close();
+            System.out.println("Disconnected from database.");
+        }
+    }
+
     public PreparedStatement query(String type) throws SQLException {
 
         String sql = "null";

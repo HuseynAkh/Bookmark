@@ -13,8 +13,8 @@ public class BookmarkApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(BookmarkApplication.class.getResource("bookmark.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 890, 785);
         stage.setTitle("Bookmark");
-        stage.setWidth(890);
-        stage.setHeight(785);
+        stage.setWidth(900);
+        stage.setHeight(720);
         stage.setScene(scene);
         stage.show();
 
