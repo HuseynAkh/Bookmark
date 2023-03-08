@@ -1,14 +1,15 @@
 package home.backend;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Book {
     private String title;
-
-    private String author;
-
+    private ArrayList<String> author;
     private String genre;
     private String description;
 
-    public Book(String title, String author, String genre) {
+    public Book(String title, ArrayList<String> author, String genre) {
         this.title = title;
         this.author = author;
         this.genre = genre;
@@ -16,7 +17,7 @@ public class Book {
     public String getTitle(){
         return this.title;
     }
-    public String getAuthor(){
+    public ArrayList<String> getAuthor(){
         return this.author;
     }
     public String getGenre(){
