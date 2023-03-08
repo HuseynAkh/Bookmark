@@ -1,8 +1,7 @@
 package home.yorku.bookmarks.controller;
 import home.yorku.bookmarks.controller.database.ConnectionMethods;
 import home.yorku.bookmarks.controller.search.BookSearch;
-import home.yorku.bookmarks.controller.search.BookSearch_old;
-import home.yorku.bookmarks.controller.search.MovieSearch_old;
+import home.yorku.bookmarks.controller.search.MovieSearch;
 import home.yorku.bookmarks.model.Book;
 import home.yorku.bookmarks.model.BookmarkConstants;
 import home.yorku.bookmarks.model.Movie;
@@ -74,11 +73,11 @@ public class BookmarkController {
         items.clear();
         searchString = searchText.getText();
         ErrorChecking.setTextFill(Color.WHITE);
-        MovieSearch_old ms = new MovieSearch_old();
-        BookSearch_old bs = new BookSearch_old();
+        MovieSearch ms = new MovieSearch();
+        BookSearch bs = new BookSearch();
 
         if(searchType.getValue().equals("Movies")){ // first drop down choice box
-
+            SearchCriteria searchCriteria;
             switch (searchBy.getValue()) {
                 case "Title": {
                     ErrorChecking.setText("Searching Movies by Title: " + searchString + "...");
@@ -86,8 +85,16 @@ public class BookmarkController {
                     if(MovieSet != null){
                         MovieSet.clear();
                     }
+                    //
+                    searchCriteria = new SearchCriteria(
+                            BookmarkConstants.TYPE_MOVIE,
+                            BookmarkConstants.KEY_MOVIE_TITLE,
+                            searchString);
 
-                    MovieSet = ms.MovieByTitle(searchString);
+                    MovieSearch search = new MovieSearch();
+                    MovieSet  = search.searchMovie(searchCriteria);
+                    //
+                    //MovieSet = ms.MovieByTitle(searchString);
                     for (Movie m : MovieSet) {
                         items.add(m.getTitle());
                     }
@@ -99,8 +106,17 @@ public class BookmarkController {
                     if(MovieSet != null){
                         MovieSet.clear();
                     }
+                    //
+                    searchCriteria = new SearchCriteria(
+                            BookmarkConstants.TYPE_MOVIE,
+                            BookmarkConstants.KEY_MOVIE_ACTOR,
+                            searchString);
 
-                    MovieSet = ms.MovieByActor(searchString);
+                    MovieSearch search = new MovieSearch();
+                    MovieSet  = search.searchMovie(searchCriteria);
+                    //
+
+                    //MovieSet = ms.MovieByActor(searchString);
                     for (Movie m : MovieSet) {
                         items.add(m.getTitle());
                     }
@@ -123,7 +139,6 @@ public class BookmarkController {
                             BookmarkConstants.KEY_BOOK_NAME,
                             searchString);
 
-                    //TODO: load appropriate search class dynamically
                     BookSearch bookSearch = new BookSearch();
                     Set<Book> arr = bookSearch.searchBook(searchCriteria);
 
@@ -152,8 +167,16 @@ public class BookmarkController {
                 }
                 case "Author": {
                     ErrorChecking.setText("Searching Books by Author: " + searchString + "...");
+                    searchCriteria = new SearchCriteria(
+                            BookmarkConstants.TYPE_BOOK,
+                            BookmarkConstants.KEY_BOOK_AUTHOR,
+                            searchString);
 
-                    Set<Book> arr = bs.searchBookAuthor(searchString);
+                    //Set<Book> arr = bs.SearchBookGenre(searchString);
+                    BookSearch bookSearch = new BookSearch();
+                    Set<Book> arr = bookSearch.searchBook(searchCriteria);
+
+                    //Set<Book> arr = bs.searchBookAuthor(searchString);
                     for (Book b : arr) {
                         items.add(b.getTitle());
                     }
