@@ -1,15 +1,15 @@
 package home;
+import home.Database.ConnectionMethods;
+import home.Database.DatabaseConnection;
 import home.backend.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.Callback;
 
 import java.util.Set;
 
@@ -84,7 +84,7 @@ public class BookmarkController {
 
                     MovieSet = ms.MovieByTitle(searchString);
                     for (Movie m : MovieSet) {
-                        items.add("Title: " + m.getTitle() + "Release Date" + m.getReleaseDate());
+                        items.add(m.getTitle());
                     }
                     break;
                 }
@@ -97,7 +97,7 @@ public class BookmarkController {
 
                     MovieSet = ms.MovieByActor(searchString);
                     for (Movie m : MovieSet) {
-                        items.add("Title: " + m.getTitle() + "Release Date" + m.getReleaseDate());
+                        items.add(m.getTitle());
                     }
                     break;
                 }
@@ -181,18 +181,23 @@ public class BookmarkController {
 
     @FXML
     private void saveToList(ActionEvent event){
-        Db_Connect connector = new Db_Connect();
+        ConnectionMethods method = new ConnectionMethods();
+
         final String selectedItem = myListView.getSelectionModel().getSelectedItem();
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
+
         if(searchType.getValue().equals("Books")){
-            connector.insertBook(01, selectedItem, "Anonymous", "NULL", "This will be the book description");
+
+            method.insertBook(01, selectedItem, "Anonymous", "NULL", "This will be the book description");
             bookList.add(selectedItem);
+
         }else if(searchType.getValue().equals("Movies")){
+
             int i = 0;
             for (Movie m : MovieSet) {
                 if(i == selectedIndex ){
                     System.out.println("Title: " + m.getTitle() + "\n" + "Description: " + m.getOverview() + "\n" + "Release Date: " + m.getReleaseDate());
-                    connector.insertMovie(01, m.getTitle(), m.getReleaseDate(), m.getOverview() );
+                    method.insertMovie(01, m.getTitle(), m.getReleaseDate(), m.getOverview() );
                 }
                 i++;
             }
@@ -231,7 +236,6 @@ public class BookmarkController {
 
     @FXML
     private void removeBook(ActionEvent event){
-        Db_Connect connector = new Db_Connect();
 
         final int selectedIdx = myBookList.getSelectionModel().getSelectedIndex();
         if (selectedIdx != -1) {
