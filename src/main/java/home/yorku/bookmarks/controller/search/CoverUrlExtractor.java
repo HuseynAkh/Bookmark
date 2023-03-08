@@ -1,7 +1,5 @@
-package home.Search;
+package home.yorku.bookmarks.controller.search;
 
-import home.Search.ImageDownloader;
-import home.Search.JsonInfoParser;
 import org.json.simple.JSONObject;
 
 public class CoverUrlExtractor {

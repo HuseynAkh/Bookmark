@@ -1,4 +1,4 @@
-package home.Search;
+package home.yorku.bookmarks.controller.search;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;

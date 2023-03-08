@@ -1,4 +1,4 @@
-package home.backend;
+package home.yorku.bookmarks.model;
 
 public class Movie {
     private String title; //movie title

@@ -1,8 +1,12 @@
-package home;
-import home.Database.ConnectionMethods;
-import home.Search.BookSearch;
-import home.Search.MovieSearch;
-import home.backend.*;
+package home.yorku.bookmarks.controller;
+import home.yorku.bookmarks.controller.database.ConnectionMethods;
+import home.yorku.bookmarks.controller.search.BookSearch;
+import home.yorku.bookmarks.controller.search.BookSearch_old;
+import home.yorku.bookmarks.controller.search.MovieSearch_old;
+import home.yorku.bookmarks.model.Book;
+import home.yorku.bookmarks.model.BookmarkConstants;
+import home.yorku.bookmarks.model.Movie;
+import home.yorku.bookmarks.model.SearchCriteria;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -70,8 +74,8 @@ public class BookmarkController {
         items.clear();
         searchString = searchText.getText();
         ErrorChecking.setTextFill(Color.WHITE);
-        MovieSearch ms = new MovieSearch();
-        BookSearch bs = new BookSearch();
+        MovieSearch_old ms = new MovieSearch_old();
+        BookSearch_old bs = new BookSearch_old();
 
         if(searchType.getValue().equals("Movies")){ // first drop down choice box
 
@@ -110,11 +114,20 @@ public class BookmarkController {
 
         }else if (searchType.getValue().equals("Books")){
 
+            SearchCriteria searchCriteria = null;
             switch (searchBy.getValue()) {
                 case "Title": {
                     ErrorChecking.setText("Searching Books by Title: " + searchString + "...");
+                    searchCriteria = new SearchCriteria(
+                            BookmarkConstants.TYPE_BOOK,
+                            BookmarkConstants.KEY_BOOK_NAME,
+                            searchString);
 
-                    Set<Book> arr = bs.searchBookName(searchString);
+                    //TODO: load appropriate search class dynamically
+                    BookSearch bookSearch = new BookSearch();
+                    Set<Book> arr = bookSearch.searchBook(searchCriteria);
+
+                    //Set<Book> arr = bs.searchBookName(searchString);
                     for (Book b : arr) {
                         items.add(b.getTitle());
                     }
@@ -122,8 +135,15 @@ public class BookmarkController {
                 }
                 case "Genre": {
                     ErrorChecking.setText("Searching Books by Genre: " + searchString + "...");
+                    searchCriteria = new SearchCriteria(
+                            BookmarkConstants.TYPE_BOOK,
+                            BookmarkConstants.KEY_BOOK_GENRE,
+                            searchString);
 
-                    Set<Book> arr = bs.SearchBookGenre(searchString);
+                    //Set<Book> arr = bs.SearchBookGenre(searchString);
+                    BookSearch bookSearch = new BookSearch();
+                    Set<Book> arr = bookSearch.searchBook(searchCriteria);
+
                     for (Book b : arr) {
                         items.add(b.getTitle());
                         //System.out.println("clicked on " + b.getTitle());

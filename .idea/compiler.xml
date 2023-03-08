@@ -9,8 +9,5 @@
         <module name="Bookmark" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Bookmark" target="19" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,4 +1,4 @@
-package home.Search;
+package home.yorku.bookmarks.controller.search;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

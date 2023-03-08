@@ -1,4 +1,4 @@
-package home.backend;
+package home.yorku.bookmarks.model;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

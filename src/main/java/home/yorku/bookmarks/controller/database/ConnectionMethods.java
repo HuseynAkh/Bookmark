@@ -1,4 +1,4 @@
-package home.Database;
+package home.yorku.bookmarks.controller.database;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
