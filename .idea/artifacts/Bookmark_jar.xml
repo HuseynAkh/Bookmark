@@ -73,11 +73,11 @@
       <element id="file-copy" path="$USER_HOME$/Libraries/javafx-sdk-19.0.2.1/bin/ucrtbase.dll" />
       <element id="file-copy" path="$USER_HOME$/Libraries/javafx-sdk-19.0.2.1/bin/vcruntime140.dll" />
       <element id="file-copy" path="$USER_HOME$/Libraries/javafx-sdk-19.0.2.1/bin/vcruntime140_1.dll" />
-      <element id="library" level="project" name="googlecode.json.simple" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/junit/junit/4.10/junit-4.10.jar" path-in-jar="/" />
       <element id="library" level="project" name="mariadb.jdbc.java.client" />
+      <element id="library" level="project" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" />
     </root>
   </artifact>
 </component>

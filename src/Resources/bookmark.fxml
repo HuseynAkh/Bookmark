@@ -12,25 +12,24 @@
 
     <tabs>
         <Tab fx:id="LoginPane" text="Login">
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
+            <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
                 <children>
-                  <!--  <VBox alignment="CENTER"> !-->
-                        <ChoiceBox fx:id="user" value="Type" layoutX="65.0" layoutY="33.0" prefHeight="24.0"
-                                   prefWidth="100.0">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="QA/Dev"/>
-                                    <String fx:value="Client"/>
-                                </FXCollections>
-                            </items>
-                        </ChoiceBox>
-                        <Button fx:id="Login" layoutX="65.0" layoutY="70.0" mnemonicParsing="false" text="Log in"
-                                prefWidth="100" onMouseClicked="#login"/>
-                    <!--  </VBox> !-->
-                  </children>
-              </AnchorPane>
-          </Tab>
-          <Tab id="SearchPane" text="Search">
+                    <Label fx:id="LoginError"/>
+                    <VBox fx:id="LoginBox">
+                    <ChoiceBox fx:id="user" id="choiceBox" value="Team:" layoutX="65.0" layoutY="33.0" prefHeight="24.0"
+                               prefWidth="100.0">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                            </FXCollections>
+                        </items>
+                    </ChoiceBox>
+                    <Button fx:id="Login" mnemonicParsing="false" text="Log in"
+                            prefWidth="100" onMouseClicked="#login"/>
+                    </VBox>
+                </children>
+            </AnchorPane>
+        </Tab>
+          <Tab fx:id="searchTab" id="SearchPane" text="Search">
               <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
                       <children>
@@ -97,7 +96,7 @@
         <Tab fx:id="LogoutPane" text="Log out">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
                 <children>
-                    <Button fx:id="Logout" layoutX="24.0" layoutY="70.0" mnemonicParsing="false" text="Log out" prefWidth="100" onMouseClicked="#logout"/>
+                    <Button fx:id="Logout" layoutX="25.0" layoutY="25.0" mnemonicParsing="false" text="Log out" prefWidth="100" onMouseClicked="#logout"/>
                 </children>
             </AnchorPane>
 
