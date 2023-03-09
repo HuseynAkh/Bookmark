@@ -24,6 +24,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class BookmarkController {
 
     @FXML
+    private TabPane tabPane;
+    @FXML
     private ChoiceBox<String> searchType;
     private ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
             "Title", "Actor"
@@ -52,6 +54,9 @@ public class BookmarkController {
     private Label description;
     private Set<Movie> MovieSet;
     private Set<Book> BookSet;
+
+    public BookmarkController() {
+    }
 
     @FXML
     private void initialize() { //Initializes all Listview items
@@ -382,4 +387,12 @@ public class BookmarkController {
         }
     }
 
+    public void login(MouseEvent mouseEvent) {
+        Tab myTab = tabPane.getTabs().stream()
+                .filter(tab -> tab.getId().equals("LoginPane"))
+                .findFirst()
+                .orElse(null);
+        tabPane.getTabs().remove(myTab);
+
+    }
 }

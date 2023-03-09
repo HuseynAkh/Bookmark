@@ -5,11 +5,27 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.collections.FXCollections?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="785.0" prefWidth="890.0"
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="785.0" prefWidth="890.0"
          tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: #0f0e26;" xmlns:fx="http://javafx.com/fxml"
          fx:controller="home.yorku.bookmarks.controller.BookmarkController" stylesheets="@stylesheet.css">
 
     <tabs>
+        <Tab fx:id="LoginPane" text="Login">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
+                <children>
+                <ChoiceBox fx:id="user" value="Type" layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="100.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="QA/Dev" />
+                            <String fx:value="Client" />
+                        </FXCollections>
+                    </items>
+                </ChoiceBox>
+                    <Button fx:id="Login" layoutX="24.0" layoutY="70.0" mnemonicParsing="false" text="Log in" prefWidth="100" onMouseClicked="#login"/>
+                </children>
+            </AnchorPane>
+
+        </Tab>
         <Tab id="SearchPane" text="Search">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
