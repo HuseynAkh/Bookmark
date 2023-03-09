@@ -20,6 +20,8 @@ public class MoviePortfolio {
     public void RemoveFromSavedMovies(Movie movie){
         SavedMovies.remove(movie);
     }
+
+    public void RemoveFromFavouriteMovies(Movie movie) {FavouriteMovies.remove(movie);}
     public ArrayList<Movie> getFavouriteMovies(){
         return this.FavouriteMovies;
     }

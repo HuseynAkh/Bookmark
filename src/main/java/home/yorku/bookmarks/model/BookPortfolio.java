@@ -20,6 +20,8 @@ public class BookPortfolio {
     public void RemoveFromSavedBooks(Book book){
         SavedBooks.remove(book);
     }
+
+    public void RemoveFromFavouriteBooks (Book book) {FavouriteBooks.remove(book);} // Removes book object from favourite list
     public ArrayList<Book> getFavouriteBooks(){
         return this.FavouriteBooks;
     }
