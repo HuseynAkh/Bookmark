@@ -2,6 +2,7 @@ package home.yorku.bookmarks.view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -12,18 +13,19 @@ import java.util.Objects;
 public class BookmarkApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-
-        FXMLLoader fxmlLoader = new FXMLLoader(BookmarkApplication.class.getResource("/bookmark.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 890, 785);
+        //Load fxml
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/bookmark.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/stylesheet.css")).toExternalForm());
-
+        //Useful
         URL fxmlLocation = this.getClass().getResource("/bookmark.fxml");
         System.out.println("fxmlLocation: " + fxmlLocation);
         System.out.println("fxml loaded");
-
+        //Set Original Stage
         stage.setTitle("Bookmark");
-        stage.setWidth(900);
-        stage.setHeight(680);
+        stage.setWidth(300);
+        stage.setHeight(200);
         stage.setScene(scene);
         stage.show();
 

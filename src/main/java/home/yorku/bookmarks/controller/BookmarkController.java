@@ -17,6 +17,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class BookmarkController {
 
     @FXML
     private TabPane tabPane;
+    private Stage stage;
     List<Tab> removedTabs = new ArrayList<>();
     @FXML
     private ChoiceBox<String> searchType;
@@ -404,6 +406,9 @@ public class BookmarkController {
     }
 
     public void login(MouseEvent mouseEvent) {
+        stage = (Stage) tabPane.getScene().getWindow();
+        stage.setWidth(900);
+        stage.setHeight(680);
 
         tabPane.getTabs().addAll(removedTabs);
         removedTabs.clear();
@@ -423,6 +428,10 @@ public class BookmarkController {
     }
 
     public void logout(MouseEvent mouseEvent) {
+
+        stage = (Stage) tabPane.getScene().getWindow();
+        stage.setWidth(300);
+        stage.setHeight(300);
 
         tabPane.getTabs().add(0,removedTabs.get(0));
         removedTabs.clear();

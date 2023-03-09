@@ -1,5 +1,6 @@
 module com.example.hello {
     requires javafx.controls;
+    requires javafx.graphics;
     requires javafx.fxml;
     requires json.simple;
     requires java.sql;

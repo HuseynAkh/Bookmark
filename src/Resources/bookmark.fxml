@@ -5,7 +5,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.collections.FXCollections?>
 
-<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="785.0" prefWidth="890.0"
+<?import javafx.scene.layout.VBox?>
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
          tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: #0f0e26;" xmlns:fx="http://javafx.com/fxml"
          fx:controller="home.yorku.bookmarks.controller.BookmarkController" stylesheets="@stylesheet.css">
 
@@ -13,34 +14,37 @@
         <Tab fx:id="LoginPane" text="Login">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
                 <children>
-                <ChoiceBox fx:id="user" value="Type" layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="100.0">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="QA/Dev" />
-                            <String fx:value="Client" />
-                        </FXCollections>
-                    </items>
-                </ChoiceBox>
-                    <Button fx:id="Login" layoutX="24.0" layoutY="70.0" mnemonicParsing="false" text="Log in" prefWidth="100" onMouseClicked="#login"/>
-                </children>
-            </AnchorPane>
-
-        </Tab>
-        <Tab id="SearchPane" text="Search">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
-                    <children>
-                        <Label fx:id="ErrorChecking"/>
-                        <TextField fx:id="searchText" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
-                        <ChoiceBox fx:id="searchType" value="Type" layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="78.0">
+                  <!--  <VBox alignment="CENTER"> !-->
+                        <ChoiceBox fx:id="user" value="Type" layoutX="65.0" layoutY="33.0" prefHeight="24.0"
+                                   prefWidth="100.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Movies" />
-                                    <String fx:value="Books" />
+                                    <String fx:value="QA/Dev"/>
+                                    <String fx:value="Client"/>
                                 </FXCollections>
                             </items>
                         </ChoiceBox>
-                        <ChoiceBox fx:id="searchBy" value="Search by" layoutX="125.0" layoutY="33.0" prefHeight="24.0" prefWidth="150.0" ><!--fix x and width-->
+                        <Button fx:id="Login" layoutX="65.0" layoutY="70.0" mnemonicParsing="false" text="Log in"
+                                prefWidth="100" onMouseClicked="#login"/>
+                    <!--  </VBox> !-->
+                  </children>
+              </AnchorPane>
+          </Tab>
+          <Tab id="SearchPane" text="Search">
+              <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
+                      <children>
+                          <Label fx:id="ErrorChecking"/>
+                          <TextField fx:id="searchText" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
+                          <ChoiceBox fx:id="searchType" value="Type" layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="78.0">
+                              <items>
+                                  <FXCollections fx:factory="observableArrayList">
+                                      <String fx:value="Movies" />
+                                      <String fx:value="Books" />
+                                  </FXCollections>
+                              </items>
+                          </ChoiceBox>
+                          <ChoiceBox fx:id="searchBy" value="Search by" layoutX="125.0" layoutY="33.0" prefHeight="24.0" prefWidth="150.0" ><!--fix x and width-->
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="-- Please choose a Type first --" />

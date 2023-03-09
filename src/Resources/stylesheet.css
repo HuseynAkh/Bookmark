@@ -4,3 +4,10 @@
     -fx-background-color: derive(-fx-control-inner-background, -30%);
     -fx-text-fill: black;
 }
+
+
+#LoginPane .tab-pane .vbox {
+    -fx-alignment: center;
+    -fx-translate-x: -50% !important;
+    -fx-translate-y: -50% !important;
+}
