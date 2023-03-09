@@ -85,7 +85,7 @@
                         <Label layoutX="400.0" layoutY="5.0" text="Books I've Read" textFill="white"/>
                         <ListView fx:id="ML_myBookList" layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
 
-                        <Label layoutX="690.0" layoutY="5.0" text="Movies I've Read" textFill="white"/>
+                        <Label layoutX="690.0" layoutY="5.0" text="Movies I've Watched" textFill="white"/>
                         <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
                     <!--
                         <Button fx:id="favouriteButtonBook" layoutX="630.0" layoutY="265.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
