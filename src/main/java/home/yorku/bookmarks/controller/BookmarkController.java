@@ -1,7 +1,7 @@
 package home.yorku.bookmarks.controller;
 import home.yorku.bookmarks.controller.database.ConnectionMethods;
-import home.yorku.bookmarks.controller.search.BookSearch;
-import home.yorku.bookmarks.controller.search.MovieSearch;
+import home.yorku.bookmarks.controller.search.BookSearchManager;
+import home.yorku.bookmarks.controller.search.MovieSearchManager;
 import home.yorku.bookmarks.model.Book;
 import home.yorku.bookmarks.model.BookmarkConstants;
 import home.yorku.bookmarks.model.Movie;
@@ -73,8 +73,8 @@ public class BookmarkController {
         items.clear();
         searchString = searchText.getText();
         ErrorChecking.setTextFill(Color.WHITE);
-        MovieSearch ms = new MovieSearch();
-        BookSearch bs = new BookSearch();
+        MovieSearchManager ms = new MovieSearchManager();
+        BookSearchManager bs = new BookSearchManager();
 
         if(searchType.getValue().equals("Movies")){ // first drop down choice box
             SearchCriteria searchCriteria;
@@ -91,7 +91,7 @@ public class BookmarkController {
                             BookmarkConstants.KEY_MOVIE_TITLE,
                             searchString);
 
-                    MovieSearch search = new MovieSearch();
+                    MovieSearchManager search = new MovieSearchManager();
                     MovieSet  = search.searchMovie(searchCriteria);
                     //
                     //MovieSet = ms.MovieByTitle(searchString);
@@ -112,7 +112,7 @@ public class BookmarkController {
                             BookmarkConstants.KEY_MOVIE_ACTOR,
                             searchString);
 
-                    MovieSearch search = new MovieSearch();
+                    MovieSearchManager search = new MovieSearchManager();
                     MovieSet  = search.searchMovie(searchCriteria);
                     //
 
@@ -139,7 +139,7 @@ public class BookmarkController {
                             BookmarkConstants.KEY_BOOK_NAME,
                             searchString);
 
-                    BookSearch bookSearch = new BookSearch();
+                    BookSearchManager bookSearch = new BookSearchManager();
                     Set<Book> arr = bookSearch.searchBook(searchCriteria);
 
                     //Set<Book> arr = bs.searchBookName(searchString);
@@ -156,7 +156,7 @@ public class BookmarkController {
                             searchString);
 
                     //Set<Book> arr = bs.SearchBookGenre(searchString);
-                    BookSearch bookSearch = new BookSearch();
+                    BookSearchManager bookSearch = new BookSearchManager();
                     Set<Book> arr = bookSearch.searchBook(searchCriteria);
 
                     for (Book b : arr) {
@@ -173,7 +173,7 @@ public class BookmarkController {
                             searchString);
 
                     //Set<Book> arr = bs.SearchBookGenre(searchString);
-                    BookSearch bookSearch = new BookSearch();
+                    BookSearchManager bookSearch = new BookSearchManager();
                     Set<Book> arr = bookSearch.searchBook(searchCriteria);
 
                     //Set<Book> arr = bs.searchBookAuthor(searchString);

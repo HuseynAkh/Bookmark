@@ -1,6 +1,5 @@
 package home.yorku.bookmarks.controller.search;
 
-import home.yorku.bookmarks.model.Book;
 import home.yorku.bookmarks.model.BookmarkConstants;
 import home.yorku.bookmarks.model.Movie;
 import home.yorku.bookmarks.model.SearchCriteria;
@@ -10,14 +9,12 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-public class MovieSearch {
+public class MovieSearchManager {
     SearchStrategyIF searchStrategy = null;
 
     public Set searchMovie (SearchCriteria searchCriteria){

@@ -7,6 +7,7 @@ import java.net.URL;
 
 //Strategy design pattern: Concrete Strategy
 public class BookAuthorSearchStrategy implements SearchStrategyIF {
+    //Giving interface method relevant body
     @Override
     public URL getSearchURL(SearchCriteria searchCriteria) {
         System.out.println("BookAuthorSearchStrategy in action");

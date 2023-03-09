@@ -16,7 +16,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 //Strategy design pattern: Context and Client implementation
-public class BookSearch {
+public class BookSearchManager {
 
     SearchStrategyIF searchStrategy = null;
 
