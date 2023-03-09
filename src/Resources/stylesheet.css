@@ -5,9 +5,10 @@
     -fx-text-fill: black;
 }
 
+#LoginBox {
+    -fx-spacing: 20px;
+}
 
-#LoginPane .tab-pane .vbox {
+#choiceBox .label {
     -fx-alignment: center;
-    -fx-translate-x: -50% !important;
-    -fx-translate-y: -50% !important;
 }

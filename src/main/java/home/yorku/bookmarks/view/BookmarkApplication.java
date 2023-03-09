@@ -14,7 +14,7 @@ public class BookmarkApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         //Load fxml
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/bookmark.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BookmarkApplication.class.getResource("/bookmark.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/stylesheet.css")).toExternalForm());
@@ -24,7 +24,7 @@ public class BookmarkApplication extends Application {
         System.out.println("fxml loaded");
         //Set Original Stage
         stage.setTitle("Bookmark");
-        stage.setWidth(300);
+        stage.setWidth(260);
         stage.setHeight(200);
         stage.setScene(scene);
         stage.show();

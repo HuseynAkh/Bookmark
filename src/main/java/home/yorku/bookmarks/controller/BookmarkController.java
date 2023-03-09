@@ -6,28 +6,36 @@ import home.yorku.bookmarks.model.Book;
 import home.yorku.bookmarks.model.BookmarkConstants;
 import home.yorku.bookmarks.model.Movie;
 import home.yorku.bookmarks.model.SearchCriteria;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.List;
+import javafx.scene.paint.Color;
+import javafx.event.ActionEvent;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BookmarkController {
-
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private TabPane tabPane;
+    @FXML
+    private Button Login;
+    @FXML
+    private VBox LoginBox;
     private Stage stage;
     List<Tab> removedTabs = new ArrayList<>();
     @FXML
@@ -37,14 +45,20 @@ public class BookmarkController {
     );
     @FXML
     private ChoiceBox<String> searchBy;
-
     private ObservableList<String> booksSearchOptions = FXCollections.observableArrayList(
             "Title", "Genre", "Author"
+    );
+    @FXML
+    private ChoiceBox<String> user;
+    private ObservableList<String> userOptions = FXCollections.observableArrayList(
+            "QA/Dev Team", "Client"
     );
     @FXML
     private TextField searchText;
     @FXML
     private Label ErrorChecking;
+    @FXML
+    private Label LoginError;
     private String searchString = "";
     @FXML
     private ListView<String> myListView;
@@ -59,6 +73,8 @@ public class BookmarkController {
     private Label description;
     private Set<Movie> MovieSet;
     private Set<Book> BookSet;
+    private double sceneHeight;
+    private double sceneWidth;
 
     public BookmarkController() {
     }
@@ -67,11 +83,36 @@ public class BookmarkController {
     private void initialize() { //Initializes all Listview items
         myBookList.setItems(bookList);
         myMovieList.setItems(movieList);
+        user.setItems(userOptions);
+
+        Scene scene = anchorPane.getScene();
+        if (scene != null) {
+            sceneHeight = scene.getHeight();
+            sceneWidth = scene.getWidth();
+        }
+
+        // All dynamic button layouts
+        anchorPane.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.heightProperty().addListener((obs, oldHeight, newHeight) -> {
+                    sceneHeight = newHeight.doubleValue();
+                    LoginBox.setLayoutY((sceneHeight/2) - (20 + LoginBox.getHeight()/2)); // 20 for padding between boxes
+
+                });
+
+                newScene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+                    sceneWidth = newWidth.doubleValue();
+                    LoginBox.setLayoutX((sceneWidth/2) - (LoginBox.getWidth()/2));
+
+                });
+
+
+            }
+        });
 
         for (Tab tab : tabPane.getTabs()) {
             if (!tab.getId().equals("LoginPane")) {
                 tab.setDisable(true);
-                //tab.setContent();
             }
         }
 
@@ -91,6 +132,8 @@ public class BookmarkController {
                 searchBy.setValue("Search by");
             }
         });
+
+
 
     }
 
@@ -406,24 +449,30 @@ public class BookmarkController {
     }
 
     public void login(MouseEvent mouseEvent) {
-        stage = (Stage) tabPane.getScene().getWindow();
-        stage.setWidth(900);
-        stage.setHeight(680);
 
-        tabPane.getTabs().addAll(removedTabs);
-        removedTabs.clear();
+        if(!user.getValue().equals("Team:")){
+            stage = (Stage) tabPane.getScene().getWindow();
+            stage.setWidth(900);
+            stage.setHeight(680);
 
-        for (Tab tab : tabPane.getTabs()) {
-            tab.setDisable(false);
+            tabPane.getTabs().addAll(removedTabs);
+            removedTabs.clear();
+
+            for (Tab tab : tabPane.getTabs()) {
+                tab.setDisable(false);
+            }
+
+            // Enable and show the login tab
+            Tab loginTab = tabPane.getTabs().stream()
+                    .filter(tab -> tab.getId().equals("LoginPane"))
+                    .findFirst()
+                    .orElse(null);
+            removedTabs.add(loginTab);
+            tabPane.getTabs().remove(loginTab);
+        }else{
+            LoginError.setTextFill(Color.RED);
+            LoginError.setText("Please select your Team to Login");
         }
-
-        // Enable and show the login tab
-        Tab loginTab = tabPane.getTabs().stream()
-                .filter(tab -> tab.getId().equals("LoginPane"))
-                .findFirst()
-                .orElse(null);
-        removedTabs.add(loginTab);
-        tabPane.getTabs().remove(loginTab);
 
     }
 
@@ -449,6 +498,8 @@ public class BookmarkController {
                 .orElse(null);
         removedTabs.add(logoutTab);
         tabPane.getTabs().remove(logoutTab);
+        LoginError.setText("");
 
     }
+
 }
