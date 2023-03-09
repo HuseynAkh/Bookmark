@@ -25,21 +25,22 @@ public class MovieSearchManager {
         Set<Movie> movies = new HashSet<Movie>();
         URL url = null;
         String jsonKey = null;
+
+        //Instantiating the relevant search strategy using Factory pattern
+        SearchStrategyFactory searchStrategyFactory = new SearchStrategyFactory();
+        this.searchStrategy = searchStrategyFactory.createSearchStrategy(searchCriteria.getSearchKey());
+
         //getting the key from searchCriteria
         //instantiating the relevant search strategy based on the key
         if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_MOVIE_TITLE)){
-            searchStrategy = new MovieTitleSearchStrategy();
             jsonKey = BookmarkConstants.JSON_KEY_MOVIE_RESULTS;
         }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_MOVIE_ACTOR)){
 
             //call on GetPersonID method to get ID of the actor searched
-            System.out.println("actor name = "+searchCriteria.getValue());
             Long id = GetPersonID(searchCriteria.getValue());
-            System.out.println("actor ID obtained = "+id);
 
             //set above ID in the search criteria
             searchCriteria = new SearchCriteria(searchCriteria.getType(), searchCriteria.getSearchKey(), id.toString());
-            searchStrategy = new MovieActorSearchStrategy();
             url = searchStrategy.getSearchURL(searchCriteria);
             jsonKey = BookmarkConstants.JSON_KEY_MOVIE_CAST;
 

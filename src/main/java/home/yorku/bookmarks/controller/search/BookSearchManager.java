@@ -26,8 +26,19 @@ public class BookSearchManager {
     public Set searchBook (SearchCriteria searchCriteria){
         Set<Book> books = new HashSet<Book>();
         URL url = null;
+        //OPTION-1: instantiating the relevant search strategy using Factory pattern
+        SearchStrategyFactory searchStrategyFactory = new SearchStrategyFactory();
+        this.searchStrategy = searchStrategyFactory.createSearchStrategy(searchCriteria.getSearchKey());
+
+        //using the strategy
+        searchBooksAPI(books, searchStrategy.getSearchURL(searchCriteria));
+
+        return books;
+
+
         //getting the key from searchCriteria
-        //instantiating the relevant search strategy based on the key
+        //OPTION-2: instantiating the relevant search strategy based on the key
+        /*
         if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_NAME)){
             this.searchStrategy = new BookNameSearchStrategy();
         }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_AUTHOR)){
@@ -35,11 +46,7 @@ public class BookSearchManager {
         }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_GENRE)){
             this.searchStrategy = new BookGenreSearchStrategy();
         }
-
-        //using the strategy
-        searchBooksAPI(books, searchStrategy.getSearchURL(searchCriteria));
-
-        return books;
+         */
     }
 
     //This method gets the json from the url
