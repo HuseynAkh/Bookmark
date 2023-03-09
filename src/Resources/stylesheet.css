@@ -1,0 +1,6 @@
+.list-cell:filled:selected,
+.list-cell:filled:selected:focused
+{
+    -fx-background-color: derive(-fx-control-inner-background, -30%);
+    -fx-text-fill: black;
+}

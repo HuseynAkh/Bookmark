@@ -7,17 +7,20 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 
 public class BookmarkApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(BookmarkApplication.class.getResource("/bookmark.fxml"));
-        System.out.println("fxml loaded");
-        //fxmlLoader.setRoot(new AnchorPane());
+        Scene scene = new Scene(fxmlLoader.load(), 890, 785);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/stylesheet.css")).toExternalForm());
+
         URL fxmlLocation = this.getClass().getResource("/bookmark.fxml");
         System.out.println("fxmlLocation: " + fxmlLocation);
-        Scene scene = new Scene(fxmlLoader.load(), 890, 785);
+        System.out.println("fxml loaded");
+
         stage.setTitle("Bookmark");
         stage.setWidth(900);
         stage.setHeight(680);

@@ -7,7 +7,7 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="785.0" prefWidth="890.0"
          tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: #0f0e26;" xmlns:fx="http://javafx.com/fxml"
-         fx:controller="home.yorku.bookmarks.controller.BookmarkController" >
+         fx:controller="home.yorku.bookmarks.controller.BookmarkController" stylesheets="@stylesheet.css">
 
     <tabs>
         <Tab id="SearchPane" text="Search">
