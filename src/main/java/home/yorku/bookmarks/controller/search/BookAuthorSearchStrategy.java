@@ -6,7 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 //Strategy design pattern: Concrete Strategy
-public class BookAuthorSearchStrategy implements BookSearchStrategyIF{
+public class BookAuthorSearchStrategy implements SearchStrategyIF {
     @Override
     public URL getSearchURL(SearchCriteria searchCriteria) {
         System.out.println("BookAuthorSearchStrategy in action");

@@ -9,7 +9,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,27 +18,23 @@ import java.util.Set;
 //Strategy design pattern: Context and Client implementation
 public class BookSearch {
 
-    BookSearchStrategyIF bookSearchStrategy = null;
+    SearchStrategyIF searchStrategy = null;
 
     public Set searchBook (SearchCriteria searchCriteria){
         Set<Book> books = new HashSet<Book>();
         URL url = null;
-        if(searchCriteria != null){
-            if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_NAME)){
-                BookNameSearchStrategy bookNameSearchStrategy = new BookNameSearchStrategy();
-                this.bookSearchStrategy = bookNameSearchStrategy;
-            }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_AUTHOR)){
-                BookAuthorSearchStrategy bookAuthorSearchStrategy = new BookAuthorSearchStrategy();
-                this.bookSearchStrategy = bookAuthorSearchStrategy;
-            }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_GENRE)){
-                BookGenreSearchStrategy bookGenreSearchStrategy = new BookGenreSearchStrategy();
-                this.bookSearchStrategy = bookGenreSearchStrategy;
-            }
 
-            //using the strategy
-            searchBooksAPI(books, bookSearchStrategy.getSearchURL(searchCriteria));
-
+        if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_NAME)){
+            this.searchStrategy = new BookNameSearchStrategy();
+        }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_AUTHOR)){
+            this.searchStrategy = new BookAuthorSearchStrategy();
+        }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_GENRE)){
+            this.searchStrategy = new BookGenreSearchStrategy();
         }
+
+        //using the strategy
+        searchBooksAPI(books, searchStrategy.getSearchURL(searchCriteria));
+
         return books;
     }
 

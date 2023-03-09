@@ -18,32 +18,32 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class MovieSearch {
+    SearchStrategyIF searchStrategy = null;
+
     public Set searchMovie (SearchCriteria searchCriteria){
         Set<Movie> movies = new HashSet<Movie>();
         URL url = null;
-        if(searchCriteria != null){
-            if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_MOVIE_TITLE)){
-               String search = searchCriteria.getValue().replaceAll(" ", "+"); //format for url
-                try {
-                    url = new URL("https://api.themoviedb.org/3/search/movie?api_key=9383f37fea2d70dbfae46cb8688e0da3&query=" + search);
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-                searchMoviesAPI(movies, url, "results");
-            }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_MOVIE_ACTOR)){
-                System.out.println("actor name = "+searchCriteria.getValue());
-                Long id = GetPersonID(searchCriteria.getValue()); //call on GetPersonID method to get ID of the actor searched
-                System.out.println("actor ID obtained = "+id);
+        String jsonKey = null;
 
-                try {
-                    //this url is specific to search movies that a specific actor acted in
-                    url = new URL("https://api.themoviedb.org/3/person/"+id+"/movie_credits?api_key=9383f37fea2d70dbfae46cb8688e0da3&language=en-US");
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-                searchMoviesAPI(movies, url,"cast" );
-            }
+        if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_MOVIE_TITLE)){
+            searchStrategy = new MovieTitleSearchStrategy();
+            jsonKey = BookmarkConstants.JSON_KEY_MOVIE_RESULTS;
+        }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_MOVIE_ACTOR)){
+
+            //call on GetPersonID method to get ID of the actor searched
+            System.out.println("actor name = "+searchCriteria.getValue());
+            Long id = GetPersonID(searchCriteria.getValue());
+            System.out.println("actor ID obtained = "+id);
+
+            //set above ID in the search criteria
+            searchCriteria = new SearchCriteria(searchCriteria.getType(), searchCriteria.getSearchKey(), id.toString());
+            searchStrategy = new MovieActorSearchStrategy();
+            url = searchStrategy.getSearchURL(searchCriteria);
+            jsonKey = BookmarkConstants.JSON_KEY_MOVIE_CAST;
+
         }
+
+        searchMoviesAPI(movies, searchStrategy.getSearchURL(searchCriteria), jsonKey );
         return movies;
     }
 
@@ -111,27 +111,19 @@ public class MovieSearch {
                 }
                 scanner.close();
 
-
                 JSONParser parser = new JSONParser();
                 Object obj = parser.parse(String.valueOf(informationString)); //parse JSON Text result to String
                 JSONArray array = new JSONArray();
                 array.add(obj);
 
-
-
                 JSONObject personData = (JSONObject) array.get(0);
-
                 JSONArray arr = (JSONArray)personData.get("results"); //get array in JSON text result tagged "results"
-
-                //Set<String> MovieNames = new HashSet<String>();
-
                 JSONObject person = (JSONObject) arr.get(0); //grab first actor in result array
                 id = (Long) person.get("id"); //retrieve actor id
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return id;
     }
 

@@ -5,6 +5,6 @@ import home.yorku.bookmarks.model.SearchCriteria;
 import java.net.URL;
 
 //Strategy design pattern: Strategy Interface
-public interface BookSearchStrategyIF {
+public interface SearchStrategyIF {
     public URL getSearchURL(SearchCriteria searchCriteria);
 }

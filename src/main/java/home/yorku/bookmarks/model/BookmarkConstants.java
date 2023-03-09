@@ -12,5 +12,7 @@ public class BookmarkConstants {
     public static final String KEY_MOVIE_TITLE = "KEY_MOVIE_TITLE";
     public static final String KEY_MOVIE_ACTOR = "KEY_MOVIE_ACTOR";
 
+    public static final String JSON_KEY_MOVIE_RESULTS =  "results";
+    public static final String JSON_KEY_MOVIE_CAST =  "cast";
 
 }
