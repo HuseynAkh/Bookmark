@@ -349,11 +349,11 @@ public class BookmarkController {
     @FXML
     private void callDescription(MouseEvent event){
 
-        System.out.println(getType());
+        final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
+        description.setText("");//Clear the descriptions
 
         if(getType().equals("Movie")){
-            description.setText("");//Clear the descriptions
-            final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
+
             int i = 0;
             for (Movie m : MovieSet) {
                 if(i == selectedIndex ){
@@ -364,7 +364,15 @@ public class BookmarkController {
             }
         }
         if(getType().equals("Book")){
-            description.setText("This is a Book");//Clear the description
+
+            int i = 0;
+            for (Book m : BookSet) {
+                if(i == selectedIndex ){
+                    System.out.println(m.getDescription()); // no longer in use
+                    //description.setPadding(new Insets(5, 5, 5, 5));
+                }
+                i++;
+            }
         }
 
         System.out.println("clicked on " + myListView.getSelectionModel().getSelectedItem());
@@ -450,7 +458,7 @@ public class BookmarkController {
 
     public void login(MouseEvent mouseEvent) {
 
-        if(!user.getValue().equals("Team:")){
+        /*if(!user.getValue().equals("Team:")){
             stage = (Stage) tabPane.getScene().getWindow();
             stage.setWidth(900);
             stage.setHeight(680);
@@ -473,6 +481,26 @@ public class BookmarkController {
             LoginError.setTextFill(Color.RED);
             LoginError.setText("Please select your Team to Login");
         }
+
+         */
+        stage = (Stage) tabPane.getScene().getWindow();
+        stage.setWidth(900);
+        stage.setHeight(680);
+
+        tabPane.getTabs().addAll(removedTabs);
+        removedTabs.clear();
+
+        for (Tab tab : tabPane.getTabs()) {
+            tab.setDisable(false);
+        }
+
+        // Enable and show the login tab
+        Tab loginTab = tabPane.getTabs().stream()
+                .filter(tab -> tab.getId().equals("LoginPane"))
+                .findFirst()
+                .orElse(null);
+        removedTabs.add(loginTab);
+        tabPane.getTabs().remove(loginTab);
 
     }
 

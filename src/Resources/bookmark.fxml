@@ -52,7 +52,7 @@
                         </ChoiceBox>
 
                         <Button fx:id="searchButton" layoutX="520.0" layoutY="33.0" mnemonicParsing="false" text="Search" onAction="#onSearchButtonClick"/>
-                    <!-- add onMouseEntered="#buttonControl" !-->
+
                         <ListView fx:id="myListView" layoutX="24.0" layoutY="85.0" prefHeight="284.0" prefWidth="554.0" onMouseEntered="#buttonControl" onMouseClicked="#callDescription" />
 
                         <Label layoutX="265.0" layoutY="380.0" text="Description" textFill="white"/>
@@ -74,21 +74,25 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" >
                     <children>
-                        <Label layoutX="265.0" layoutY="380.0" text="Description" textFill="white"/>
-                        <ScrollPane fx:id="ML_descriptionPane" layoutX="24.0" layoutY="400.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
+                        <Label layoutX="405.0" layoutY="260.0" text="Description" textFill="white"/>
+                        <ScrollPane fx:id="ML_descriptionPane" layoutX="164.0" layoutY="20.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
                             <Label fx:id="ML_description" wrapText="true"/>
                         </ScrollPane>
 
-                        <Label layoutX="690.0" layoutY="5.0" text="My Book List" textFill="white"/>
-                        <ListView fx:id="ML_myBookList" layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
+                        <Label layoutX="24.0" layoutY="5.0" text="What to read/Watch Next" textFill="white"/>
+                        <ListView fx:id="upNextList" layoutX="24.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
 
-                        <Label layoutX="690.0" layoutY="320.0" text="My Movie List" textFill="white"/>
-                        <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="350.0" prefHeight="224.0" prefWidth="263.0"/>
+                        <Label layoutX="400.0" layoutY="5.0" text="Books I've Read" textFill="white"/>
+                        <ListView fx:id="ML_myBookList" layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
 
+                        <Label layoutX="690.0" layoutY="5.0" text="Movies I've Read" textFill="white"/>
+                        <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
+                    <!--
                         <Button fx:id="favouriteButtonBook" layoutX="630.0" layoutY="265.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
                         <Button fx:id="removeBook" layoutX="770.0" layoutY="265.0" mnemonicParsing="false" text="Remove" onAction="#removeBook"/>
                         <Button fx:id="favouriteButtonMovie" layoutX="630.0" layoutY="590.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addMovieToFavourites"/>
                         <Button fx:id="removeMovie" layoutX="770.0" layoutY="590.0" mnemonicParsing="false" text="Remove" onAction="#removeMovie"/>
+                    !-->
                     </children>
                 </AnchorPane>
             </content>
@@ -99,7 +103,6 @@
                     <Button fx:id="Logout" layoutX="25.0" layoutY="25.0" mnemonicParsing="false" text="Log out" prefWidth="100" onMouseClicked="#logout"/>
                 </children>
             </AnchorPane>
-
         </Tab>
     </tabs>
 </TabPane>
