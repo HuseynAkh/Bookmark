@@ -16,6 +16,9 @@ import java.util.Scanner;
 import java.util.Set;
 
 //Strategy design pattern: Context and Client implementation
+//This class behaves as the manager for the book search
+//It creates a new strategy object of type SearchStategyIF
+//It is getting the key from the SearchCriteria from the model and instantiates the relevant search strategy needed
 public class BookSearchManager {
 
     SearchStrategyIF searchStrategy = null;
@@ -23,7 +26,8 @@ public class BookSearchManager {
     public Set searchBook (SearchCriteria searchCriteria){
         Set<Book> books = new HashSet<Book>();
         URL url = null;
-
+        //getting the key from searchCriteria
+        //instantiating the relevant search strategy based on the key
         if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_NAME)){
             this.searchStrategy = new BookNameSearchStrategy();
         }else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_BOOK_AUTHOR)){
@@ -38,6 +42,7 @@ public class BookSearchManager {
         return books;
     }
 
+    //This method gets the json from the url
     private static void searchBooksAPI(Set<Book> books, URL url) {
         try {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -63,6 +68,7 @@ public class BookSearchManager {
         }
     }
 
+    //this method gets the information of the books and adds it to the books hashset
     private static void extractBookInfo(Set<Book> books, StringBuilder informationString) throws ParseException {
         JSONParser parser = new JSONParser();
         Object obj = parser.parse(String.valueOf(informationString));

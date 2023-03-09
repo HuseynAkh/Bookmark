@@ -8,7 +8,9 @@ import java.net.URL;
 
 //Strategy design pattern: Concrete Strategy
 public class BookNameSearchStrategy implements SearchStrategyIF {
-
+    //Giving interface method relevant body
+    //Search criteria is in the model, it is used by both the frontend and the backend
+    //Getting the search key from searchCriteria then returning the appropriate url associated with the key
     @Override
     public URL getSearchURL(SearchCriteria searchCriteria) {
         System.out.println("BookNameSearchStrategy in action");

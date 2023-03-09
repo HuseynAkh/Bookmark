@@ -7,6 +7,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MovieActorSearchStrategy implements SearchStrategyIF {
+    //Giving interface method relevant body
+    //Getting the search key from searchCriteria then returning the appropriate url associated with the key
     @Override
     public URL getSearchURL(SearchCriteria searchCriteria) {
         System.out.println("MovieTitleSearchStrategy in action");

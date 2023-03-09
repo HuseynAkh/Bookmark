@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MovieTitleSearchStrategy implements SearchStrategyIF {
+    //
     @Override
     public URL getSearchURL(SearchCriteria searchCriteria) {
         System.out.println("MovieTitleSearchStrategy in action");
