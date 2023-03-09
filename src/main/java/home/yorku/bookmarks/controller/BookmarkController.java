@@ -9,13 +9,17 @@ import home.yorku.bookmarks.model.SearchCriteria;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BookmarkController {
 
@@ -51,7 +55,7 @@ public class BookmarkController {
 
     @FXML
     private void initialize() { //Initializes all Listview items
-        myListView.setItems(items);
+        //myListView.setItems(items);
         myBookList.setItems(bookList);
         myMovieList.setItems(movieList);
 
@@ -70,7 +74,7 @@ public class BookmarkController {
     @FXML
     private void onSearchButtonClick(ActionEvent event) {
 
-        items.clear();
+        //items.clear();
         searchString = searchText.getText();
         ErrorChecking.setTextFill(Color.WHITE);
         MovieSearchManager ms = new MovieSearchManager();
@@ -93,11 +97,9 @@ public class BookmarkController {
 
                     MovieSearchManager search = new MovieSearchManager();
                     MovieSet  = search.searchMovie(searchCriteria);
-                    //
-                    //MovieSet = ms.MovieByTitle(searchString);
-                    for (Movie m : MovieSet) {
-                        items.add(m.getTitle());
-                    }
+                    MovieController movieController = new MovieController(BookSet, MovieSet, myListView);
+                    movieController.display();
+
                     break;
                 }
                 case "Actor": {
@@ -114,12 +116,10 @@ public class BookmarkController {
 
                     MovieSearchManager search = new MovieSearchManager();
                     MovieSet  = search.searchMovie(searchCriteria);
-                    //
-
                     //MovieSet = ms.MovieByActor(searchString);
-                    for (Movie m : MovieSet) {
-                        items.add(m.getTitle());
-                    }
+                    MovieController movieController = new MovieController(BookSet, MovieSet, myListView);
+                    movieController.display();
+
                     break;
                 }
                 default:
@@ -140,12 +140,11 @@ public class BookmarkController {
                             searchString);
 
                     BookSearchManager bookSearch = new BookSearchManager();
-                    Set<Book> arr = bookSearch.searchBook(searchCriteria);
+                    BookSet = bookSearch.searchBook(searchCriteria);
 
-                    //Set<Book> arr = bs.searchBookName(searchString);
-                    for (Book b : arr) {
-                        items.add(b.getTitle());
-                    }
+                    BookController bookController = new BookController(BookSet, MovieSet, myListView);
+                    bookController.display();
+
                     break;
                 }
                 case "Genre": {
@@ -157,12 +156,11 @@ public class BookmarkController {
 
                     //Set<Book> arr = bs.SearchBookGenre(searchString);
                     BookSearchManager bookSearch = new BookSearchManager();
-                    Set<Book> arr = bookSearch.searchBook(searchCriteria);
+                    BookSet = bookSearch.searchBook(searchCriteria);
 
-                    for (Book b : arr) {
-                        items.add(b.getTitle());
-                        //System.out.println("clicked on " + b.getTitle());
-                    }
+                    BookController bookController = new BookController(BookSet, MovieSet, myListView);
+                    bookController.display();
+
                     break;
                 }
                 case "Author": {
@@ -174,12 +172,11 @@ public class BookmarkController {
 
                     //Set<Book> arr = bs.SearchBookGenre(searchString);
                     BookSearchManager bookSearch = new BookSearchManager();
-                    Set<Book> arr = bookSearch.searchBook(searchCriteria);
+                    BookSet = bookSearch.searchBook(searchCriteria);
 
-                    //Set<Book> arr = bs.searchBookAuthor(searchString);
-                    for (Book b : arr) {
-                        items.add(b.getTitle());
-                    }
+                    BookController bookController = new BookController(BookSet, MovieSet, myListView);
+                    bookController.display();
+
                     break;
                 }
                 default:
@@ -195,10 +192,100 @@ public class BookmarkController {
         }
     }
 
+    protected String getType(){
+
+        String type = "";
+        final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
+
+        if(MovieSet!=null){
+            int i = 0;
+            for (Movie m : MovieSet) {
+                if(i == selectedIndex ){
+                    type = m.getIdentifier();
+                }
+                i++;
+            }
+        }
+
+        if(BookSet!=null){
+            int i = 0;
+            for (Book b : BookSet) {
+                if(i == selectedIndex ){
+                    type = b.getIdentifier();
+                }
+                i++;
+            }
+        }
+
+        return type;
+
+    }
+
+    @FXML
+    private void buttonControl(MouseEvent event){
+
+        AtomicReference<ContextMenu> currentMenu = new AtomicReference<>(null);
+
+        myListView.setCellFactory(lv -> new ListCell<String>() {
+            private final Label button = new Label("Save to:");
+            //May need to change and customize for specific list
+            private final ContextMenu menu = new ContextMenu(new MenuItem("My Watched/Read List"), new MenuItem("Want to Watch/Read"));
+            private final StackPane stackPane = new StackPane();
+
+            {
+                button.setVisible(false);
+                stackPane.setAlignment(Pos.CENTER_LEFT);
+                StackPane.setAlignment(button, Pos.CENTER_RIGHT);
+                stackPane.getChildren().addAll(new Label(), button);
+                button.setOnMouseEntered(e -> button.setUnderline(true));
+                button.setOnMouseExited(e -> button.setUnderline(false));
+
+                setOnMouseEntered(e -> {
+                    if (currentMenu.get() == null) {
+                        button.setVisible(true);
+                    }
+                });
+                setOnMouseExited(e -> {
+                    if (currentMenu.get() == null) {
+                        button.setVisible(false);
+                    }
+                });
+                button.setOnMouseClicked(e -> {
+                    currentMenu.set(menu);
+                    menu.show(button, Side.RIGHT, 0, 0);
+                    e.consume();
+                });
+                menu.setOnHidden(e -> {
+                    currentMenu.set(null);
+                    button.setVisible(false);
+                });
+
+            }
+
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    Label label = new Label(item);
+                    MenuItem bookList = menu.getItems().get(0);
+                    stackPane.getChildren().set(0, label);
+                    setGraphic(stackPane);
+                    // Call the "saveToList" function when Menu item 1 is clicked
+                    bookList.setOnAction(e -> saveToList());
+                }
+            }
+        });
+    }
+
     @FXML
     private void callDescription(MouseEvent event){
 
-        if(searchType.getValue().equals("Movies")){
+        System.out.println(getType());
+
+        if(getType().equals("Movie")){
             description.setText("");//Clear the descriptions
             final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
             int i = 0;
@@ -210,8 +297,8 @@ public class BookmarkController {
                 i++;
             }
         }
-        if(searchType.getValue().equals("Books")){
-            description.setText("");//Clear the description
+        if(getType().equals("Book")){
+            description.setText("This is a Book");//Clear the description
         }
 
         System.out.println("clicked on " + myListView.getSelectionModel().getSelectedItem());
@@ -224,7 +311,7 @@ public class BookmarkController {
     //May need to wait for backend to return the object so that we can have a "check for book" bool
 
     @FXML
-    private void saveToList(ActionEvent event){
+    private void saveToList(){
         ConnectionMethods method = new ConnectionMethods();
 
         final String selectedItem = myListView.getSelectionModel().getSelectedItem();

@@ -6,6 +6,8 @@ module com.example.hello {
     requires java.desktop;
 
 
-    opens home to javafx.fxml;
-    exports home;
+    opens home.yorku.bookmarks.view to javafx.fxml;
+    exports home.yorku.bookmarks.view;
+    exports home.yorku.bookmarks.controller;
+    opens home.yorku.bookmarks.controller to javafx.fxml;
 }
