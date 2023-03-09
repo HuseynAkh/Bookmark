@@ -90,5 +90,13 @@
                 </AnchorPane>
             </content>
         </Tab>
+        <Tab fx:id="LogoutPane" text="Log out">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
+                <children>
+                    <Button fx:id="Logout" layoutX="24.0" layoutY="70.0" mnemonicParsing="false" text="Log out" prefWidth="100" onMouseClicked="#logout"/>
+                </children>
+            </AnchorPane>
+
+        </Tab>
     </tabs>
 </TabPane>

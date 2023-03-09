@@ -18,6 +18,8 @@ import javafx.scene.paint.Color;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -25,6 +27,7 @@ public class BookmarkController {
 
     @FXML
     private TabPane tabPane;
+    List<Tab> removedTabs = new ArrayList<>();
     @FXML
     private ChoiceBox<String> searchType;
     private ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
@@ -60,9 +63,22 @@ public class BookmarkController {
 
     @FXML
     private void initialize() { //Initializes all Listview items
-        //myListView.setItems(items);
         myBookList.setItems(bookList);
         myMovieList.setItems(movieList);
+
+        for (Tab tab : tabPane.getTabs()) {
+            if (!tab.getId().equals("LoginPane")) {
+                tab.setDisable(true);
+                //tab.setContent();
+            }
+        }
+
+        Tab logoutTab = tabPane.getTabs().stream()
+                .filter(tab -> tab.getId().equals("LogoutPane"))
+                .findFirst()
+                .orElse(null);
+        removedTabs.add(logoutTab);
+        tabPane.getTabs().remove(logoutTab);
 
         searchType.setOnAction(event -> {
             if (searchType.getValue().equals("Movies")) {
@@ -388,11 +404,42 @@ public class BookmarkController {
     }
 
     public void login(MouseEvent mouseEvent) {
-        Tab myTab = tabPane.getTabs().stream()
+
+        tabPane.getTabs().addAll(removedTabs);
+        removedTabs.clear();
+
+        for (Tab tab : tabPane.getTabs()) {
+            tab.setDisable(false);
+        }
+
+        // Enable and show the login tab
+        Tab loginTab = tabPane.getTabs().stream()
                 .filter(tab -> tab.getId().equals("LoginPane"))
                 .findFirst()
                 .orElse(null);
-        tabPane.getTabs().remove(myTab);
+        removedTabs.add(loginTab);
+        tabPane.getTabs().remove(loginTab);
+
+    }
+
+    public void logout(MouseEvent mouseEvent) {
+
+        tabPane.getTabs().add(0,removedTabs.get(0));
+        removedTabs.clear();
+
+        for (Tab tab : tabPane.getTabs()) {
+            if (!tab.getId().equals("LoginPane")) {
+                tab.setDisable(true);
+            }
+        }
+
+        // Enable and show the login tab
+        Tab logoutTab = tabPane.getTabs().stream()
+                .filter(tab -> tab.getId().equals("LogoutPane"))
+                .findFirst()
+                .orElse(null);
+        removedTabs.add(logoutTab);
+        tabPane.getTabs().remove(logoutTab);
 
     }
 }
