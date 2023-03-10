@@ -147,10 +147,22 @@ public class BookmarkController {
 
     }
 
+    private void clear(){
+        if(MovieSet != null){
+            MovieSet.clear();
+        }
+
+        if(BookSet != null){
+            BookSet.clear();
+        }
+        description.setText("");
+        description.setGraphic(null);
+    }
+
     @FXML
     private void onSearchButtonClick(ActionEvent event) {
 
-        //items.clear();
+        clear();
         searchString = searchText.getText();
         ErrorChecking.setTextFill(Color.WHITE);
         MovieSearchManager ms = new MovieSearchManager();
@@ -161,10 +173,6 @@ public class BookmarkController {
             switch (searchBy.getValue()) {
                 case "Title": {
                     ErrorChecking.setText("Searching Movies by Title: " + searchString + "...");
-
-                    if(MovieSet != null){
-                        MovieSet.clear();
-                    }
                     //
                     searchCriteria = new SearchCriteria(
                             BookmarkConstants.TYPE_MOVIE,
@@ -180,10 +188,6 @@ public class BookmarkController {
                 }
                 case "Actor": {
                     ErrorChecking.setText("Searching Movies by Actor: " + searchString + "...");
-
-                    if(MovieSet != null){
-                        MovieSet.clear();
-                    }
                     //
                     searchCriteria = new SearchCriteria(
                             BookmarkConstants.TYPE_MOVIE,
@@ -363,6 +367,8 @@ public class BookmarkController {
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
 
         description.setText("");//Clear the descriptions
+        description.setGraphic(null);
+        System.out.println(getType());
 
         if(getType().equals("Movie")){
 
