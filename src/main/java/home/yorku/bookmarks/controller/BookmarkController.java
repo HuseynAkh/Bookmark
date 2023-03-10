@@ -355,11 +355,13 @@ public class BookmarkController {
                     setGraphic(null);
                 } else {
                     Label label = new Label(item);
-                    MenuItem bookList = menu.getItems().get(0);
+                    MenuItem myCurrentList = menu.getItems().get(0);
+                    MenuItem myFutureList = menu.getItems().get(1);
                     stackPane.getChildren().set(0, label);
                     setGraphic(stackPane);
                     // Call the "saveToList" function when Menu item 1 is clicked
-                    bookList.setOnAction(e -> saveToList());
+                    myCurrentList.setOnAction(e -> saveToMyCurrentList());
+                    myFutureList.setOnAction(e -> saveToMyFutureList());
                 }
             }
         });
@@ -415,6 +417,8 @@ public class BookmarkController {
     @FXML
     private ListView<String> ML_myBookList;
     @FXML
+    private ListView<String> upNextList;
+    @FXML
     private void listUpdate(){
         ConnectionMethods method = new ConnectionMethods();
 
@@ -424,10 +428,50 @@ public class BookmarkController {
         ObservableList<String> bookList = FXCollections.observableList(method.pullBooks());
         ML_myBookList.setItems(bookList);
 
+        ObservableList<String> futureList = FXCollections.observableList(method.pullFutureList());
+        upNextList.setItems(futureList);
+
     }
 
     @FXML
-    private void saveToList(){
+    private void saveToMyFutureList(){
+
+        ConnectionMethods method = new ConnectionMethods();
+
+        final String selectedItem = myListView.getSelectionModel().getSelectedItem();
+        final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
+
+        if(searchType.getValue().equals("Books")){
+
+            int i = 0;
+            for (Book b : BookSet) {
+                if(i == selectedIndex ){
+
+                    method.insertFutureList(01, b.getIdentifier(), b.getTitle(), b.getIsbn(), b.getAuthor().toString(), null, null);
+                }
+                i++;
+            }
+
+
+        }else if(searchType.getValue().equals("Movies")){
+
+            int i = 0;
+            for (Movie m : MovieSet) {
+                if(i == selectedIndex ){
+
+                    method.insertFutureList(01, m.getIdentifier(), m.getTitle(), null, null, m.getReleaseDate(), m.getOverview() );
+                }
+                i++;
+            }
+
+        }else{
+            //error checking
+        }
+
+    }
+
+    @FXML
+    private void saveToMyCurrentList(){
         ConnectionMethods method = new ConnectionMethods();
 
         final String selectedItem = myListView.getSelectionModel().getSelectedItem();

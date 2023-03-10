@@ -14,7 +14,7 @@ public class MovieController extends MediaController {
     protected void display() {
         myListView.getItems().clear();
         for (Movie movie : movies) {
-            myListView.getItems().add(movie.getTitle());
+            myListView.getItems().add(movie.getTitle() + " " + "(Release date: " + movie.getReleaseDate() + ")");
         }
     }
 

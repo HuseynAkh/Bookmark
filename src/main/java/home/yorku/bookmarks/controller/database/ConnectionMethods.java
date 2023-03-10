@@ -7,6 +7,31 @@ import java.util.ArrayList;
 
 public class ConnectionMethods {
     //Change String to object Book or Movie later
+
+    public void insertFutureList(int user_id, String identifier, String title, String isbn, String author, String release_date, String description) {
+
+        try {
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Future_List");
+            statement.setInt(1, user_id);
+            statement.setString(2, identifier);
+            statement.setString(3, title);
+            statement.setString(4, isbn);
+            statement.setString(5, author);
+            statement.setString(6, release_date);
+            statement.setString(7, description);
+            int rowsInserted = statement.executeUpdate();
+
+            if (rowsInserted > 0) {
+                System.out.println("A new book was inserted into FUTURE LIST successfully.");
+            }
+
+            connection.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println("Error inserting book: " + e.getMessage());
+        }
+    }
     public void insertBook(int user_id, String identifier, String title, String isbn,  String author) {
 
         try {
@@ -20,7 +45,7 @@ public class ConnectionMethods {
             int rowsInserted = statement.executeUpdate();
 
             if (rowsInserted > 0) {
-                System.out.println("A new book was inserted successfully.");
+                System.out.println("A new book was inserted into BOOK LIST successfully.");
             }
 
             connection.closeConnection();
@@ -44,7 +69,7 @@ public class ConnectionMethods {
             int rowsInserted = statement.executeUpdate();
 
             if (rowsInserted > 0) {
-                System.out.println("A new movie was inserted successfully.");
+                System.out.println("A new movie was inserted into MOVIE LIST successfully.");
             }
 
             connection.closeConnection();
@@ -66,7 +91,6 @@ public class ConnectionMethods {
 
             while (rs.next()) {
                 String title = rs.getString("title");
-                System.out.println(title);
                 movies.add(title);
             }
 
@@ -92,7 +116,6 @@ public class ConnectionMethods {
 
             while (rs.next()) {
                 String title = rs.getString("title");
-                System.out.println(title);
                 books.add(title);
             }
 
@@ -104,6 +127,31 @@ public class ConnectionMethods {
         }
 
         return books;
+    }
+
+    public ArrayList<String> pullFutureList() {
+
+        ArrayList<String> futureList = new ArrayList<>();
+
+        try {
+
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Pull_Future_List");
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                String title = rs.getString("title");
+                futureList.add(title);
+            }
+
+            connection.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println("Error inserting movie: " + e.getMessage());
+
+        }
+
+        return futureList;
     }
 
 
