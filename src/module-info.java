@@ -5,6 +5,8 @@ module com.example.hello {
     requires json.simple;
     requires java.sql;
     requires java.desktop;
+    requires org.testng;
+    requires org.junit.jupiter.api;
 
 
     opens home.yorku.bookmarks.view to javafx.fxml;
