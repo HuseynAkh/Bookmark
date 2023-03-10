@@ -11,23 +11,19 @@ public class AlphaSort {
     public AlphaSort(){
 
     }
-    public Set<Movie> sortMovies(Set<Movie> list){
-        List<Movie> sortedList = list.stream().sorted(Comparator.comparing(Movie::getTitle)).collect(Collectors.toList());
+    public ArrayList<String> sortMovies(ArrayList<String> list){
 
-        list.clear();
-        for(Movie m: sortedList) {
-            list.add(m);
-        }
+        Collections.sort(list);
+//        List<Movie> sortedList = list.stream().sorted(Comparator.comparing(Movie::getTitle)).collect(Collectors.toList());
+//        list.clear();
+//        for(Movie m: sortedList) {
+//            list.add(m);
+//        } // This chunk of code exists just incase it needs to be used in the future.
         return list;
     }
 
-    public Set<Book> sortBooks(Set<Book> list){
-        List<Book> sortedList = list.stream().sorted(Comparator.comparing(Book::getTitle)).collect(Collectors.toList());
-
-        list.clear();
-        for(Book b: sortedList) {
-            list.add(b);
-        }
+    public ArrayList<String> sortBooks(ArrayList<String> list){
+        Collections.sort(list);
         return list;
     }
 }
