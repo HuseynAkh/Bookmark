@@ -79,6 +79,12 @@ public class BookmarkController {
     private ListView<String> myMovieList;
     private ObservableList<String> movieList = FXCollections.observableArrayList();
     @FXML
+    private ListView<String> ML_myMovieList;
+    @FXML
+    private ListView<String> ML_myBookList;
+    @FXML
+    private ListView<String> upNextList;
+    @FXML
     private Label description;
     private Set<Movie> MovieSet;
     private Set<Book> BookSet;
@@ -97,10 +103,13 @@ public class BookmarkController {
 
         bookPortfolio = new BookPortfolio();
         moviePortfolio = new MoviePortfolio();
-
+        //Initialize the list when null
         myBookList.setItems(bookList);
         myMovieList.setItems(movieList);
         user.setItems(userOptions);
+
+        //Update lists
+        listUpdate();
 
         Scene scene = anchorPane.getScene();
         if (scene != null) {
@@ -366,6 +375,8 @@ public class BookmarkController {
             }
         });
     }
+
+
     @FXML
     private ImageView coverImageView;
     @FXML
@@ -412,21 +423,17 @@ public class BookmarkController {
 
     }
 
-    @FXML
-    private ListView<String> ML_myMovieList;
-    @FXML
-    private ListView<String> ML_myBookList;
-    @FXML
-    private ListView<String> upNextList;
-    @FXML
+
     private void listUpdate(){
         ConnectionMethods method = new ConnectionMethods();
 
         ObservableList<String> movieList = FXCollections.observableList(method.pullMovies());
         ML_myMovieList.setItems(movieList);
+        myMovieList.setItems(movieList);
 
         ObservableList<String> bookList = FXCollections.observableList(method.pullBooks());
         ML_myBookList.setItems(bookList);
+        myBookList.setItems(bookList);
 
         ObservableList<String> futureList = FXCollections.observableList(method.pullFutureList());
         upNextList.setItems(futureList);
@@ -440,7 +447,6 @@ public class BookmarkController {
 
         ConnectionMethods method = new ConnectionMethods();
 
-        final String selectedItem = myListView.getSelectionModel().getSelectedItem();
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
 
         if(searchType.getValue().equals("Books")){
@@ -469,14 +475,13 @@ public class BookmarkController {
         }else{
             //error checking
         }
-
+        listUpdate();
     }
 
     @FXML
     private void saveToMyCurrentList(){
         ConnectionMethods method = new ConnectionMethods();
 
-        final String selectedItem = myListView.getSelectionModel().getSelectedItem();
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
 
         if(searchType.getValue().equals("Books")){
@@ -491,9 +496,6 @@ public class BookmarkController {
                 i++;
             }
 
-            //method.insertBook(01, selectedItem, "Anonymous", "NULL", "This will be the book description");
-            bookList.add(selectedItem);
-
         }else if(searchType.getValue().equals("Movies")){
 
             int i = 0;
@@ -505,10 +507,12 @@ public class BookmarkController {
                 }
                 i++;
             }
-            movieList.add(selectedItem);
+
         }else{
             //error checking
         }
+
+        listUpdate();
     }
 
     @FXML
@@ -553,13 +557,22 @@ public class BookmarkController {
         }
     }
 
+
     @FXML
     private void removeBook(ActionEvent event){
 
-        final int selectedIdx = myBookList.getSelectionModel().getSelectedIndex();
+        ConnectionMethods method = new ConnectionMethods();
+        final String selectedItem = ML_myBookList.getSelectionModel().getSelectedItem();
+        final int selectedIdx = ML_myBookList.getSelectionModel().getSelectedIndex();
+
         if (selectedIdx != -1) {
-            myBookList.getItems().remove(selectedIdx);
+            method.removeBook(selectedItem);
         }
+
+    //We will have to design this better for itr 3 as MovieSet is empty from ML
+    /*
+        myBookList.getItems().remove(selectedIdx);
+
         int i = 0;
         for (Book b : BookSet) {
             if(i == selectedIdx ){
@@ -567,14 +580,26 @@ public class BookmarkController {
             }
             i++;
         }
+
+     */
+
+        listUpdate();
+
     }
 
     @FXML
-    private void removeMovie(ActionEvent event){
-        final int selectedIdx = myMovieList.getSelectionModel().getSelectedIndex();
+    private void removeMovie(){
+
+        ConnectionMethods method = new ConnectionMethods();
+        final String selectedItem = ML_myMovieList.getSelectionModel().getSelectedItem();
+        final int selectedIdx = ML_myMovieList.getSelectionModel().getSelectedIndex();
+
         if (selectedIdx != -1) {
-            myMovieList.getItems().remove(selectedIdx);
+            method.removeMovie(selectedItem);
         }
+
+    //We will have to design this better for itr 3 as MovieSet is empty from ML
+    /*
         int i = 0;
         for (Movie m : MovieSet) {
             if(i == selectedIdx ) {
@@ -582,6 +607,10 @@ public class BookmarkController {
             }
             i++;
         }
+    */
+
+        listUpdate();
+
     }
 
     public void login(MouseEvent mouseEvent) {

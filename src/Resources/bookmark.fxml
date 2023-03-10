@@ -81,8 +81,8 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" >
                     <children>
-                        <Label layoutX="405.0" layoutY="260.0" text="Description" textFill="white"/>
-                        <ScrollPane fx:id="ML_descriptionPane" layoutX="164.0" layoutY="280.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
+                        <Label layoutX="405.0" layoutY="300.0" text="Description" textFill="white"/>
+                        <ScrollPane fx:id="ML_descriptionPane" layoutX="164.0" layoutY="320.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
                             <Label fx:id="ML_description" wrapText="true"/>
                         </ScrollPane>
 
@@ -95,7 +95,8 @@
                         <Label layoutX="690.0" layoutY="5.0" text="Movies I've Watched" textFill="white"/>
                         <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
 
-                        <Button fx:id="updateList" layoutX="400.0" layoutY="480.0" mnemonicParsing="false" text="Update My Lists" onAction="#listUpdate" />
+                        <Button fx:id="removeBook" layoutX="400.0" layoutY="260.0" mnemonicParsing="false" text="Remove Book" onAction="#removeBook"/>
+                        <Button fx:id="removeMovie" layoutX="660.0" layoutY="260.0" mnemonicParsing="false" text="Remove Movie" onAction="#removeMovie"/>
                     <!--
                         <Button fx:id="favouriteButtonBook" layoutX="630.0" layoutY="265.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
                         <Button fx:id="removeBook" layoutX="770.0" layoutY="265.0" mnemonicParsing="false" text="Remove" onAction="#removeBook"/>

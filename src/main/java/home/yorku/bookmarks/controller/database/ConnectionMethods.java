@@ -95,7 +95,7 @@ public class ConnectionMethods {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error inserting movie: " + e.getMessage());
+            System.out.println("Error pulling Movies: " + e.getMessage());
 
         }
 
@@ -119,7 +119,7 @@ public class ConnectionMethods {
 
 
         } catch (SQLException e) {
-            System.out.println("Error inserting movie: " + e.getMessage());
+            System.out.println("Error pulling Books: " + e.getMessage());
 
         }
 
@@ -143,7 +143,7 @@ public class ConnectionMethods {
 
 
         } catch (SQLException e) {
-            System.out.println("Error inserting movie: " + e.getMessage());
+            System.out.println("Error inserting into FUTURE LIST: " + e.getMessage());
 
         }
 
@@ -158,38 +158,50 @@ public class ConnectionMethods {
             connection.closeConnection();
 
         } catch (SQLException e) {
-            System.out.println("Error inserting movie: " + e.getMessage());
+            System.out.println("Error disconnecting: " + e.getMessage());
 
         }
 
     }
 
 
-    //For backend db to work we need to give a unique id to each book and movie object on add
+    //For future backend db to work better need to give a unique id to each book and movie object on add
     //or add the entire object to the database and just pull from the "titles" in the db
-    /*
-    public void removeBook(int bookId) {
+
+    public void removeMovie(String title) {
+
         try {
 
-            String sql = "DELETE FROM my_book_list WHERE book_ID = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, bookId);
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Delete_Movie");
+            statement.setString(1, title);
             int rowsDeleted = statement.executeUpdate();
 
-            if (rowsDeleted > 0) {
-                System.out.println("The book with ID " + bookId + " was deleted successfully.");
-            } else {
-                System.out.println("No books were deleted.");
-            }
+            System.out.println(rowsDeleted + " row deleted.");
+            connection.closeConnection();
 
         } catch (SQLException e) {
-            System.out.println("Error deleting book: " + e.getMessage());
+            System.out.println("Error removing movie: " + e.getMessage());
+
         }
     }
 
-     */
+    public void removeBook(String title) {
 
+        try {
 
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Delete_Book");
+            statement.setString(1, title);
+            int rowsDeleted = statement.executeUpdate();
 
+            System.out.println(rowsDeleted + " row deleted.");
+            connection.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println("Error removing book: " + e.getMessage());
+
+        }
+    }
 
 }

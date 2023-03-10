@@ -49,8 +49,12 @@ public class DatabaseConnection {
             sql = "INSERT INTO my_book_list (user_id, identifier, title, isbn, author) VALUES (?, ?, ?, ?, ?)";
         }else if(type.equals("Movie")) {
             sql = "INSERT INTO my_movie_list (user_ID, identifier, title, release_date, description) VALUES (?, ?, ?, ?, ?)";
-        }else if(type.equals("Future_List")){
+        }else if(type.equals("Future_List")) {
             sql = "INSERT INTO my_future_list (user_ID, identifier, title, isbn, author, release_date, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        }else if(type.equals("Delete_Movie")){
+            sql = "DELETE FROM my_movie_list WHERE title = ?";
+        }else if(type.equals("Delete_Book")){
+            sql = "DELETE FROM my_book_list WHERE title = ?";
         }else if(type.equals("Pull_Movies")){
             sql = "Select title FROM my_movie_list";
         }else if(type.equals("Pull_Books")){
