@@ -1,6 +1,8 @@
 package home.yorku.bookmarks.controller;
 import home.yorku.bookmarks.controller.database.ConnectionMethods;
 import home.yorku.bookmarks.controller.search.BookSearchManager;
+import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
+import home.yorku.bookmarks.controller.search.ImageDownloader;
 import home.yorku.bookmarks.controller.search.MovieSearchManager;
 import home.yorku.bookmarks.model.Book;
 import home.yorku.bookmarks.model.BookmarkConstants;
@@ -12,6 +14,8 @@ import javafx.geometry.Side;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -21,6 +25,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
+
+import javax.swing.*;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
@@ -345,11 +351,15 @@ public class BookmarkController {
             }
         });
     }
-
+    @FXML
+    private Label coverLabel;
+    @FXML
+    private ImageView coverImageView;
     @FXML
     private void callDescription(MouseEvent event){
 
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
+       // String bookKey = "";
         description.setText("");//Clear the descriptions
 
         if(getType().equals("Movie")){
@@ -364,15 +374,27 @@ public class BookmarkController {
             }
         }
         if(getType().equals("Book")){
+            CoverUrlExtractor url = new CoverUrlExtractor();
 
             int i = 0;
-            for (Book m : BookSet) {
+            for (Book b : BookSet) {
                 if(i == selectedIndex ){
-                    System.out.println(m.getDescription()); // no longer in use
+                    url.getBookCover(b.getIsbn());
+
+                    //Image coverImage = new Image("./temporary.jpg");
+
+                    //coverImageView.setImage(coverImage);
+
+                    // Set the ImageView as the graphic property of the Label
+                    //coverLabel.setGraphic(coverImageView);
+
+                    System.out.println(b.getIsbn()); // no longer in use
                     //description.setPadding(new Insets(5, 5, 5, 5));
                 }
                 i++;
             }
+
+
         }
 
         System.out.println("clicked on " + myListView.getSelectionModel().getSelectedItem());

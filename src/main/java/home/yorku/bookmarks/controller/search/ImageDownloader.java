@@ -17,6 +17,7 @@ public class ImageDownloader {
             URL url = new URL(urlString); //convert passed url String into url object
             this.image = ImageIO.read(url); //download url
             ImageIO.write(image, "jpg", new File("./temporary.jpg")); //store in current directory.
+            System.out.println("Image downloaded @: ");
         }catch(IOException e){
             e.printStackTrace();
         }

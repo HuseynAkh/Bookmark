@@ -21,8 +21,15 @@ public class CoverUrlExtractor {
             String coverURL = (String) isbnData.get("large"); //grab url for largest book cover jpg image
             this.imgDL.downloadImage(coverURL, isbn); //call upon ImageDownloader to download and store image
         }catch (NullPointerException e){ //some books do not have covers. this exception catch will catch NPE to reduce software lag and to assign a placeholder image as book cover
-
+            System.out.println("No Cover");
         }
 
     }
+
+    public static void main(String[] args) {
+        CoverUrlExtractor url = new CoverUrlExtractor();
+        url.getBookCover("OL22856696M");
+    }
 }
+
+
