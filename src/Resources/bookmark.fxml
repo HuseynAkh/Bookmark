@@ -2,10 +2,9 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.collections.FXCollections?>
 
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.image.ImageView?>
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
          tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: #0f0e26;" xmlns:fx="http://javafx.com/fxml"
@@ -58,12 +57,14 @@
 
                         <Label layoutX="265.0" layoutY="380.0" text="Description" textFill="white"/>
                         <ScrollPane fx:id="descriptionPane" layoutX="24.0" layoutY="400.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
-                            <Label fx:id="description" wrapText="true"/>
-                            <Label fx:id="coverLabel" text="Book Cover">
-                                <graphic>
-                                    <ImageView fx:id="coverImageView" fitWidth="300.0" fitHeight="400.0" />
-                                </graphic>
-                            </Label>
+
+                            <!--  <Label fx:id="description" wrapText="true"/> !-->
+                                <Label fx:id="description" wrapText="true">
+                                     <graphic>
+                                         <ImageView fx:id="coverImageView" />
+                                     </graphic>
+                                 </Label>
+
                         </ScrollPane>
 
                         <Label layoutX="690.0" layoutY="65.0" text="My Book List" textFill="white"/>
