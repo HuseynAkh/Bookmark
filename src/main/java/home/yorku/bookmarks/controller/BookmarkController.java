@@ -4,10 +4,7 @@ import home.yorku.bookmarks.controller.search.BookSearchManager;
 import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
 import home.yorku.bookmarks.controller.search.ImageDownloader;
 import home.yorku.bookmarks.controller.search.MovieSearchManager;
-import home.yorku.bookmarks.model.Book;
-import home.yorku.bookmarks.model.BookmarkConstants;
-import home.yorku.bookmarks.model.Movie;
-import home.yorku.bookmarks.model.SearchCriteria;
+import home.yorku.bookmarks.model.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -85,6 +82,10 @@ public class BookmarkController {
     private Label description;
     private Set<Movie> MovieSet;
     private Set<Book> BookSet;
+
+    private BookPortfolio bookPortfolio;
+
+    private MoviePortfolio moviePortfolio;
     private double sceneHeight;
     private double sceneWidth;
 
@@ -93,6 +94,10 @@ public class BookmarkController {
 
     @FXML
     private void initialize() { //Initializes all Listview items
+
+        bookPortfolio = new BookPortfolio();
+        moviePortfolio = new MoviePortfolio();
+
         myBookList.setItems(bookList);
         myMovieList.setItems(movieList);
         user.setItems(userOptions);
@@ -405,10 +410,21 @@ public class BookmarkController {
 
     }
 
+    @FXML
+    private ListView<String> ML_myMovieList;
+    @FXML
+    private ListView<String> ML_myBookList;
+    @FXML
+    private void listUpdate(){
+        ConnectionMethods method = new ConnectionMethods();
 
-    //Need to fix bug where if Book is selected from drop down after a Movie search,
-    //it will add the book to the movie list
-    //May need to wait for backend to return the object so that we can have a "check for book" bool
+        ObservableList<String> movieList = FXCollections.observableList(method.pullMovies());
+        ML_myMovieList.setItems(movieList);
+
+        ObservableList<String> bookList = FXCollections.observableList(method.pullBooks());
+        ML_myBookList.setItems(bookList);
+
+    }
 
     @FXML
     private void saveToList(){
@@ -419,7 +435,17 @@ public class BookmarkController {
 
         if(searchType.getValue().equals("Books")){
 
-            method.insertBook(01, selectedItem, "Anonymous", "NULL", "This will be the book description");
+            int i = 0;
+            for (Book b : BookSet) {
+                if(i == selectedIndex ){
+
+                    this.bookPortfolio.AddToSavedBooks(b);
+                    method.insertBook(01, b.getIdentifier(), b.getTitle(), b.getIsbn(), b.getAuthor().toString());
+                }
+                i++;
+            }
+
+            //method.insertBook(01, selectedItem, "Anonymous", "NULL", "This will be the book description");
             bookList.add(selectedItem);
 
         }else if(searchType.getValue().equals("Movies")){
@@ -427,8 +453,9 @@ public class BookmarkController {
             int i = 0;
             for (Movie m : MovieSet) {
                 if(i == selectedIndex ){
+                    this.moviePortfolio.AddToSavedMovies(m);
                     System.out.println("Title: " + m.getTitle() + "\n" + "Description: " + m.getOverview() + "\n" + "Release Date: " + m.getReleaseDate());
-                    method.insertMovie(01, m.getTitle(), m.getReleaseDate(), m.getOverview() );
+                    method.insertMovie(01, m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview() );
                 }
                 i++;
             }
