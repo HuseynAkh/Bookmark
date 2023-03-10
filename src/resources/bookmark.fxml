@@ -89,7 +89,7 @@
                     !-->
                         <Label layoutX="24.0" layoutY="5.0" text="What to read/Watch Next" textFill="white"/>
                         <ListView fx:id="upNextList" layoutX="24.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
-                        <Button fx:id="rmFuturlist" layoutX="310.0" layoutY="260.0" mnemonicParsing="false" text="Remove from List" onAction="#removeFutureList"/>
+                        <Button fx:id="rmFutureList" layoutX="24.0" layoutY="260.0" mnemonicParsing="false" text="Remove from List" onAction="#removeFutureList"/>
 
                         <Label layoutX="400.0" layoutY="5.0" text="Books I've Read" textFill="white"/>
                         <ListView fx:id="ML_myBookList" layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
