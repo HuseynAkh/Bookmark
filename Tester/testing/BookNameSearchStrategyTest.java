@@ -5,6 +5,7 @@ import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
 import home.yorku.bookmarks.model.Book;
 import home.yorku.bookmarks.model.SearchCriteria;
 import org.json.simple.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.testng.annotations.Test;
 
 import java.net.MalformedURLException;
@@ -31,8 +32,8 @@ public class BookNameSearchStrategyTest {
         BookSearchManager bookSearch = new BookSearchManager();
         Set<Book> result = bookSearch.searchBook(sc);
 
-        assertEquals(expectedURL,actualURL);
-        assertNotNull(result);
+        Assertions.assertEquals(expectedURL,actualURL);
+        Assertions.assertNotNull(result);
     }
 
     @Test
@@ -49,8 +50,8 @@ public class BookNameSearchStrategyTest {
         BookSearchManager bookSearch = new BookSearchManager();
         Set<Book> result = bookSearch.searchBook(sc);
 
-        assertEquals(expectedURL,actualURL);
-        assertNull(result);
+        Assertions.assertEquals(expectedURL,actualURL);
+        Assertions.assertNull(result);
     }
 
 }

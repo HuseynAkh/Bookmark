@@ -1,6 +1,7 @@
 package testing;
 
 import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
+import org.junit.jupiter.api.Assertions;
 import org.testng.annotations.Test;
 
 import java.net.MalformedURLException;
@@ -20,6 +21,6 @@ public class BookCoverTest {
         cue.getBookCover(OLID);
         String actualJPGUrl = cue.coverURL;
 
-        assertEquals(expectedJPGUrl,actualJPGUrl);
+        Assertions.assertEquals(expectedJPGUrl,actualJPGUrl);
     }
 }

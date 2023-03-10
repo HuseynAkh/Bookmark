@@ -2,6 +2,7 @@ package testing;
 
 import home.yorku.bookmarks.controller.search.MovieTitleSearchStrategy;
 import home.yorku.bookmarks.model.SearchCriteria;
+import org.junit.jupiter.api.Assertions;
 import org.testng.annotations.Test;
 
 import java.net.MalformedURLException;
@@ -24,7 +25,7 @@ class MovieTitleSearchStrategyTest {
 
         URL actual = urlTester.getSearchURL(searchCriteria);
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
     //This test tests to ensure the URL for when a search is null is correct
     @Test
@@ -39,7 +40,7 @@ class MovieTitleSearchStrategyTest {
 
         URL actual = urlTester.getSearchURL(searchCriteria);
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
     //This test tests to ensure the URL for when a search is incorrect is correct
     @Test
@@ -54,6 +55,6 @@ class MovieTitleSearchStrategyTest {
 
         URL actual = urlTester.getSearchURL(searchCriteria);
 
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 }
