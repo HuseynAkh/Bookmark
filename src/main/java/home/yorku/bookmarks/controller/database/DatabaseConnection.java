@@ -55,6 +55,8 @@ public class DatabaseConnection {
             sql = "DELETE FROM my_movie_list WHERE title = ?";
         }else if(type.equals("Delete_Book")){
             sql = "DELETE FROM my_book_list WHERE title = ?";
+        }else if(type.equals("Delete_Future_List")){
+            sql = "DELETE FROM my_future_list WHERE title = ?";
         }else if(type.equals("Pull_Movies")){
             sql = "Select title FROM my_movie_list";
         }else if(type.equals("Pull_Books")){

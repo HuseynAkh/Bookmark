@@ -1,10 +1,6 @@
 package home.yorku.bookmarks.controller.sorting;
 
-import home.yorku.bookmarks.model.Book;
-import home.yorku.bookmarks.model.Movie;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AlphaSort {
 

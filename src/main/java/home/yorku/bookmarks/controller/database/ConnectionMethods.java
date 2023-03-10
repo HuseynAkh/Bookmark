@@ -164,6 +164,23 @@ public class ConnectionMethods {
 
     }
 
+    public void removeFutureList(String title){
+        try {
+
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Delete_Future_List");
+            statement.setString(1, title);
+            int rowsDeleted = statement.executeUpdate();
+
+            System.out.println(rowsDeleted + " row deleted.");
+            connection.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println("Error removing item from MY FUTURE LIST: " + e.getMessage());
+
+        }
+    }
+
 
     //For future backend db to work better need to give a unique id to each book and movie object on add
     //or add the entire object to the database and just pull from the "titles" in the db

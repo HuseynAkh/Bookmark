@@ -81,6 +81,9 @@ public class BookmarkController {
     private ObservableList<String> MLbookList = FXCollections.observableArrayList();
     @FXML
     private ListView<String> upNextList;
+    private ObservableList<String> futureList = FXCollections.observableArrayList();
+    @FXML
+    private ImageView coverImageView;
     @FXML
     private Label description;
     private Set<Movie> MovieSet;
@@ -103,6 +106,7 @@ public class BookmarkController {
         myMovieList.setItems(movieList);
         ML_myBookList.setItems(MLbookList);
         ML_myMovieList.setItems(MLmovieList);
+        upNextList.setItems(futureList);
         user.setItems(userOptions);
 
         //Update lists
@@ -374,8 +378,6 @@ public class BookmarkController {
     }
 
     @FXML
-    private ImageView coverImageView;
-    @FXML
     private void callDescription(MouseEvent event) throws IOException {
 
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
@@ -442,7 +444,7 @@ public class BookmarkController {
         ML_myBookList.setItems(MLbookList);
         myBookList.setItems(MLbookList);
 
-        ObservableList<String> futureList = FXCollections.observableList(method.pullFutureList());
+        futureList = FXCollections.observableList(method.pullFutureList());
         upNextList.setItems(futureList);
 
         method.closeConnection();
@@ -607,30 +609,9 @@ public class BookmarkController {
         listUpdate();
 
     }
-    @FXML
-    private void sortAlpha(MouseEvent event){
-        AlphaSort alphaSort = new AlphaSort();
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        arrayList.addAll(ML_myMovieList.getItems());
-        // Same as above
-        /*
-        for (int i = 0; i < ML_myMovieList.getItems().size(); i++) {
-            arrayList.add(ML_myMovieList.getItems().get(i));
-        }
-
-         */
-
-        arrayList = alphaSort.sortMovies(arrayList);
-
-        ML_myMovieList.getItems().removeAll();
-        ML_myMovieList.getItems().addAll(arrayList);
-
-
-    }
 
     @FXML
-    private void removeMovie(){
+    private void removeMovie(ActionEvent event){
 
         ConnectionMethods method = new ConnectionMethods();
         String selectedItem = ML_myMovieList.getSelectionModel().getSelectedItem();
@@ -658,6 +639,47 @@ public class BookmarkController {
         listUpdate();
 
     }
+
+    @FXML
+    private void removeFutureList(ActionEvent event){
+        ConnectionMethods method = new ConnectionMethods();
+
+        String selectedItem = upNextList.getSelectionModel().getSelectedItem();
+        final int selectedIdx = upNextList.getSelectionModel().getSelectedIndex();
+
+        if (selectedIdx != -1) {
+            method.removeFutureList(selectedItem);
+        }
+
+        listUpdate();
+    }
+
+    @FXML
+    private void sortAlphaMovie(MouseEvent event){
+        AlphaSort alphaSort = new AlphaSort();
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        arrayList.addAll(ML_myMovieList.getItems());
+        arrayList = alphaSort.sortMovies(arrayList);
+
+        ML_myMovieList.getItems().removeAll(MLmovieList);
+        ML_myMovieList.getItems().addAll(arrayList);
+
+    }
+
+    @FXML
+    private void sortAlphaBook(MouseEvent event){
+        AlphaSort alphaSort = new AlphaSort();
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        arrayList.addAll(ML_myBookList.getItems());
+        arrayList = alphaSort.sortMovies(arrayList);
+
+        ML_myBookList.getItems().removeAll(MLbookList);
+        ML_myBookList.getItems().addAll(arrayList);
+
+    }
+
 
     public void login(MouseEvent mouseEvent) {
 
