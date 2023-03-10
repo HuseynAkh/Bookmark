@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MovieTitleSearchStrategyTest {
 
-
+    //This test tests to ensure the URL for searching by movie name is correct
     @Test
     void getSearchURLRegTitleSearch() throws MalformedURLException {
 
@@ -26,6 +26,7 @@ class MovieTitleSearchStrategyTest {
 
         assertEquals(expected, actual);
     }
+    //This test tests to ensure the URL for when a search is null is correct
     @Test
     void getSearchURLNullTitleSearch() throws MalformedURLException {
 
@@ -40,6 +41,7 @@ class MovieTitleSearchStrategyTest {
 
         assertEquals(expected, actual);
     }
+    //This test tests to ensure the URL for when a search is incorrect is correct
     @Test
     void getSearchURLIncorrectTtileSearch() throws MalformedURLException {
 
