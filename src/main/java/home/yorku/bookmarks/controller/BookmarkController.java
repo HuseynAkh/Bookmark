@@ -431,6 +431,8 @@ public class BookmarkController {
         ObservableList<String> futureList = FXCollections.observableList(method.pullFutureList());
         upNextList.setItems(futureList);
 
+        method.closeConnection();
+
     }
 
     @FXML
@@ -584,7 +586,7 @@ public class BookmarkController {
 
     public void login(MouseEvent mouseEvent) {
 
-        /*if(!user.getValue().equals("Team:")){
+        if(!user.getValue().equals("Team:")){
             stage = (Stage) tabPane.getScene().getWindow();
             stage.setWidth(900);
             stage.setHeight(680);
@@ -607,26 +609,6 @@ public class BookmarkController {
             LoginError.setTextFill(Color.RED);
             LoginError.setText("Please select your Team to Login");
         }
-
-         */
-        stage = (Stage) tabPane.getScene().getWindow();
-        stage.setWidth(900);
-        stage.setHeight(680);
-
-        tabPane.getTabs().addAll(removedTabs);
-        removedTabs.clear();
-
-        for (Tab tab : tabPane.getTabs()) {
-            tab.setDisable(false);
-        }
-
-        // Enable and show the login tab
-        Tab loginTab = tabPane.getTabs().stream()
-                .filter(tab -> tab.getId().equals("LoginPane"))
-                .findFirst()
-                .orElse(null);
-        removedTabs.add(loginTab);
-        tabPane.getTabs().remove(loginTab);
 
     }
 

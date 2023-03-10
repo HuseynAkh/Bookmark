@@ -94,8 +94,6 @@ public class ConnectionMethods {
                 movies.add(title);
             }
 
-            connection.closeConnection();
-
         } catch (SQLException e) {
             System.out.println("Error inserting movie: " + e.getMessage());
 
@@ -119,7 +117,6 @@ public class ConnectionMethods {
                 books.add(title);
             }
 
-            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error inserting movie: " + e.getMessage());
@@ -144,7 +141,6 @@ public class ConnectionMethods {
                 futureList.add(title);
             }
 
-            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error inserting movie: " + e.getMessage());
@@ -152,6 +148,20 @@ public class ConnectionMethods {
         }
 
         return futureList;
+    }
+
+    public void closeConnection(){
+
+        try {
+
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            connection.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println("Error inserting movie: " + e.getMessage());
+
+        }
+
     }
 
 
