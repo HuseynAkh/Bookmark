@@ -81,11 +81,12 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" >
                     <children>
+                    <!--
                         <Label layoutX="405.0" layoutY="300.0" text="Description" textFill="white"/>
                         <ScrollPane fx:id="ML_descriptionPane" layoutX="164.0" layoutY="320.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
                             <Label fx:id="ML_description" wrapText="true"/>
                         </ScrollPane>
-
+                    !-->
                         <Label layoutX="24.0" layoutY="5.0" text="What to read/Watch Next" textFill="white"/>
                         <ListView fx:id="upNextList" layoutX="24.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
 
