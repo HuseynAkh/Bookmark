@@ -3,6 +3,7 @@ import home.yorku.bookmarks.controller.database.ConnectionMethods;
 import home.yorku.bookmarks.controller.search.BookSearchManager;
 import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
 import home.yorku.bookmarks.controller.search.MovieSearchManager;
+import home.yorku.bookmarks.controller.sorting.AlphaSort;
 import home.yorku.bookmarks.model.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -604,6 +605,27 @@ public class BookmarkController {
      */
 
         listUpdate();
+
+    }
+    @FXML
+    private void sortAlpha(MouseEvent event){
+        AlphaSort alphaSort = new AlphaSort();
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        arrayList.addAll(ML_myMovieList.getItems());
+        // Same as above
+        /*
+        for (int i = 0; i < ML_myMovieList.getItems().size(); i++) {
+            arrayList.add(ML_myMovieList.getItems().get(i));
+        }
+
+         */
+
+        arrayList = alphaSort.sortMovies(arrayList);
+
+        ML_myMovieList.getItems().removeAll();
+        ML_myMovieList.getItems().addAll(arrayList);
+
 
     }
 

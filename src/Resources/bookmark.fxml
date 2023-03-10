@@ -99,7 +99,8 @@
                         <Button fx:id="removeBook" layoutX="310.0" layoutY="260.0" mnemonicParsing="false" text="Remove Book" onAction="#removeBook"/>
                         <Button fx:id="favouriteButtonBook" layoutX="420.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
                         <Button fx:id="removeMovie" layoutX="600.0" layoutY="260.0" mnemonicParsing="false" text="Remove Movie" onAction="#removeMovie"/>
-                        <Button fx:id="favouriteButtonMovie" layoutX="720.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addMovieToFavourites"/>
+                        <Button fx:id="favouriteButtonMovie" layoutX="710.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addMovieToFavourites"/>
+                        <Button fx:id="sort" layoutX="830.0" layoutY="260.0" mnemonicParsing="false" text="Sort" onAction="#sortAlpha" />
 
                     </children>
                 </AnchorPane>
