@@ -2,7 +2,6 @@ package home.yorku.bookmarks.controller;
 import home.yorku.bookmarks.controller.database.ConnectionMethods;
 import home.yorku.bookmarks.controller.search.BookSearchManager;
 import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
-import home.yorku.bookmarks.controller.search.ImageDownloader;
 import home.yorku.bookmarks.controller.search.MovieSearchManager;
 import home.yorku.bookmarks.model.*;
 import javafx.fxml.FXML;
@@ -23,9 +22,6 @@ import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 
-import javax.swing.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -80,8 +76,10 @@ public class BookmarkController {
     private ObservableList<String> movieList = FXCollections.observableArrayList();
     @FXML
     private ListView<String> ML_myMovieList;
+    private ObservableList<String> MLmovieList = FXCollections.observableArrayList();
     @FXML
     private ListView<String> ML_myBookList;
+    private ObservableList<String> MLbookList = FXCollections.observableArrayList();
     @FXML
     private ListView<String> upNextList;
     @FXML
@@ -106,6 +104,8 @@ public class BookmarkController {
         //Initialize the list when null
         myBookList.setItems(bookList);
         myMovieList.setItems(movieList);
+        ML_myBookList.setItems(MLbookList);
+        ML_myMovieList.setItems(MLmovieList);
         user.setItems(userOptions);
 
         //Update lists
@@ -427,13 +427,13 @@ public class BookmarkController {
     private void listUpdate(){
         ConnectionMethods method = new ConnectionMethods();
 
-        ObservableList<String> movieList = FXCollections.observableList(method.pullMovies());
-        ML_myMovieList.setItems(movieList);
-        myMovieList.setItems(movieList);
+        MLmovieList = FXCollections.observableList(method.pullMovies());
+        ML_myMovieList.setItems(MLmovieList);
+        myMovieList.setItems(MLmovieList);
 
-        ObservableList<String> bookList = FXCollections.observableList(method.pullBooks());
-        ML_myBookList.setItems(bookList);
-        myBookList.setItems(bookList);
+        MLbookList = FXCollections.observableList(method.pullBooks());
+        ML_myBookList.setItems(MLbookList);
+        myBookList.setItems(MLbookList);
 
         ObservableList<String> futureList = FXCollections.observableList(method.pullFutureList());
         upNextList.setItems(futureList);
@@ -517,16 +517,18 @@ public class BookmarkController {
 
     @FXML
     private void addBookToFavourites(ActionEvent event){
-        final String selectedItem = myBookList.getSelectionModel().getSelectedItem();
-        final int selectedIdx = myBookList.getSelectionModel().getSelectedIndex();
+        final String selectedItem = ML_myBookList.getSelectionModel().getSelectedItem();
+        final int selectedIdx = ML_myBookList.getSelectionModel().getSelectedIndex();
 
         if(!selectedItem.startsWith("*")){
-            myBookList.getItems().remove(selectedIdx);
+            ML_myBookList.getItems().remove(selectedIdx);
+            MLbookList.add(0,"*" + selectedItem);
             bookList.add(0, "*" + selectedItem); //Pushes favourite items to top of the list
         }else{
             System.out.println("The Book is already in Favourites");
         }
-
+    //We will have to design this better for itr 3 as MovieSet is empty from ML
+    /*
         int i = 0;
         for (Book b : BookSet) {
             if(i == selectedIdx ){
@@ -534,20 +536,26 @@ public class BookmarkController {
             }
             i++;
         }
+
+     */
     }
 
     @FXML
     private void addMovieToFavourites(ActionEvent event){
-        final String selectedItem = myMovieList.getSelectionModel().getSelectedItem();
-        final int selectedIdx = myMovieList.getSelectionModel().getSelectedIndex();
+
+        final String selectedItem = ML_myMovieList.getSelectionModel().getSelectedItem();
+        final int selectedIdx = ML_myMovieList.getSelectionModel().getSelectedIndex();
 
         if(!selectedItem.startsWith("*")){
             myMovieList.getItems().remove(selectedIdx);
+            MLmovieList.add(0,"*" + selectedItem);
             movieList.add(0,"*" + selectedItem);//Pushes favourite items to top of the list
         }else{
             System.out.println("The Movies is already in Favourites");
         }
 
+    //We will have to design this better for itr 3 as MovieSet is empty from ML
+    /*
         int i = 0;
         for (Movie m : MovieSet) {
             if (i == selectedIdx) {
@@ -555,6 +563,8 @@ public class BookmarkController {
             }
             i++;
         }
+
+     */
     }
 
 
@@ -562,8 +572,12 @@ public class BookmarkController {
     private void removeBook(ActionEvent event){
 
         ConnectionMethods method = new ConnectionMethods();
-        final String selectedItem = ML_myBookList.getSelectionModel().getSelectedItem();
+        String selectedItem = ML_myBookList.getSelectionModel().getSelectedItem();
         final int selectedIdx = ML_myBookList.getSelectionModel().getSelectedIndex();
+
+        if(selectedItem.startsWith("*")){
+            selectedItem = selectedItem.substring(1);
+        }
 
         if (selectedIdx != -1) {
             method.removeBook(selectedItem);
@@ -591,8 +605,12 @@ public class BookmarkController {
     private void removeMovie(){
 
         ConnectionMethods method = new ConnectionMethods();
-        final String selectedItem = ML_myMovieList.getSelectionModel().getSelectedItem();
+        String selectedItem = ML_myMovieList.getSelectionModel().getSelectedItem();
         final int selectedIdx = ML_myMovieList.getSelectionModel().getSelectedIndex();
+
+        if(selectedItem.startsWith("*")){
+            selectedItem = selectedItem.substring(1);
+        }
 
         if (selectedIdx != -1) {
             method.removeMovie(selectedItem);
