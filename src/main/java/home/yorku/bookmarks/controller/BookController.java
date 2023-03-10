@@ -15,7 +15,7 @@ public class BookController extends MediaController {
     protected void display() {
         myListView.getItems().clear();
         for (Book book : books) {
-            myListView.getItems().add(book.getTitle() + " " + "(Author: " + book.getAuthor() + ")");
+            myListView.getItems().add(book.getTitle() + " | | " + "Author: " + book.getAuthor());
         }
     }
 
