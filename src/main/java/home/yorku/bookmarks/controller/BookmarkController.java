@@ -38,8 +38,6 @@ public class BookmarkController {
     @FXML
     private TabPane tabPane;
     @FXML
-    private Button Login;
-    @FXML
     private VBox LoginBox;
     private Stage stage;
     List<Tab> removedTabs = new ArrayList<>();
@@ -86,9 +84,7 @@ public class BookmarkController {
     private Label description;
     private Set<Movie> MovieSet;
     private Set<Book> BookSet;
-
     private BookPortfolio bookPortfolio;
-
     private MoviePortfolio moviePortfolio;
     private double sceneHeight;
     private double sceneWidth;
@@ -376,7 +372,6 @@ public class BookmarkController {
         });
     }
 
-
     @FXML
     private ImageView coverImageView;
     @FXML
@@ -406,23 +401,34 @@ public class BookmarkController {
             for (Book b : BookSet) {
                 if(i == selectedIndex ){
                     url.getBookCover(b.getIsbn());
-                    InputStream stream = Files.newInputStream(Paths.get("./temporary.jpg"));
-                    Image coverImage = new Image(stream);
-                    coverImageView.setImage(coverImage);
-                    coverImageView.setFitWidth(100);
-                    coverImageView.setFitHeight(200);
-                    description.setGraphic(coverImageView);
+
+                    if(url.getBookCover(b.getIsbn())){
+                        InputStream stream = Files.newInputStream(Paths.get("./temporary.jpg"));
+                        Image coverImage = new Image(stream);
+                        coverImageView.setImage(coverImage);
+                        coverImageView.setFitWidth(100);
+                        coverImageView.setFitHeight(200);
+                        description.setGraphic(coverImageView);
+                    }else{
+                        InputStream stream = Files.newInputStream(Paths.get("Images/book-placeholder.jpg"));
+                        Image coverImage = new Image(stream);
+                        coverImageView.setImage(coverImage);
+                        coverImageView.setFitWidth(100);
+                        coverImageView.setFitHeight(200);
+                        description.setGraphic(coverImageView);
+
+                    }
+
+
                 }
                 i++;
             }
-
 
         }
 
         System.out.println("clicked on " + myListView.getSelectionModel().getSelectedItem());
 
     }
-
 
     private void listUpdate(){
         ConnectionMethods method = new ConnectionMethods();
@@ -567,7 +573,6 @@ public class BookmarkController {
 
      */
     }
-
 
     @FXML
     private void removeBook(ActionEvent event){
