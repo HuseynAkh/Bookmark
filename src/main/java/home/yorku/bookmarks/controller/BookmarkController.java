@@ -27,6 +27,12 @@ import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 
 import javax.swing.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
@@ -138,8 +144,6 @@ public class BookmarkController {
                 searchBy.setValue("Search by");
             }
         });
-
-
 
     }
 
@@ -352,14 +356,12 @@ public class BookmarkController {
         });
     }
     @FXML
-    private Label coverLabel;
-    @FXML
     private ImageView coverImageView;
     @FXML
-    private void callDescription(MouseEvent event){
+    private void callDescription(MouseEvent event) throws IOException {
 
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
-       // String bookKey = "";
+
         description.setText("");//Clear the descriptions
 
         if(getType().equals("Movie")){
@@ -380,16 +382,12 @@ public class BookmarkController {
             for (Book b : BookSet) {
                 if(i == selectedIndex ){
                     url.getBookCover(b.getIsbn());
-
-                    //Image coverImage = new Image("./temporary.jpg");
-
-                    //coverImageView.setImage(coverImage);
-
-                    // Set the ImageView as the graphic property of the Label
-                    //coverLabel.setGraphic(coverImageView);
-
-                    System.out.println(b.getIsbn()); // no longer in use
-                    //description.setPadding(new Insets(5, 5, 5, 5));
+                    InputStream stream = Files.newInputStream(Paths.get("./temporary.jpg"));
+                    Image coverImage = new Image(stream);
+                    coverImageView.setImage(coverImage);
+                    coverImageView.setFitWidth(100);
+                    coverImageView.setFitHeight(200);
+                    description.setGraphic(coverImageView);
                 }
                 i++;
             }
