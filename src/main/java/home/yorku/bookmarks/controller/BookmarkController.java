@@ -477,6 +477,13 @@ public class BookmarkController {
             System.out.println("The Book is already in Favourites");
         }
 
+        int i = 0;
+        for (Book b : BookSet) {
+            if(i == selectedIdx ){
+                this.bookPortfolio.AddToFavourites(b);
+            }
+            i++;
+        }
     }
 
     @FXML
@@ -490,6 +497,14 @@ public class BookmarkController {
         }else{
             System.out.println("The Movies is already in Favourites");
         }
+
+        int i = 0;
+        for (Movie m : MovieSet) {
+            if (i == selectedIdx) {
+                this.moviePortfolio.AddToSavedMovies(m);
+            }
+            i++;
+        }
     }
 
     @FXML
@@ -499,6 +514,13 @@ public class BookmarkController {
         if (selectedIdx != -1) {
             myBookList.getItems().remove(selectedIdx);
         }
+        int i = 0;
+        for (Book b : BookSet) {
+            if(i == selectedIdx ){
+                this.bookPortfolio.RemoveFromSavedBooks(b);
+            }
+            i++;
+        }
     }
 
     @FXML
@@ -506,6 +528,13 @@ public class BookmarkController {
         final int selectedIdx = myMovieList.getSelectionModel().getSelectedIndex();
         if (selectedIdx != -1) {
             myMovieList.getItems().remove(selectedIdx);
+        }
+        int i = 0;
+        for (Movie m : MovieSet) {
+            if(i == selectedIdx ) {
+                this.moviePortfolio.AddToSavedMovies(m);
+            }
+            i++;
         }
     }
 
