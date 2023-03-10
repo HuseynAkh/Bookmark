@@ -1,21 +1,33 @@
 CREATE SCHEMA bookmark; 
 
 CREATE TABLE bookmark.my_book_list(
-	book_ID INT NOT NULL AUTO_INCREMENT,
-    user_ID INT NOT NULL,
-    title VARCHAR(255) NOT NULL, 
-    author VARCHAR(255) NOT NULL,
-    genre VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    PRIMARY KEY(book_ID)
+                                      book_ID INT NOT NULL AUTO_INCREMENT,
+                                      user_ID INT NOT NULL,
+                                      identifier VARCHAR(255) NOT NULL,
+                                      title VARCHAR(255) NOT NULL,
+                                      isbn VARCHAR(255) NULL,
+                                      author VARCHAR(255) NOT NULL,
+                                      PRIMARY KEY(book_ID)
 );
 
 CREATE TABLE bookmark.my_movie_list(
-	movie_ID INT NOT NULL AUTO_INCREMENT,
-    user_ID INT NOT NULL,
-    title VARCHAR(255) NOT NULL, 
-    actor VARCHAR(255) NOT NULL,
-    genre VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL, 
-    PRIMARY KEY(movie_ID)
+                                       movie_ID INT NOT NULL AUTO_INCREMENT,
+                                       user_ID INT NOT NULL,
+                                       identifier VARCHAR(255) NOT NULL,
+                                       title VARCHAR(255) NOT NULL,
+                                       release_date VARCHAR(255) NOT NULL,
+                                       description VARCHAR(255) NULL,
+                                       PRIMARY KEY(movie_ID)
+);
+
+CREATE TABLE bookmark.my_future_list(
+                              unique_ID INT NOT NULL AUTO_INCREMENT,
+                              user_ID INT NOT NULL,
+                              identifier VARCHAR(255) NOT NULL,
+                              title VARCHAR(255) NOT NULL,
+                              isbn VARCHAR(255) NULL,
+                              author VARCHAR(255) NULL,
+                              release_date VARCHAR(255) NULL,
+                              description VARCHAR(255) NULL,
+                              PRIMARY KEY(unique_ID)
 );

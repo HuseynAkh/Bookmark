@@ -1,5 +1,0 @@
-String url = "jdbc:mariadb://sql958.main-hosting.eu/u880453721_Bookmark";
-String user = "u880453721_user";
-String password = "@BookmarkDbcp01";
-TLSv1.2 in enabledTLSProtocols
-mvn library: mariadb-java-client (3.0.7)
