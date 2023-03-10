@@ -32,15 +32,28 @@ public class DatabaseConnection {
 
         return instance;
     }
+
+    public void closeConnection(){
+        try {
+            connection.close();
+            System.out.println("Database connection closed");
+        } catch (SQLException e) {
+            System.out.println("Error closing connection: " + e.getMessage());
+        }
+    }
     public PreparedStatement query(String type) throws SQLException {
 
         String sql = "null";
 
         if(type.equals("Book")){
-            sql = "INSERT INTO my_book_list (user_id, title, author, genre, description) VALUES (?, ?, ?, ?, ?)";
+            sql = "INSERT INTO my_book_list (user_id, identifier, title, isbn, author) VALUES (?, ?, ?, ?, ?)";
         }else if(type.equals("Movie")){
-            sql = "INSERT INTO my_movie_list (user_ID, title, release_date, description) VALUES (?, ?, ?, ?)";
-        }//do nothing or error checking
+            sql = "INSERT INTO my_movie_list (user_ID, identifier, title, release_date, description) VALUES (?, ?, ?, ?, ?)";
+        }else if(type.equals("Pull_Movies")){
+            sql = "Select title FROM my_movie_list";
+        }else if(type.equals("Pull_Books")){
+            sql = "Select title FROM my_book_list";
+        }
 
         return connection.prepareStatement(sql);
     }

@@ -94,6 +94,8 @@
 
                         <Label layoutX="690.0" layoutY="5.0" text="Movies I've Watched" textFill="white"/>
                         <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
+
+                        <Button fx:id="updateList" layoutX="400.0" layoutY="480.0" mnemonicParsing="false" text="Update My Lists" onAction="#listUpdate" />
                     <!--
                         <Button fx:id="favouriteButtonBook" layoutX="630.0" layoutY="265.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
                         <Button fx:id="removeBook" layoutX="770.0" layoutY="265.0" mnemonicParsing="false" text="Remove" onAction="#removeBook"/>
