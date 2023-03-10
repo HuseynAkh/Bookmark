@@ -15,21 +15,17 @@ public class CoverUrlExtractor {
 
     public void getBookCover(String isbn) { // get the book cover image. (This method is not exactly SRP, we must create a new class BookCover which calls upon this class.
         JSONObject isbnData = this.jip.getJsonInfo("https://openlibrary.org/api/books?bibkeys=OLID:" + isbn + "&jscmd=data&format=json"); //call on JsonInfoParser to search url and return JSON result
-        isbnData = (JSONObject) isbnData.get("ISBN:"+isbn); //convert entire json text into json object
+        isbnData = (JSONObject) isbnData.get("OLID:"+isbn); //convert entire json text into json object
         try {
             isbnData = (JSONObject) isbnData.get("cover"); //grab the array in JSON text for book cover image urls
             String coverURL = (String) isbnData.get("large"); //grab url for largest book cover jpg image
             this.imgDL.downloadImage(coverURL, isbn); //call upon ImageDownloader to download and store image
         }catch (NullPointerException e){ //some books do not have covers. this exception catch will catch NPE to reduce software lag and to assign a placeholder image as book cover
-            System.out.println("No Cover");
+
         }
 
     }
 
-    public static void main(String[] args) {
-        CoverUrlExtractor url = new CoverUrlExtractor();
-        url.getBookCover("OL22856696M");
-    }
 }
 
 
