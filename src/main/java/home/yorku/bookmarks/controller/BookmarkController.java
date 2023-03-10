@@ -517,6 +517,7 @@ public class BookmarkController {
 
     @FXML
     private void addBookToFavourites(ActionEvent event){
+        //This implementation will be fixed itr 3 (favourites don't show up on list update)
         final String selectedItem = ML_myBookList.getSelectionModel().getSelectedItem();
         final int selectedIdx = ML_myBookList.getSelectionModel().getSelectedIndex();
 
@@ -542,7 +543,7 @@ public class BookmarkController {
 
     @FXML
     private void addMovieToFavourites(ActionEvent event){
-
+        //This implementation will be fixed itr 3 (favourites don't show up on list update)
         final String selectedItem = ML_myMovieList.getSelectionModel().getSelectedItem();
         final int selectedIdx = ML_myMovieList.getSelectionModel().getSelectedIndex();
 
