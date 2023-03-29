@@ -93,7 +93,8 @@ public class MovieSearchManager {
             String overview = (String) movie.get("overview");
             //get movie release date
             String releaseDate = (String) movie.get("release_date");
-            Movie m = new Movie(title, releaseDate, overview);
+            Long id = (Long) movie.get("id");
+            Movie m = new Movie(id, title, releaseDate, overview);
             movies.add(m);
         }
     }

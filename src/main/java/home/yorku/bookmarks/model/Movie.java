@@ -6,12 +6,19 @@ public class Movie {
     private String identifier = "Movie"; //identifier for database
     private String overview; //overiew of this movie
     private String releaseDate; //release date of this movie
+    private Long id;
 
-    public Movie(String title, String releaseDate, String overview) { //constructor
+    public Movie(Long id, String title, String releaseDate, String overview) { //constructor
         this.title = title;
         this.overview = overview;
         this.releaseDate = releaseDate;
+        this.id = id;
     }
+
+    public Long getId() {
+        return id;
+    }
+
     public String getTitle(){
         return this.title;
     }
