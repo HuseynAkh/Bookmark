@@ -5,6 +5,7 @@ import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
 import home.yorku.bookmarks.controller.search.MovieSearchManager;
 import home.yorku.bookmarks.controller.sorting.AlphaSort;
 import home.yorku.bookmarks.model.*;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -22,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +57,7 @@ public class BookmarkController {
     @FXML
     private ChoiceBox<String> user;
     private ObservableList<String> userOptions = FXCollections.observableArrayList(
-            "QA/Dev Team", "Client"
+            "QA", "TA", "Client"
     );
     @FXML
     private TextField searchText;
@@ -464,7 +466,7 @@ public class BookmarkController {
             for (Book b : BookSet) {
                 if(i == selectedIndex ){
 
-                    method.insertFutureList(01, b.getIdentifier(), b.getTitle(), b.getIsbn(), b.getAuthor().toString(), null, null);
+                    method.insertFutureList(b.getIsbn(), "null" , user.getValue(), b.getIdentifier() , b.getTitle(), b.getAuthor().toString(), null, null);
                 }
                 i++;
             }
@@ -476,7 +478,7 @@ public class BookmarkController {
             for (Movie m : MovieSet) {
                 if(i == selectedIndex ){
 
-                    method.insertFutureList(01, m.getIdentifier(), m.getTitle(), null, null, m.getReleaseDate(), m.getOverview() );
+                    method.insertFutureList("null", String.valueOf(m.getId()), user.getValue(), m.getIdentifier(), m.getTitle(),  null, m.getReleaseDate(), m.getOverview());
                 }
                 i++;
             }
@@ -500,7 +502,8 @@ public class BookmarkController {
                 if(i == selectedIndex ){
 
                     this.bookPortfolio.AddToSavedBooks(b);
-                    method.insertBook(01, b.getIdentifier(), b.getTitle(), b.getIsbn(), b.getAuthor().toString());
+                    method.insertBook(b.getIsbn(), user.getValue(), b.getIdentifier(), b.getTitle(), b.getAuthor().toString());
+
                 }
                 i++;
             }
@@ -512,13 +515,13 @@ public class BookmarkController {
                 if(i == selectedIndex ){
                     this.moviePortfolio.AddToSavedMovies(m);
                     System.out.println("Title: " + m.getTitle() + "\n" + "Description: " + m.getOverview() + "\n" + "Release Date: " + m.getReleaseDate());
-                    method.insertMovie(01, m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview() );
+                    method.insertMovie(String.valueOf(m.getId()), user.getValue(), m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview() );
                 }
                 i++;
             }
 
         }else{
-            //error checking
+            System.out.println("Error at line 523: No searchType value");
         }
 
         listUpdate();
@@ -683,10 +686,14 @@ public class BookmarkController {
 
     public void login(MouseEvent mouseEvent) {
 
+        ConnectionMethods method = new ConnectionMethods();
+
         if(!user.getValue().equals("Team:")){
+            method.userLogin(user.getValue(), "Login");
             stage = (Stage) tabPane.getScene().getWindow();
             stage.setWidth(900);
             stage.setHeight(680);
+            listen();
 
             tabPane.getTabs().addAll(removedTabs);
             removedTabs.clear();
@@ -711,9 +718,12 @@ public class BookmarkController {
 
     public void logout(MouseEvent mouseEvent) {
 
+        ConnectionMethods method = new ConnectionMethods();
+        method.userLogin(user.getValue(), "Logout");
         stage = (Stage) tabPane.getScene().getWindow();
         stage.setWidth(300);
         stage.setHeight(300);
+        listen();
 
         tabPane.getTabs().add(0,removedTabs.get(0));
         removedTabs.clear();
@@ -733,6 +743,17 @@ public class BookmarkController {
         tabPane.getTabs().remove(logoutTab);
         LoginError.setText("");
 
+    }
+
+    public void listen() {
+        ConnectionMethods method = new ConnectionMethods();
+        stage = (Stage) tabPane.getScene().getWindow();
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                method.userLogin(user.getValue(), "Logout");
+            }
+        });
     }
 
 }

@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mariadb://sql958.main-hosting.eu/u880453721_Bookmark</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="bookmark@localhost" uuid="afe0b169-a303-4b1d-a710-eedc9d209c4f">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/bookmark</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

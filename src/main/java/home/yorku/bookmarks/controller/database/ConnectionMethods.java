@@ -8,39 +8,39 @@ import java.util.ArrayList;
 public class ConnectionMethods {
     //Change String to object Book or Movie later
 
-    public void insertFutureList(int user_id, String identifier, String title, String isbn, String author, String release_date, String description) {
+    public void userLogin(String user_id, String type) {
 
         try {
             DatabaseConnection connection = DatabaseConnection.getInstance();
-            PreparedStatement statement = connection.query("Future_List");
-            statement.setInt(1, user_id);
-            statement.setString(2, identifier);
-            statement.setString(3, title);
-            statement.setString(4, isbn);
-            statement.setString(5, author);
-            statement.setString(6, release_date);
-            statement.setString(7, description);
+            PreparedStatement statement = connection.query("User");
+            statement.setString(1, user_id);
+            statement.setString(2, type);
             int rowsInserted = statement.executeUpdate();
 
-            if (rowsInserted > 0) {
-                System.out.println("A new book was inserted into FUTURE LIST successfully.");
+            if (rowsInserted > 0 && type.equals("Login")) {
+                System.out.println("A user has logged-in");
+            }
+
+            if (rowsInserted > 0 && type.equals("Logout")) {
+                System.out.println("A user has logged-out");
             }
 
             connection.closeConnection();
 
         } catch (SQLException e) {
-            System.out.println("Error inserting book: " + e.getMessage());
+            System.out.println("Error in login/logout: " + e.getMessage());
         }
     }
-    public void insertBook(int user_id, String identifier, String title, String isbn,  String author) {
+
+    public void insertBook(String book_id, String user_id, String identifier, String title, String author) {
 
         try {
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Book");
-            statement.setInt(1, user_id);
-            statement.setString(2, identifier);
-            statement.setString(3, title);
-            statement.setString(4, isbn);
+            statement.setString(1, book_id);
+            statement.setString(2, user_id);
+            statement.setString(3, identifier);
+            statement.setString(4, title);
             statement.setString(5, author);
             int rowsInserted = statement.executeUpdate();
 
@@ -55,17 +55,19 @@ public class ConnectionMethods {
         }
     }
 
-    public void insertMovie(int user_id, String identifier, String title, String release_date, String description) {
+    public void insertMovie(String movie_id, String user_id, String identifier, String title, String release_date, String movie_dsc) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Movie");
-            statement.setInt(1, user_id);
-            statement.setString(2, identifier);
-            statement.setString(3, title);
-            statement.setString(4, release_date);
-            statement.setString(5, description);
+            statement.setString(1, movie_id);
+            statement.setString(2, user_id);
+            statement.setString(3, identifier);
+            statement.setString(4, title);
+            statement.setString(5, release_date);
+            statement.setString(6, movie_dsc);
+
             int rowsInserted = statement.executeUpdate();
 
             if (rowsInserted > 0) {
@@ -76,6 +78,32 @@ public class ConnectionMethods {
 
         } catch (SQLException e) {
             System.out.println("Error inserting movie: " + e.getMessage());
+        }
+    }
+
+    public void insertFutureList(String book_id, String movie_id, String user_id, String identifier, String title, String author, String release_date, String movie_dsc) {
+
+        try {
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Future_List");
+            statement.setString(1, book_id);
+            statement.setString(2, movie_id);
+            statement.setString(3, user_id);
+            statement.setString(4, identifier);
+            statement.setString(5, title);
+            statement.setString(6, author);
+            statement.setString(7, release_date);
+            statement.setString(8, movie_dsc);
+            int rowsInserted = statement.executeUpdate();
+
+            if (rowsInserted > 0) {
+                System.out.println("A new book was inserted into FUTURE LIST successfully.");
+            }
+
+            connection.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println("Error inserting book: " + e.getMessage());
         }
     }
 

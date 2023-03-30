@@ -4,7 +4,7 @@ public class Movie {
     private String title; //movie title
 
     private String identifier = "Movie"; //identifier for database
-    private String overview; //overiew of this movie
+    private String overview; //overview of this movie
     private String releaseDate; //release date of this movie
     private Long id;
 
