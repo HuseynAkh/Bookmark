@@ -56,7 +56,7 @@ public class DatabaseConnection {
                 break;
             }
             case "Movie":{
-                sql = "INSERT INTO my_movie_list (movie_id, user_ID, identifier, title, release_date, movie_dsc, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                sql = "INSERT INTO my_movie_list (movie_id, user_id, identifier, title, release_date, movie_dsc, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
                 break;
             }
             case "Future_List":{
@@ -64,43 +64,43 @@ public class DatabaseConnection {
                 break;
             }
             case "Delete_Movie":{
-                sql = "DELETE FROM my_movie_list WHERE movie_id = ?";
+                sql = "DELETE FROM my_movie_list WHERE movie_id = ? AND user_id = ?";
                 break;
             }
             case "Delete_Book":{
-                sql = "DELETE FROM my_book_list WHERE book_id = ?";
+                sql = "DELETE FROM my_book_list WHERE book_id = ? AND user_id = ?";
                 break;
             }
             case "Delete_Future_List":{
-                sql = "DELETE FROM my_future_list WHERE title = ?";
+                sql = "DELETE FROM my_future_list WHERE title = ? AND user_id = ?";
                 break;
             }
             case "Pull_Books":{
-                sql = "SELECT book_id, title, author, is_favourite FROM my_book_list ORDER BY time_stamp";
+                sql = "SELECT book_id, title, author, is_favourite FROM my_book_list WHERE user_id = ? ORDER BY time_stamp";
                 break;
             }
             case "Pull_Movies":{
-                sql = "SELECT movie_id, title, release_date, movie_dsc, is_favourite FROM my_movie_list ORDER BY time_stamp";
+                sql = "SELECT movie_id, title, release_date, movie_dsc, is_favourite FROM my_movie_list WHERE user_id = ? ORDER BY time_stamp";
                 break;
             }
             case "Pull_Future_List":{
-                sql = "SELECT title FROM my_future_list ORDER BY time_stamp";
+                sql = "SELECT title FROM my_future_list WHERE user_id = ? ORDER BY time_stamp";
                 break;
             }
             case "Add_FavouriteBook":{
-                sql = "UPDATE my_book_list SET is_favourite = 1 WHERE book_id = ?";
+                sql = "UPDATE my_book_list SET is_favourite = 1 WHERE book_id = ? AND user_id = ?";
                 break;
             }
             case "Remove_FavouriteBook":{
-                sql = "UPDATE my_book_list SET is_favourite = 0 WHERE book_id = ?";
+                sql = "UPDATE my_book_list SET is_favourite = 0 WHERE book_id = ? AND user_id = ?";
                 break;
             }
             case "Add_FavouriteMovie":{
-                sql = "UPDATE my_movie_list SET is_favourite = 1 WHERE movie_id = ?";
+                sql = "UPDATE my_movie_list SET is_favourite = 1 WHERE movie_id = ? AND user_id = ?";
                 break;
             }
             case "Remove_FavouriteMovie":{
-                sql = "UPDATE my_movie_list SET is_favourite = 0 WHERE movie_id = ?";
+                sql = "UPDATE my_movie_list SET is_favourite = 0 WHERE movie_id = ? AND user_id = ?";
                 break;
             }
             default:

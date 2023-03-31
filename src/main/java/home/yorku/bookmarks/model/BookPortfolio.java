@@ -17,6 +17,7 @@ public class BookPortfolio {
         SavedBooks.add(book);
     }
 
+    //No need for removes statements in Book & movie portfolio, the Db updates removed items automatically
     public void RemoveFromSavedBooks(Book book){
         SavedBooks.remove(book);
     }

@@ -448,7 +448,7 @@ public class BookmarkController {
         MLbookList.clear();
         MLfavBooks.clear();
 
-        localBookSet = method.pullBooks();
+        localBookSet = method.pullBooks(user.getValue());
 
         for (Book b : localBookSet) {
 
@@ -483,7 +483,7 @@ public class BookmarkController {
         MLmovieList.clear();
         MLfavMovies.clear();
 
-        localMovieSet = method.pullMovies();
+        localMovieSet = method.pullMovies(user.getValue());
 
         for (Movie m : localMovieSet) {
 
@@ -511,7 +511,7 @@ public class BookmarkController {
 
         ConnectionMethods method = new ConnectionMethods();
 
-        futureList = FXCollections.observableList(method.pullFutureList());
+        futureList = FXCollections.observableList(method.pullFutureList(user.getValue()));
         upNextList.setItems(futureList);
     }
 
@@ -601,7 +601,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.addFavouriteBook(b.getIsbn());
+                method.addFavouriteBook(b.getIsbn(), user.getValue());
             }
             i++;
 
@@ -622,7 +622,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.removeFavouriteBook(b.getIsbn());
+                method.removeFavouriteBook(b.getIsbn(), user.getValue());
             }
             i++;
 
@@ -643,7 +643,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.addFavouriteMovie(m.getId());
+                method.addFavouriteMovie(m.getId(), user.getValue());
             }
             i++;
 
@@ -664,7 +664,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.removeFavouriteMovie(m.getId());
+                method.removeFavouriteMovie(m.getId(), user.getValue());
             }
             i++;
 
@@ -685,7 +685,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.removeBook(b.getIsbn());
+                method.removeBook(b.getIsbn(), user.getValue());
             }
             i++;
 
@@ -706,7 +706,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.removeMovie(m.getId());
+                method.removeMovie(m.getId(), user.getValue());
             }
             i++;
 
@@ -718,13 +718,14 @@ public class BookmarkController {
 
     @FXML
     private void removeFutureList(ActionEvent event){
+        //Need to change, will be problematic in the future
         ConnectionMethods method = new ConnectionMethods();
 
         String selectedItem = upNextList.getSelectionModel().getSelectedItem();
         final int selectedIdx = upNextList.getSelectionModel().getSelectedIndex();
 
         if (selectedIdx != -1) {
-            method.removeFutureList(selectedItem);
+            method.removeFutureList(selectedItem, user.getValue());
         }
 
         updateFutureList();
@@ -776,6 +777,9 @@ public class BookmarkController {
 
         if(!user.getValue().equals("Team:")){
             method.userLogin(user.getValue(), "Login");
+            updateBooks();
+            updateMovies();
+            updateFutureList();
             logout = false;
             stage = (Stage) tabPane.getScene().getWindow();
             stage.setWidth(900);

@@ -113,7 +113,7 @@ public class ConnectionMethods {
         }
     }
 
-    public Set<Book> pullBooks() {
+    public Set<Book> pullBooks(String user_id) {
 
         Set<Book> books = new HashSet<>();
 
@@ -121,6 +121,7 @@ public class ConnectionMethods {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Pull_Books");
+            statement.setString(1, user_id);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
@@ -144,7 +145,7 @@ public class ConnectionMethods {
         return books;
     }
 
-    public Set<Movie> pullMovies() {
+    public Set<Movie> pullMovies(String user_id) {
 
         Set<Movie> movies = new HashSet<>();
 
@@ -152,6 +153,7 @@ public class ConnectionMethods {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Pull_Movies");
+            statement.setString(1, user_id);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
@@ -173,7 +175,7 @@ public class ConnectionMethods {
         return movies;
     }
 
-    public ArrayList<String> pullFutureList() {
+    public ArrayList<String> pullFutureList(String user_id) {
 
         ArrayList<String> futureList = new ArrayList<>();
 
@@ -181,6 +183,7 @@ public class ConnectionMethods {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Pull_Future_List");
+            statement.setString(1, user_id);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
@@ -197,12 +200,13 @@ public class ConnectionMethods {
         return futureList;
     }
 
-    public void removeFutureList(String title){
+    public void removeFutureList(String title, String user_id){
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Delete_Future_List");
             statement.setString(1, title);
+            statement.setString(2, user_id);
             int rowsDeleted = statement.executeUpdate();
 
             System.out.println(rowsDeleted + " row deleted.");
@@ -214,13 +218,14 @@ public class ConnectionMethods {
         }
     }
 
-    public void addFavouriteBook(String book_id) {
+    public void addFavouriteBook(String book_id, String user_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Add_FavouriteBook");
             statement.setString(1, book_id);
+            statement.setString(2, user_id);
             statement.executeUpdate();
 
             System.out.println("Favourite book added");
@@ -232,13 +237,14 @@ public class ConnectionMethods {
         }
     }
 
-    public void removeFavouriteBook(String book_id) {
+    public void removeFavouriteBook(String book_id, String user_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Remove_FavouriteBook");
             statement.setString(1, book_id);
+            statement.setString(2, user_id);
             statement.executeUpdate();
 
             System.out.println("Favourite book removed");
@@ -250,13 +256,14 @@ public class ConnectionMethods {
         }
     }
 
-    public void addFavouriteMovie(Long movie_id) {
+    public void addFavouriteMovie(Long movie_id, String user_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Add_FavouriteMovie");
             statement.setLong(1, movie_id);
+            statement.setString(2, user_id);
             statement.executeUpdate();
 
             System.out.println("Favourite movie added");
@@ -268,13 +275,14 @@ public class ConnectionMethods {
         }
     }
 
-    public void removeFavouriteMovie(Long movie_id) {
+    public void removeFavouriteMovie(Long movie_id, String user_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Remove_FavouriteMovie");
             statement.setLong(1, movie_id);
+            statement.setString(2, user_id);
             statement.executeUpdate();
 
             System.out.println("Favourite movie removed");
@@ -286,13 +294,14 @@ public class ConnectionMethods {
         }
     }
 
-    public void removeBook(String book_id) {
+    public void removeBook(String book_id, String user_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Delete_Book");
             statement.setString(1, book_id);
+            statement.setString(2, user_id);
             int rowsDeleted = statement.executeUpdate();
 
             System.out.println(rowsDeleted + " row deleted.");
@@ -304,13 +313,14 @@ public class ConnectionMethods {
         }
     }
 
-    public void removeMovie(Long movie_id) {
+    public void removeMovie(Long movie_id, String user_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Delete_Movie");
             statement.setLong(1, movie_id);
+            statement.setString(2, user_id);
             int rowsDeleted = statement.executeUpdate();
 
             System.out.println(rowsDeleted + " row deleted.");

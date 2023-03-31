@@ -19,6 +19,8 @@ public class MoviePortfolio {
         SavedMovies.add(movie);
     }
     //This method removes movies from the saved movies list
+
+    //No need for removes statements in Book & movie portfolio, the Db updates removed items automatically
     public void RemoveFromSavedMovies(Movie movie){
         SavedMovies.remove(movie);
     }

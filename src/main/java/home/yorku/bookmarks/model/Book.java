@@ -30,6 +30,5 @@ public class Book {
     public int getIsFavourite(){
         return this.is_favourite;
     }
-
     public String getIdentifier(){return this.identifier;}
 }
