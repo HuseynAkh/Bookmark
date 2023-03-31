@@ -102,7 +102,7 @@ public class BookSearchManager {
                 }
             }
 
-            Book b = new Book(title, authors, isbn, "");
+            Book b = new Book(title, authors, isbn, 0);
             books.add(b);
         }
     }

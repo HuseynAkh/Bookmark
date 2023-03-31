@@ -10,13 +10,13 @@ public class Book {
     private ArrayList<String> author; //list of authors for this book
 
     private String isbn; //isbn (Openlibrary Key) for this book
-    private String description; //description for this book (NO LONGER IN USE)
+    private int is_favourite; //used for filtering
 
-    public Book(String title, ArrayList<String> author, String isbn, String description) { //constructor
+    public Book(String title, ArrayList<String> author, String isbn, int is_favourite) { //constructor
         this.title = title;
         this.author = author;
         this.isbn = isbn;
-        this.description = description;
+        this.is_favourite = is_favourite;
     }
     public String getTitle(){
         return this.title;
@@ -27,8 +27,8 @@ public class Book {
     public String getIsbn(){
         return this.isbn;
     }
-    public String getDescription(){
-        return this.description;
+    public int getIsFavourite(){
+        return this.is_favourite;
     }
 
     public String getIdentifier(){return this.identifier;}

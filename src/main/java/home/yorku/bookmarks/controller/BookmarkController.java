@@ -85,6 +85,9 @@ public class BookmarkController {
     private ListView<String> ML_myMovieList;
     private ObservableList<String> MLmovieList = FXCollections.observableArrayList();
     @FXML
+    private ListView<String> favourite_movies;
+    private ObservableList<String> MLfavMovies = FXCollections.observableArrayList();
+    @FXML
     private ListView<String> upNextList;
     private ObservableList<String> futureList = FXCollections.observableArrayList();
     @FXML
@@ -113,6 +116,8 @@ public class BookmarkController {
         myMovieList.setItems(movieList);
         ML_myBookList.setItems(MLbookList);
         ML_myMovieList.setItems(MLmovieList);
+        favourite_books.setItems(MLfavBooks);
+        favourite_movies.setItems(MLfavMovies);
         upNextList.setItems(futureList);
         user.setItems(userOptions);
 
@@ -253,7 +258,6 @@ public class BookmarkController {
                             BookmarkConstants.KEY_BOOK_GENRE,
                             searchString);
 
-                    //Set<Book> arr = bs.SearchBookGenre(searchString);
                     BookSearchManager bookSearch = new BookSearchManager();
                     BookSet = bookSearch.searchBook(searchCriteria);
 
@@ -269,7 +273,6 @@ public class BookmarkController {
                             BookmarkConstants.KEY_BOOK_AUTHOR,
                             searchString);
 
-                    //Set<Book> arr = bs.SearchBookGenre(searchString);
                     BookSearchManager bookSearch = new BookSearchManager();
                     BookSet = bookSearch.searchBook(searchCriteria);
 
@@ -388,7 +391,6 @@ public class BookmarkController {
 
         description.setText("");//Clear the descriptions
         description.setGraphic(null);
-        System.out.println(getType());
 
         if(getType().equals("Movie")){
 
@@ -438,33 +440,98 @@ public class BookmarkController {
     }
 
     private void listUpdate(){
-        ConnectionMethods method = new ConnectionMethods();
-        this.bookPortfolio.getSavedBooks().clear();
-        MLbookList.clear();
-        //will need to update to handel is_favourite flag
-        //Split to two Movie & book for later
-        BookSet = method.pullBooks();
 
-        for (Book b : BookSet) {
-            this.bookPortfolio.AddToSavedBooks(b);
-            MLbookList.add(b.getTitle());
+        ConnectionMethods method = new ConnectionMethods();
+        Set<Book> localBookSet = new HashSet<Book>();
+        Set<Movie> localMovieSet = new HashSet<Movie>();
+        this.bookPortfolio.getSavedBooks().clear();
+        this.bookPortfolio.getFavouriteBooks().clear();
+        this.moviePortfolio.getSavedMovies().clear();
+        this.moviePortfolio.getFavouriteMovies().clear();
+        MLbookList.clear();
+        MLfavBooks.clear();
+        MLmovieList.clear();
+        MLfavMovies.clear();
+
+        localBookSet = method.pullBooks();
+
+        for (Book b : localBookSet) {
+
+            if(b.getIsFavourite() == 1){
+                this.bookPortfolio.AddToFavourites(b);
+                MLfavBooks.add(b.getTitle());
+            } else {
+                this.bookPortfolio.AddToSavedBooks(b);
+                MLbookList.add(b.getTitle());
+            }
+
         }
 
         ML_myBookList.setItems(MLbookList);
         myBookList.setItems(MLbookList);
+        favourite_books.setItems(MLfavBooks);
 
+        localMovieSet = method.pullMovies();
 
-        MLmovieList = FXCollections.observableList(method.pullMovies());
+        for (Movie m : localMovieSet) {
+
+            if(m.getIsFavourite() == 1){
+                this.moviePortfolio.AddToFavourites(m);
+                MLfavMovies.add(m.getTitle());
+            } else {
+                this.moviePortfolio.AddToSavedMovies(m);
+                MLmovieList.add(m.getTitle());
+            }
+
+        }
+
         ML_myMovieList.setItems(MLmovieList);
         myMovieList.setItems(MLmovieList);
+        favourite_movies.setItems(MLfavMovies);
 
         futureList = FXCollections.observableList(method.pullFutureList());
         upNextList.setItems(futureList);
 
         method.closeConnection();
-        //BookSet.clear();
-       // MLbookList.clear();
 
+    }
+
+    @FXML
+    private void saveToMyCurrentList(){
+        ConnectionMethods method = new ConnectionMethods();
+
+        final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
+        System.out.println(getType());
+
+        if(getType().equals("Book")){
+
+            int i = 0;
+            for (Book b : BookSet) {
+                if(i == selectedIndex ){
+
+                    method.insertBook(b.getIsbn(), user.getValue(), b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), b.getIsFavourite());
+
+                }
+                i++;
+            }
+
+        }else if(getType().equals("Movie")){
+
+            int i = 0;
+            for (Movie m : MovieSet) {
+                if(i == selectedIndex ){
+
+                    method.insertMovie(m.getId(), user.getValue(), m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(),0);
+
+                }
+                i++;
+            }
+
+        }else{
+            System.out.println("Error near line 532: No searchType value");
+        }
+
+        listUpdate();
     }
 
     @FXML
@@ -474,68 +541,31 @@ public class BookmarkController {
 
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
 
-        if(searchType.getValue().equals("Books")){
+        if(getType().equals("Book")){
 
             int i = 0;
             for (Book b : BookSet) {
                 if(i == selectedIndex ){
 
-                    method.insertFutureList(b.getIsbn(), "null" , user.getValue(), b.getIdentifier() , b.getTitle(), b.getAuthor().toString(), null, null);
+                    method.insertFutureList(b.getIsbn(), 0L , user.getValue(), b.getIdentifier() , b.getTitle(), b.getAuthor().toString(), null, null);
                 }
                 i++;
             }
 
 
-        }else if(searchType.getValue().equals("Movies")){
+        }else if(getType().equals("Movie")){
 
             int i = 0;
             for (Movie m : MovieSet) {
                 if(i == selectedIndex ){
 
-                    method.insertFutureList("null", String.valueOf(m.getId()), user.getValue(), m.getIdentifier(), m.getTitle(),  null, m.getReleaseDate(), m.getOverview());
+                    method.insertFutureList("null", m.getId(), user.getValue(), m.getIdentifier(), m.getTitle(),  null, m.getReleaseDate(), m.getOverview());
                 }
                 i++;
             }
 
         }else{
-            //error checking
-        }
-        listUpdate();
-    }
-
-    @FXML
-    private void saveToMyCurrentList(){
-        ConnectionMethods method = new ConnectionMethods();
-
-        final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
-
-        if(searchType.getValue().equals("Books")){
-
-            int i = 0;
-            for (Book b : BookSet) {
-                if(i == selectedIndex ){
-
-                    this.bookPortfolio.AddToSavedBooks(b);
-                    method.insertBook(b.getIsbn(), user.getValue(), b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), 0);
-
-                }
-                i++;
-            }
-
-        }else if(searchType.getValue().equals("Movies")){
-
-            int i = 0;
-            for (Movie m : MovieSet) {
-                if(i == selectedIndex ){
-                    this.moviePortfolio.AddToSavedMovies(m);
-                    System.out.println("Title: " + m.getTitle() + "\n" + "Description: " + m.getOverview() + "\n" + "Release Date: " + m.getReleaseDate());
-                    method.insertMovie(String.valueOf(m.getId()), user.getValue(), m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(),0);
-                }
-                i++;
-            }
-
-        }else{
-            System.out.println("Error at line 523: No searchType value");
+            System.out.println("Error near line 569: No searchType value");
         }
 
         listUpdate();
@@ -544,88 +574,57 @@ public class BookmarkController {
     @FXML
     private void addBookToFavourites(ActionEvent event){
         //This implementation will be fixed itr 3 (favourites don't show up on list update)
+        ConnectionMethods method = new ConnectionMethods();
         final String selectedItem = ML_myBookList.getSelectionModel().getSelectedItem();
-        final int selectedIdx = ML_myBookList.getSelectionModel().getSelectedIndex();
 
-        if(!selectedItem.startsWith("*")){
-            ConnectionMethods method = new ConnectionMethods();
-            method.addFavourite(selectedItem);
-            ML_myBookList.getItems().remove(selectedIdx);
-            MLbookList.add(0,"*" + selectedItem);
-            bookList.add(0, "*" + selectedItem); //Pushes favourite items to top of the list
-        }else{
-            System.out.println("The Book is already in Favourites");
-        }
+        method.addFavouriteBook(selectedItem);
 
-       // listUpdate();
-    //We will have to design this better for itr 3 as MovieSet is empty from ML
-    /*
-        int i = 0;
-        for (Book b : BookSet) {
-            if(i == selectedIdx ){
-                this.bookPortfolio.AddToFavourites(b);
-            }
-            i++;
-        }
-
-     */
+        listUpdate();
     }
 
     @FXML
     private void addMovieToFavourites(ActionEvent event){
         //This implementation will be fixed itr 3 (favourites don't show up on list update)
+        ConnectionMethods method = new ConnectionMethods();
         final String selectedItem = ML_myMovieList.getSelectionModel().getSelectedItem();
-        final int selectedIdx = ML_myMovieList.getSelectionModel().getSelectedIndex();
 
-        if(!selectedItem.startsWith("*")){
-            myMovieList.getItems().remove(selectedIdx);
-            MLmovieList.add(0,"*" + selectedItem);
-            movieList.add(0,"*" + selectedItem);//Pushes favourite items to top of the list
-        }else{
-            System.out.println("The Movies is already in Favourites");
-        }
+        method.addFavouriteMovie(selectedItem);
 
-    //We will have to design this better for itr 3 as MovieSet is empty from ML
-    /*
-        int i = 0;
-        for (Movie m : MovieSet) {
-            if (i == selectedIdx) {
-                this.moviePortfolio.AddToSavedMovies(m);
-            }
-            i++;
-        }
+        listUpdate();
 
-     */
+    }
+
+    @FXML
+    private void removeBookFromFavourites(ActionEvent event){
+
+        ConnectionMethods method = new ConnectionMethods();
+        String selectedItem = favourite_books.getSelectionModel().getSelectedItem();
+
+        method.removeFavouriteBook(selectedItem);
+
+        listUpdate();
+
+    }
+
+    @FXML
+    private void removeMovieFromFavourites(ActionEvent event){
+
+        ConnectionMethods method = new ConnectionMethods();
+        String selectedItem = favourite_movies.getSelectionModel().getSelectedItem();
+
+        method.removeFavouriteMovie(selectedItem);
+
+        listUpdate();
+
     }
 
     @FXML
     private void removeBook(ActionEvent event){
-        //FIX "*" when favourite db is finished
+
         ConnectionMethods method = new ConnectionMethods();
         String selectedItem = ML_myBookList.getSelectionModel().getSelectedItem();
-        final int selectedIdx = ML_myBookList.getSelectionModel().getSelectedIndex();
 
-        if(selectedItem.startsWith("*")){
-            selectedItem = selectedItem.substring(1);
-        }
-
-        if (selectedIdx != -1) {
-            method.removeBook(selectedItem);
-        }
-
-    //We will have to design this better for itr 3 as MovieSet is empty from ML
-    /*
-        myBookList.getItems().remove(selectedIdx);
-
-        int i = 0;
-        for (Book b : BookSet) {
-            if(i == selectedIdx ){
-                this.bookPortfolio.RemoveFromSavedBooks(b);
-            }
-            i++;
-        }
-
-     */
+        method.removeBook(selectedItem);
 
         listUpdate();
 
@@ -636,26 +635,8 @@ public class BookmarkController {
 
         ConnectionMethods method = new ConnectionMethods();
         String selectedItem = ML_myMovieList.getSelectionModel().getSelectedItem();
-        final int selectedIdx = ML_myMovieList.getSelectionModel().getSelectedIndex();
 
-        if(selectedItem.startsWith("*")){
-            selectedItem = selectedItem.substring(1);
-        }
-
-        if (selectedIdx != -1) {
-            method.removeMovie(selectedItem);
-        }
-
-    //We will have to design this better for itr 3 as MovieSet is empty from ML
-    /*
-        int i = 0;
-        for (Movie m : MovieSet) {
-            if(i == selectedIdx ) {
-                this.moviePortfolio.AddToSavedMovies(m);
-            }
-            i++;
-        }
-    */
+        method.removeMovie(selectedItem);
 
         listUpdate();
 

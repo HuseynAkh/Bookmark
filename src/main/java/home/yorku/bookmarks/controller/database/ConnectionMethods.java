@@ -61,13 +61,13 @@ public class ConnectionMethods {
         }
     }
 
-    public void insertMovie(String movie_id, String user_id, String identifier, String title, String release_date, String movie_dsc, int is_favourite) {
+    public void insertMovie(Long movie_id, String user_id, String identifier, String title, String release_date, String movie_dsc, int is_favourite) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Movie");
-            statement.setString(1, movie_id);
+            statement.setLong(1, movie_id);
             statement.setString(2, user_id);
             statement.setString(3, identifier);
             statement.setString(4, title);
@@ -88,13 +88,13 @@ public class ConnectionMethods {
         }
     }
 
-    public void insertFutureList(String book_id, String movie_id, String user_id, String identifier, String title, String author, String release_date, String movie_dsc) {
+    public void insertFutureList(String book_id, Long movie_id, String user_id, String identifier, String title, String author, String release_date, String movie_dsc) {
 
         try {
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Future_List");
             statement.setString(1, book_id);
-            statement.setString(2, movie_id);
+            statement.setLong(2, movie_id);
             statement.setString(3, user_id);
             statement.setString(4, identifier);
             statement.setString(5, title);
@@ -104,7 +104,7 @@ public class ConnectionMethods {
             int rowsInserted = statement.executeUpdate();
 
             if (rowsInserted > 0) {
-                System.out.println("A new book was inserted into FUTURE LIST successfully.");
+                System.out.println("A new" + identifier + "was inserted into FUTURE LIST successfully.");
             }
 
             connection.closeConnection();
@@ -116,7 +116,6 @@ public class ConnectionMethods {
 
     public Set<Book> pullBooks() {
 
-        //ArrayList<String> books = new ArrayList<>();
         Set<Book> books = new HashSet<Book>();
 
         try {
@@ -130,9 +129,10 @@ public class ConnectionMethods {
                 String isbn = rs.getString("book_id");
                 String title = rs.getString("title");
                 String author = rs.getString("author");
+                int is_favourite = rs.getInt("is_favourite");
                 authorToList.add(author);
 
-                Book book = new Book(title, authorToList, isbn, "" );
+                Book book = new Book(title, authorToList, isbn, is_favourite);
                 books.add(book);
             }
 
@@ -145,9 +145,9 @@ public class ConnectionMethods {
         return books;
     }
 
-    public ArrayList<String> pullMovies() {
+    public Set<Movie> pullMovies() {
 
-        ArrayList<String> movies = new ArrayList<>();
+        Set<Movie> movies = new HashSet<Movie>();
 
         try {
 
@@ -156,8 +156,14 @@ public class ConnectionMethods {
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
+                Long id = rs.getLong("movie_id");
                 String title = rs.getString("title");
-                movies.add(title);
+                String overview = rs.getString("movie_dsc");
+                String release_date = rs.getString("release_date");
+                int is_favourite = rs.getInt("is_favourite");
+
+                Movie movie = new Movie(id, title, release_date, overview, is_favourite);
+                movies.add(movie);
             }
 
         } catch (SQLException e) {
@@ -192,22 +198,6 @@ public class ConnectionMethods {
         return futureList;
     }
 
-
-
-    public void closeConnection(){
-
-        try {
-
-            DatabaseConnection connection = DatabaseConnection.getInstance();
-            connection.closeConnection();
-
-        } catch (SQLException e) {
-            System.out.println("Error disconnecting: " + e.getMessage());
-
-        }
-
-    }
-
     public void removeFutureList(String title){
         try {
 
@@ -225,24 +215,74 @@ public class ConnectionMethods {
         }
     }
 
-
-    //For future backend db to work better need to give a unique id to each book and movie object on add
-    //or add the entire object to the database and just pull from the "titles" in the db
-
-    public void removeMovie(String title) {
+    public void addFavouriteBook(String title) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
-            PreparedStatement statement = connection.query("Delete_Movie");
+            PreparedStatement statement = connection.query("Add_FavouriteBook");
             statement.setString(1, title);
-            int rowsDeleted = statement.executeUpdate();
+            statement.executeUpdate();
 
-            System.out.println(rowsDeleted + " row deleted.");
+            System.out.println("Favourite book added");
             connection.closeConnection();
 
         } catch (SQLException e) {
-            System.out.println("Error removing movie: " + e.getMessage());
+            System.out.println("Error adding to favourite books: " + e.getMessage());
+
+        }
+    }
+
+    public void removeFavouriteBook(String title) {
+
+        try {
+
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Remove_FavouriteBook");
+            statement.setString(1, title);
+            statement.executeUpdate();
+
+            System.out.println("Favourite book removed");
+            connection.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println("Error removing from favourite books: " + e.getMessage());
+
+        }
+    }
+
+    public void addFavouriteMovie(String title) {
+
+        try {
+
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Add_FavouriteMovie");
+            statement.setString(1, title);
+            statement.executeUpdate();
+
+            System.out.println("Favourite movie added");
+            connection.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println("Error adding to favourite movies: " + e.getMessage());
+
+        }
+    }
+
+    public void removeFavouriteMovie(String title) {
+
+        try {
+
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Remove_FavouriteMovie");
+            statement.setString(1, title);
+            statement.executeUpdate();
+
+            System.out.println("Favourite movie removed");
+            connection.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println("Error removing from favourite movies: " + e.getMessage());
 
         }
     }
@@ -265,40 +305,36 @@ public class ConnectionMethods {
         }
     }
 
-    public void addFavourite(String title) {
+    public void removeMovie(String title) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
-            PreparedStatement statement = connection.query("Add_Favourite");
+            PreparedStatement statement = connection.query("Delete_Movie");
             statement.setString(1, title);
-            statement.executeUpdate();
+            int rowsDeleted = statement.executeUpdate();
 
-            System.out.println("Favourite added");
+            System.out.println(rowsDeleted + " row deleted.");
             connection.closeConnection();
 
         } catch (SQLException e) {
-            System.out.println("Error adding to favourites: " + e.getMessage());
+            System.out.println("Error removing movie: " + e.getMessage());
 
         }
     }
 
-    public void removeFavourite(String title) {
+    public void closeConnection(){
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
-            PreparedStatement statement = connection.query("Remove_Favourite");
-            statement.setString(1, title);
-            statement.executeUpdate();
-
-            System.out.println("Favourite removed");
             connection.closeConnection();
 
         } catch (SQLException e) {
-            System.out.println("Error removing from favourites: " + e.getMessage());
+            System.out.println("Error disconnecting: " + e.getMessage());
 
         }
+
     }
 
 }

@@ -76,23 +76,31 @@ public class DatabaseConnection {
                 break;
             }
             case "Pull_Books":{
-                sql = "SELECT book_id, title, author FROM my_book_list";
+                sql = "SELECT book_id, title, author, is_favourite FROM my_book_list ORDER BY time_stamp";
                 break;
             }
             case "Pull_Movies":{
-                sql = "SELECT title FROM my_movie_list";
+                sql = "SELECT movie_id, title, release_date, movie_dsc, is_favourite FROM my_movie_list ORDER BY time_stamp";
                 break;
             }
             case "Pull_Future_List":{
-                sql = "SELECT title FROM my_future_list";
+                sql = "SELECT title FROM my_future_list ORDER BY time_stamp";
                 break;
             }
-            case "Add_Favourite":{
-                sql = "UPDATE my_book_list SET is_favourite = 1 WHERE title = ?";
+            case "Add_FavouriteBook":{
+                sql = "UPDATE my_book_list SET is_favourite = 1, time_stamp = CURRENT_TIMESTAMP WHERE title = ?";
                 break;
             }
-            case "Remove_Favourite":{
-                sql = "UPDATE my_book_list SET is_favourite = 0 WHERE book_id = title";
+            case "Remove_FavouriteBook":{
+                sql = "UPDATE my_book_list SET is_favourite = 0, time_stamp = CURRENT_TIMESTAMP WHERE title = ?";
+                break;
+            }
+            case "Add_FavouriteMovie":{
+                sql = "UPDATE my_movie_list SET is_favourite = 1, time_stamp = CURRENT_TIMESTAMP WHERE title = ?";
+                break;
+            }
+            case "Remove_FavouriteMovie":{
+                sql = "UPDATE my_movie_list SET is_favourite = 0, time_stamp = CURRENT_TIMESTAMP WHERE title = ?";
                 break;
             }
             default:
