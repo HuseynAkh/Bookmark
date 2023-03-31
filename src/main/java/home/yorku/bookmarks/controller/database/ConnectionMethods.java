@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ConnectionMethods {
-    //Change String to object Book or Movie later
 
     public void userLogin(String user_id, String type) {
 
@@ -116,7 +115,7 @@ public class ConnectionMethods {
 
     public Set<Book> pullBooks() {
 
-        Set<Book> books = new HashSet<Book>();
+        Set<Book> books = new HashSet<>();
 
         try {
 
@@ -147,7 +146,7 @@ public class ConnectionMethods {
 
     public Set<Movie> pullMovies() {
 
-        Set<Movie> movies = new HashSet<Movie>();
+        Set<Movie> movies = new HashSet<>();
 
         try {
 
@@ -287,13 +286,13 @@ public class ConnectionMethods {
         }
     }
 
-    public void removeBook(String title) {
+    public void removeBook(String book_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Delete_Book");
-            statement.setString(1, title);
+            statement.setString(1, book_id);
             int rowsDeleted = statement.executeUpdate();
 
             System.out.println(rowsDeleted + " row deleted.");
@@ -305,13 +304,13 @@ public class ConnectionMethods {
         }
     }
 
-    public void removeMovie(String title) {
+    public void removeMovie(Long movie_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Delete_Movie");
-            statement.setString(1, title);
+            statement.setLong(1, movie_id);
             int rowsDeleted = statement.executeUpdate();
 
             System.out.println(rowsDeleted + " row deleted.");

@@ -100,9 +100,7 @@ public class BookmarkController {
     private MoviePortfolio moviePortfolio;
     private double sceneHeight;
     private double sceneWidth;
-
     private boolean logout = false;
-
     public BookmarkController() {
     }
 
@@ -112,17 +110,20 @@ public class BookmarkController {
         bookPortfolio = new BookPortfolio();
         moviePortfolio = new MoviePortfolio();
         //Initialize the list when null
+        user.setItems(userOptions);
         myBookList.setItems(bookList);
+        upNextList.setItems(futureList);
         myMovieList.setItems(movieList);
         ML_myBookList.setItems(MLbookList);
         ML_myMovieList.setItems(MLmovieList);
         favourite_books.setItems(MLfavBooks);
         favourite_movies.setItems(MLfavMovies);
-        upNextList.setItems(futureList);
-        user.setItems(userOptions);
 
         //Update lists
-        listUpdate();
+        updateBooks();
+        updateMovies();
+        updateFutureList();
+        //listUpdate();
 
         Scene scene = anchorPane.getScene();
         if (scene != null) {
@@ -132,6 +133,7 @@ public class BookmarkController {
 
         // All dynamic button layouts
         anchorPane.sceneProperty().addListener((observable, oldScene, newScene) -> {
+
             if (newScene != null) {
                 newScene.heightProperty().addListener((obs, oldHeight, newHeight) -> {
                     sceneHeight = newHeight.doubleValue();
@@ -144,15 +146,16 @@ public class BookmarkController {
                     LoginBox.setLayoutX((sceneWidth/2) - (LoginBox.getWidth()/2));
 
                 });
-
-
             }
+
         });
 
         for (Tab tab : tabPane.getTabs()) {
+
             if (!tab.getId().equals("LoginPane")) {
                 tab.setDisable(true);
             }
+
         }
 
         Tab logoutTab = tabPane.getTabs().stream()
@@ -163,6 +166,7 @@ public class BookmarkController {
         tabPane.getTabs().remove(logoutTab);
 
         searchType.setOnAction(event -> {
+
             if (searchType.getValue().equals("Movies")) {
                 searchBy.setItems(moviesSearchOptions);
                 searchBy.setValue("Search by");
@@ -170,6 +174,7 @@ public class BookmarkController {
                 searchBy.setItems(booksSearchOptions);
                 searchBy.setValue("Search by");
             }
+
         });
 
     }
@@ -286,11 +291,10 @@ public class BookmarkController {
                     ErrorChecking.setText("Please choose a selection from the drop down title \"Search by\" ");
                     break;
             }
-        }else {
 
+        } else {
             ErrorChecking.setTextFill(Color.RED);
             ErrorChecking.setText("Please choose a selection from the drop down title \"Type\" and \"Search by\" ");
-
         }
     }
 
@@ -427,31 +431,25 @@ public class BookmarkController {
                         description.setGraphic(coverImageView);
 
                     }
-
-
                 }
                 i++;
             }
-
         }
 
         System.out.println("clicked on " + myListView.getSelectionModel().getSelectedItem());
 
     }
 
-    private void listUpdate(){
+    private void updateBooks(){
 
-        ConnectionMethods method = new ConnectionMethods();
         Set<Book> localBookSet = new HashSet<Book>();
-        Set<Movie> localMovieSet = new HashSet<Movie>();
+        ConnectionMethods method = new ConnectionMethods();
+
         this.bookPortfolio.getSavedBooks().clear();
         this.bookPortfolio.getFavouriteBooks().clear();
-        this.moviePortfolio.getSavedMovies().clear();
-        this.moviePortfolio.getFavouriteMovies().clear();
+        bookList.clear();
         MLbookList.clear();
         MLfavBooks.clear();
-        MLmovieList.clear();
-        MLfavMovies.clear();
 
         localBookSet = method.pullBooks();
 
@@ -460,16 +458,33 @@ public class BookmarkController {
             if(b.getIsFavourite() == 1){
                 this.bookPortfolio.AddToFavourites(b);
                 MLfavBooks.add(b.getTitle());
+                bookList.add("*" + b.getTitle());
             } else {
                 this.bookPortfolio.AddToSavedBooks(b);
                 MLbookList.add(b.getTitle());
+                bookList.add(b.getTitle());
             }
 
         }
 
+        alphaSort(myBookList, bookList);
         ML_myBookList.setItems(MLbookList);
-        myBookList.setItems(MLbookList);
         favourite_books.setItems(MLfavBooks);
+
+        method.closeConnection();
+
+    }
+
+    private void updateMovies(){
+
+        Set<Movie> localMovieSet = new HashSet<Movie>();
+        ConnectionMethods method = new ConnectionMethods();
+
+        this.moviePortfolio.getSavedMovies().clear();
+        this.moviePortfolio.getFavouriteMovies().clear();
+        movieList.clear();
+        MLmovieList.clear();
+        MLfavMovies.clear();
 
         localMovieSet = method.pullMovies();
 
@@ -478,30 +493,36 @@ public class BookmarkController {
             if(m.getIsFavourite() == 1){
                 this.moviePortfolio.AddToFavourites(m);
                 MLfavMovies.add(m.getTitle());
+                movieList.add("*" + m.getTitle());
             } else {
                 this.moviePortfolio.AddToSavedMovies(m);
                 MLmovieList.add(m.getTitle());
+                movieList.add(m.getTitle());
             }
 
         }
 
+        alphaSort(myMovieList, movieList);
         ML_myMovieList.setItems(MLmovieList);
-        myMovieList.setItems(MLmovieList);
         favourite_movies.setItems(MLfavMovies);
-
-        futureList = FXCollections.observableList(method.pullFutureList());
-        upNextList.setItems(futureList);
 
         method.closeConnection();
 
     }
 
-    @FXML
-    private void saveToMyCurrentList(){
+    private void updateFutureList(){
+
         ConnectionMethods method = new ConnectionMethods();
 
+        futureList = FXCollections.observableList(method.pullFutureList());
+        upNextList.setItems(futureList);
+    }
+
+    @FXML
+    private void saveToMyCurrentList(){
+
+        ConnectionMethods method = new ConnectionMethods();
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
-        System.out.println(getType());
 
         if(getType().equals("Book")){
 
@@ -510,10 +531,11 @@ public class BookmarkController {
                 if(i == selectedIndex ){
 
                     method.insertBook(b.getIsbn(), user.getValue(), b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), b.getIsFavourite());
-
                 }
                 i++;
             }
+
+            updateBooks();
 
         }else if(getType().equals("Movie")){
 
@@ -522,23 +544,22 @@ public class BookmarkController {
                 if(i == selectedIndex ){
 
                     method.insertMovie(m.getId(), user.getValue(), m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(),0);
-
                 }
                 i++;
             }
 
+            updateMovies();
+
         }else{
-            System.out.println("Error near line 532: No searchType value");
+            System.out.println("Error near line 557: No searchType value");
         }
 
-        listUpdate();
     }
 
     @FXML
     private void saveToMyFutureList(){
 
         ConnectionMethods method = new ConnectionMethods();
-
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
 
         if(getType().equals("Book")){
@@ -565,10 +586,11 @@ public class BookmarkController {
             }
 
         }else{
-            System.out.println("Error near line 569: No searchType value");
+            System.out.println("Error near line 593: No searchType value");
         }
 
-        listUpdate();
+        updateFutureList();
+
     }
 
     @FXML
@@ -588,7 +610,8 @@ public class BookmarkController {
 
         }
 
-        listUpdate();
+        updateBooks();
+
     }
 
     @FXML
@@ -608,7 +631,7 @@ public class BookmarkController {
 
         }
 
-        listUpdate();
+        updateBooks();
 
     }
 
@@ -629,7 +652,7 @@ public class BookmarkController {
 
         }
 
-        listUpdate();
+        updateMovies();
 
     }
 
@@ -650,7 +673,7 @@ public class BookmarkController {
 
         }
 
-        listUpdate();
+        updateMovies();
 
     }
 
@@ -658,11 +681,20 @@ public class BookmarkController {
     private void removeBook(ActionEvent event){
 
         ConnectionMethods method = new ConnectionMethods();
-        String selectedItem = ML_myBookList.getSelectionModel().getSelectedItem();
+        int selectedIndex = ML_myBookList.getSelectionModel().getSelectedIndex();
 
-        method.removeBook(selectedItem);
+        int i = 0;
+        for(Book b: this.bookPortfolio.getSavedBooks()){
 
-        listUpdate();
+            if(i == selectedIndex){
+
+                method.removeBook(b.getIsbn());
+            }
+            i++;
+
+        }
+
+        updateBooks();
 
     }
 
@@ -670,11 +702,20 @@ public class BookmarkController {
     private void removeMovie(ActionEvent event){
 
         ConnectionMethods method = new ConnectionMethods();
-        String selectedItem = ML_myMovieList.getSelectionModel().getSelectedItem();
+        int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
 
-        method.removeMovie(selectedItem);
+        int i = 0;
+        for(Movie m: this.moviePortfolio.getFavouriteMovies()){
 
-        listUpdate();
+            if(i == selectedIndex){
+
+                method.removeMovie(m.getId());
+            }
+            i++;
+
+        }
+
+        updateMovies();
 
     }
 
@@ -689,19 +730,7 @@ public class BookmarkController {
             method.removeFutureList(selectedItem);
         }
 
-        listUpdate();
-    }
-
-    @FXML
-    private void sortAlphaMovie(MouseEvent event){
-        AlphaSort alphaSort = new AlphaSort();
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        arrayList.addAll(ML_myMovieList.getItems());
-        arrayList = alphaSort.sortMovies(arrayList);
-
-        ML_myMovieList.getItems().removeAll(MLmovieList);
-        ML_myMovieList.getItems().addAll(arrayList);
+        updateFutureList();
 
     }
 
@@ -718,6 +747,32 @@ public class BookmarkController {
 
     }
 
+    @FXML
+    private void sortAlphaMovie(MouseEvent event){
+        AlphaSort alphaSort = new AlphaSort();
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        arrayList.addAll(ML_myMovieList.getItems());
+        arrayList = alphaSort.sortMovies(arrayList);
+
+        ML_myMovieList.getItems().removeAll(MLmovieList);
+        ML_myMovieList.getItems().addAll(arrayList);
+
+        //alphaSort(ML_myMovieList, MLmovieList);
+
+    }
+
+    private void alphaSort(ListView<String> list, ObservableList<String> items){
+
+        AlphaSort alphaSort = new AlphaSort();
+
+        ArrayList<String> arrayList = new ArrayList<>(list.getItems());
+        arrayList = alphaSort.sortMovies(arrayList);
+
+        list.getItems().removeAll(items);
+        list.getItems().addAll(arrayList);
+
+    }
 
     public void login(MouseEvent mouseEvent) {
 

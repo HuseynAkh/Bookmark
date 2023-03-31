@@ -5,12 +5,12 @@ public class DatabaseConnection {
 
     private static DatabaseConnection instance;
     private Connection connection;
-   private String url = "jdbc:mariadb://sql958.main-hosting.eu/u880453721_Bookmark";
+    private String url = "jdbc:mariadb://sql958.main-hosting.eu/u880453721_Bookmark";
     private String user = "u880453721_user";
     private String password = "@BookmarkDbcp01";
 
 
-    private DatabaseConnection() throws SQLException{
+    private DatabaseConnection() {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
             this.connection = DriverManager.getConnection(url, user, password);
@@ -64,11 +64,11 @@ public class DatabaseConnection {
                 break;
             }
             case "Delete_Movie":{
-                sql = "DELETE FROM my_movie_list WHERE title = ?";
+                sql = "DELETE FROM my_movie_list WHERE movie_id = ?";
                 break;
             }
             case "Delete_Book":{
-                sql = "DELETE FROM my_book_list WHERE title = ?";
+                sql = "DELETE FROM my_book_list WHERE book_id = ?";
                 break;
             }
             case "Delete_Future_List":{
