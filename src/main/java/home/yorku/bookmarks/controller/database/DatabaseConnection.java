@@ -88,19 +88,19 @@ public class DatabaseConnection {
                 break;
             }
             case "Add_FavouriteBook":{
-                sql = "UPDATE my_book_list SET is_favourite = 1, time_stamp = CURRENT_TIMESTAMP WHERE title = ?";
+                sql = "UPDATE my_book_list SET is_favourite = 1 WHERE book_id = ?";
                 break;
             }
             case "Remove_FavouriteBook":{
-                sql = "UPDATE my_book_list SET is_favourite = 0, time_stamp = CURRENT_TIMESTAMP WHERE title = ?";
+                sql = "UPDATE my_book_list SET is_favourite = 0 WHERE book_id = ?";
                 break;
             }
             case "Add_FavouriteMovie":{
-                sql = "UPDATE my_movie_list SET is_favourite = 1, time_stamp = CURRENT_TIMESTAMP WHERE title = ?";
+                sql = "UPDATE my_movie_list SET is_favourite = 1 WHERE movie_id = ?";
                 break;
             }
             case "Remove_FavouriteMovie":{
-                sql = "UPDATE my_movie_list SET is_favourite = 0, time_stamp = CURRENT_TIMESTAMP WHERE title = ?";
+                sql = "UPDATE my_movie_list SET is_favourite = 0 WHERE movie_id = ?";
                 break;
             }
             default:

@@ -215,13 +215,13 @@ public class ConnectionMethods {
         }
     }
 
-    public void addFavouriteBook(String title) {
+    public void addFavouriteBook(String book_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Add_FavouriteBook");
-            statement.setString(1, title);
+            statement.setString(1, book_id);
             statement.executeUpdate();
 
             System.out.println("Favourite book added");
@@ -233,13 +233,13 @@ public class ConnectionMethods {
         }
     }
 
-    public void removeFavouriteBook(String title) {
+    public void removeFavouriteBook(String book_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Remove_FavouriteBook");
-            statement.setString(1, title);
+            statement.setString(1, book_id);
             statement.executeUpdate();
 
             System.out.println("Favourite book removed");
@@ -251,13 +251,13 @@ public class ConnectionMethods {
         }
     }
 
-    public void addFavouriteMovie(String title) {
+    public void addFavouriteMovie(Long movie_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Add_FavouriteMovie");
-            statement.setString(1, title);
+            statement.setLong(1, movie_id);
             statement.executeUpdate();
 
             System.out.println("Favourite movie added");
@@ -269,13 +269,13 @@ public class ConnectionMethods {
         }
     }
 
-    public void removeFavouriteMovie(String title) {
+    public void removeFavouriteMovie(Long movie_id) {
 
         try {
 
             DatabaseConnection connection = DatabaseConnection.getInstance();
             PreparedStatement statement = connection.query("Remove_FavouriteMovie");
-            statement.setString(1, title);
+            statement.setLong(1, movie_id);
             statement.executeUpdate();
 
             System.out.println("Favourite movie removed");

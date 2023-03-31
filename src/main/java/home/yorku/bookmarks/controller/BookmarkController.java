@@ -573,34 +573,61 @@ public class BookmarkController {
 
     @FXML
     private void addBookToFavourites(ActionEvent event){
-        //This implementation will be fixed itr 3 (favourites don't show up on list update)
-        ConnectionMethods method = new ConnectionMethods();
-        final String selectedItem = ML_myBookList.getSelectionModel().getSelectedItem();
 
-        method.addFavouriteBook(selectedItem);
+        ConnectionMethods method = new ConnectionMethods();
+        int selectedIndex = ML_myBookList.getSelectionModel().getSelectedIndex();
+
+        int i = 0;
+        for(Book b: this.bookPortfolio.getSavedBooks()){
+
+            if(i == selectedIndex){
+
+                method.addFavouriteBook(b.getIsbn());
+            }
+            i++;
+
+        }
 
         listUpdate();
-    }
-
-    @FXML
-    private void addMovieToFavourites(ActionEvent event){
-        //This implementation will be fixed itr 3 (favourites don't show up on list update)
-        ConnectionMethods method = new ConnectionMethods();
-        final String selectedItem = ML_myMovieList.getSelectionModel().getSelectedItem();
-
-        method.addFavouriteMovie(selectedItem);
-
-        listUpdate();
-
     }
 
     @FXML
     private void removeBookFromFavourites(ActionEvent event){
 
         ConnectionMethods method = new ConnectionMethods();
-        String selectedItem = favourite_books.getSelectionModel().getSelectedItem();
+        int selectedIndex = favourite_books.getSelectionModel().getSelectedIndex();
 
-        method.removeFavouriteBook(selectedItem);
+        int i = 0;
+        for(Book b: this.bookPortfolio.getFavouriteBooks()){
+
+            if(i == selectedIndex){
+
+                method.removeFavouriteBook(b.getIsbn());
+            }
+            i++;
+
+        }
+
+        listUpdate();
+
+    }
+
+    @FXML
+    private void addMovieToFavourites(ActionEvent event){
+
+        ConnectionMethods method = new ConnectionMethods();
+        int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
+
+        int i = 0;
+        for(Movie m: this.moviePortfolio.getSavedMovies()){
+
+            if(i == selectedIndex){
+
+                method.addFavouriteMovie(m.getId());
+            }
+            i++;
+
+        }
 
         listUpdate();
 
@@ -610,9 +637,18 @@ public class BookmarkController {
     private void removeMovieFromFavourites(ActionEvent event){
 
         ConnectionMethods method = new ConnectionMethods();
-        String selectedItem = favourite_movies.getSelectionModel().getSelectedItem();
+        int selectedIndex = favourite_movies.getSelectionModel().getSelectedIndex();
 
-        method.removeFavouriteMovie(selectedItem);
+        int i = 0;
+        for(Movie m: this.moviePortfolio.getFavouriteMovies()){
+
+            if(i == selectedIndex){
+
+                method.removeFavouriteMovie(m.getId());
+            }
+            i++;
+
+        }
 
         listUpdate();
 
