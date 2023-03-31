@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
@@ -68,7 +69,6 @@ public class BookmarkController {
     private String searchString = "";
     @FXML
     private ListView<String> myListView;
-    private ObservableList<String> items = FXCollections.observableArrayList();
     @FXML
     private ListView<String> myBookList;
     private ObservableList<String> bookList = FXCollections.observableArrayList();
@@ -76,11 +76,14 @@ public class BookmarkController {
     private ListView<String> myMovieList;
     private ObservableList<String> movieList = FXCollections.observableArrayList();
     @FXML
-    private ListView<String> ML_myMovieList;
-    private ObservableList<String> MLmovieList = FXCollections.observableArrayList();
-    @FXML
     private ListView<String> ML_myBookList;
     private ObservableList<String> MLbookList = FXCollections.observableArrayList();
+    @FXML
+    private ListView<String> favourite_books;
+    private ObservableList<String> MLfavBooks = FXCollections.observableArrayList();
+    @FXML
+    private ListView<String> ML_myMovieList;
+    private ObservableList<String> MLmovieList = FXCollections.observableArrayList();
     @FXML
     private ListView<String> upNextList;
     private ObservableList<String> futureList = FXCollections.observableArrayList();
@@ -94,6 +97,8 @@ public class BookmarkController {
     private MoviePortfolio moviePortfolio;
     private double sceneHeight;
     private double sceneWidth;
+
+    private boolean logout = false;
 
     public BookmarkController() {
     }
@@ -182,8 +187,6 @@ public class BookmarkController {
         clear();
         searchString = searchText.getText();
         ErrorChecking.setTextFill(Color.WHITE);
-        MovieSearchManager ms = new MovieSearchManager();
-        BookSearchManager bs = new BookSearchManager();
 
         if(searchType.getValue().equals("Movies")){ // first drop down choice box
             SearchCriteria searchCriteria;
@@ -213,7 +216,6 @@ public class BookmarkController {
 
                     MovieSearchManager search = new MovieSearchManager();
                     MovieSet  = search.searchMovie(searchCriteria);
-                    //MovieSet = ms.MovieByActor(searchString);
                     MovieController movieController = new MovieController(BookSet, MovieSet, myListView);
                     movieController.display();
 
@@ -437,19 +439,31 @@ public class BookmarkController {
 
     private void listUpdate(){
         ConnectionMethods method = new ConnectionMethods();
+        this.bookPortfolio.getSavedBooks().clear();
+        MLbookList.clear();
+        //will need to update to handel is_favourite flag
+        //Split to two Movie & book for later
+        BookSet = method.pullBooks();
+
+        for (Book b : BookSet) {
+            this.bookPortfolio.AddToSavedBooks(b);
+            MLbookList.add(b.getTitle());
+        }
+
+        ML_myBookList.setItems(MLbookList);
+        myBookList.setItems(MLbookList);
+
 
         MLmovieList = FXCollections.observableList(method.pullMovies());
         ML_myMovieList.setItems(MLmovieList);
         myMovieList.setItems(MLmovieList);
 
-        MLbookList = FXCollections.observableList(method.pullBooks());
-        ML_myBookList.setItems(MLbookList);
-        myBookList.setItems(MLbookList);
-
         futureList = FXCollections.observableList(method.pullFutureList());
         upNextList.setItems(futureList);
 
         method.closeConnection();
+        //BookSet.clear();
+       // MLbookList.clear();
 
     }
 
@@ -502,7 +516,7 @@ public class BookmarkController {
                 if(i == selectedIndex ){
 
                     this.bookPortfolio.AddToSavedBooks(b);
-                    method.insertBook(b.getIsbn(), user.getValue(), b.getIdentifier(), b.getTitle(), b.getAuthor().toString());
+                    method.insertBook(b.getIsbn(), user.getValue(), b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), 0);
 
                 }
                 i++;
@@ -515,7 +529,7 @@ public class BookmarkController {
                 if(i == selectedIndex ){
                     this.moviePortfolio.AddToSavedMovies(m);
                     System.out.println("Title: " + m.getTitle() + "\n" + "Description: " + m.getOverview() + "\n" + "Release Date: " + m.getReleaseDate());
-                    method.insertMovie(String.valueOf(m.getId()), user.getValue(), m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview() );
+                    method.insertMovie(String.valueOf(m.getId()), user.getValue(), m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(),0);
                 }
                 i++;
             }
@@ -534,12 +548,16 @@ public class BookmarkController {
         final int selectedIdx = ML_myBookList.getSelectionModel().getSelectedIndex();
 
         if(!selectedItem.startsWith("*")){
+            ConnectionMethods method = new ConnectionMethods();
+            method.addFavourite(selectedItem);
             ML_myBookList.getItems().remove(selectedIdx);
             MLbookList.add(0,"*" + selectedItem);
             bookList.add(0, "*" + selectedItem); //Pushes favourite items to top of the list
         }else{
             System.out.println("The Book is already in Favourites");
         }
+
+       // listUpdate();
     //We will have to design this better for itr 3 as MovieSet is empty from ML
     /*
         int i = 0;
@@ -582,7 +600,7 @@ public class BookmarkController {
 
     @FXML
     private void removeBook(ActionEvent event){
-
+        //FIX "*" when favourite db is finished
         ConnectionMethods method = new ConnectionMethods();
         String selectedItem = ML_myBookList.getSelectionModel().getSelectedItem();
         final int selectedIdx = ML_myBookList.getSelectionModel().getSelectedIndex();
@@ -690,6 +708,7 @@ public class BookmarkController {
 
         if(!user.getValue().equals("Team:")){
             method.userLogin(user.getValue(), "Login");
+            logout = false;
             stage = (Stage) tabPane.getScene().getWindow();
             stage.setWidth(900);
             stage.setHeight(680);
@@ -720,6 +739,7 @@ public class BookmarkController {
 
         ConnectionMethods method = new ConnectionMethods();
         method.userLogin(user.getValue(), "Logout");
+        logout = true;
         stage = (Stage) tabPane.getScene().getWindow();
         stage.setWidth(300);
         stage.setHeight(300);
@@ -751,7 +771,11 @@ public class BookmarkController {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                method.userLogin(user.getValue(), "Logout");
+
+                if(!logout){
+                    method.userLogin(user.getValue(), "Logout");
+                }
+
             }
         });
     }

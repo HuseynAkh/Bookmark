@@ -92,13 +92,43 @@
                         <Button fx:id="rmFutureList" layoutX="24.0" layoutY="260.0" mnemonicParsing="false" text="Remove from List" onAction="#removeFutureList"/>
 
                         <Label layoutX="400.0" layoutY="5.0" text="Books I've Read" textFill="white"/>
-                        <ListView fx:id="ML_myBookList" layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
-                        <Button fx:id="removeBook" layoutX="310.0" layoutY="260.0" mnemonicParsing="false" text="Remove Book" onAction="#removeBook"/>
-                        <Button fx:id="favouriteButtonBook" layoutX="405.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
-                        <Button fx:id="SortBook" layoutX="522.0" layoutY="260.0" mnemonicParsing="false" text="Sort" onMouseClicked="#sortAlphaBook" />
+
+                        <TabPane layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0">
+                            <tabs>
+                                <Tab text="Books" closable="false">
+                                    <content>
+                                        <ListView fx:id="ML_myBookList" layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0" />
+                                    </content>
+                                </Tab>
+                                <Tab text="Favorites" closable="false">
+                                    <content>
+                                        <ListView fx:id="favourite_books" layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0" />
+                                    </content>
+                                </Tab>
+                            </tabs>
+                        </TabPane>
+
+                        <Button layoutX="310.0" layoutY="260.0" mnemonicParsing="false" text="Remove Book" onAction="#removeBook"/>
+                        <Button layoutX="405.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
+                        <Button layoutX="522.0" layoutY="260.0" mnemonicParsing="false" text="Sort" onMouseClicked="#sortAlphaBook" />
 
                         <Label layoutX="690.0" layoutY="5.0" text="Movies I've Watched" textFill="white"/>
-                        <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
+
+                        <TabPane layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0">
+                            <tabs>
+                                <Tab text="Movies" closable="false">
+                                    <content>
+                                        <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
+                                    </content>
+                                </Tab>
+                                <Tab text="Favorites" closable="false">
+                                    <content>
+                                        <ListView fx:id="favourite_movies" layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0" />
+                                    </content>
+                                </Tab>
+                            </tabs>
+                        </TabPane>
+
                         <Button fx:id="removeMovie" layoutX="600.0" layoutY="260.0" mnemonicParsing="false" text="Remove Movie" onAction="#removeMovie"/>
                         <Button fx:id="favouriteButtonMovie" layoutX="700.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addMovieToFavourites"/>
                         <Button fx:id="SortMovie" layoutX="816.0" layoutY="260.0" mnemonicParsing="false" text="Sort" onMouseClicked="#sortAlphaMovie" />
