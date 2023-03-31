@@ -570,6 +570,7 @@ public class BookmarkController {
                 i++;
             }
 
+            updateBooks();
 
         }else if(getType().equals("Movie")){
 
@@ -596,6 +597,11 @@ public class BookmarkController {
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myBookList.getSelectionModel().getSelectedIndex();
 
+        if (selectedIndex == -1) {
+            System.out.println("No Selected Item");
+            return; // exit the method
+        }
+
         int i = 0;
         for(Book b: this.bookPortfolio.getSavedBooks()){
 
@@ -616,6 +622,11 @@ public class BookmarkController {
 
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = favourite_books.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            System.out.println("No Selected Item");
+            return; // exit the method
+        }
 
         int i = 0;
         for(Book b: this.bookPortfolio.getFavouriteBooks()){
@@ -638,6 +649,11 @@ public class BookmarkController {
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
 
+        if (selectedIndex == -1) {
+            System.out.println("No Selected Item");
+            return; // exit the method
+        }
+
         int i = 0;
         for(Movie m: this.moviePortfolio.getSavedMovies()){
 
@@ -658,6 +674,11 @@ public class BookmarkController {
 
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = favourite_movies.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            System.out.println("No Selected Item");
+            return; // exit the method
+        }
 
         int i = 0;
         for(Movie m: this.moviePortfolio.getFavouriteMovies()){
@@ -680,6 +701,11 @@ public class BookmarkController {
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myBookList.getSelectionModel().getSelectedIndex();
 
+        if (selectedIndex == -1) {
+            System.out.println("No Selected Item");
+            return; // exit the method
+        }
+
         int i = 0;
         for(Book b: this.bookPortfolio.getSavedBooks()){
 
@@ -700,6 +726,11 @@ public class BookmarkController {
 
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            System.out.println("No Selected Item");
+            return; // exit the method
+        }
 
         int i = 0;
         for(Movie m: this.moviePortfolio.getSavedMovies()){
@@ -722,11 +753,14 @@ public class BookmarkController {
         ConnectionMethods method = new ConnectionMethods();
 
         String selectedItem = upNextList.getSelectionModel().getSelectedItem();
-        final int selectedIdx = upNextList.getSelectionModel().getSelectedIndex();
+        final int selectedIndex = upNextList.getSelectionModel().getSelectedIndex();
 
-        if (selectedIdx != -1) {
-            method.removeFutureList(selectedItem, user.getValue());
+        if (selectedIndex == -1) {
+            System.out.println("No Selected Item");
+            return; // exit the method
         }
+
+        method.removeFutureList(selectedItem, user.getValue());
 
         updateFutureList();
 
