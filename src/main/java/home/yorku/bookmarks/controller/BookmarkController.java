@@ -29,10 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -705,7 +702,7 @@ public class BookmarkController {
         int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
 
         int i = 0;
-        for(Movie m: this.moviePortfolio.getFavouriteMovies()){
+        for(Movie m: this.moviePortfolio.getSavedMovies()){
 
             if(i == selectedIndex){
 
@@ -736,29 +733,28 @@ public class BookmarkController {
 
     @FXML
     private void sortAlphaBook(MouseEvent event){
-        AlphaSort alphaSort = new AlphaSort();
-        ArrayList<String> arrayList = new ArrayList<>();
 
-        arrayList.addAll(ML_myBookList.getItems());
-        arrayList = alphaSort.sortMovies(arrayList);
+        this.bookPortfolio.getSavedBooks().sort(new Comparator<Book>() {
+            @Override
+            public int compare(Book b1, Book b2) {
+                return b1.getTitle().compareTo(b2.getTitle());
+            }
+        });
 
-        ML_myBookList.getItems().removeAll(MLbookList);
-        ML_myBookList.getItems().addAll(arrayList);
+        alphaSort(ML_myBookList, MLbookList);
 
     }
 
     @FXML
     private void sortAlphaMovie(MouseEvent event){
-        AlphaSort alphaSort = new AlphaSort();
-        ArrayList<String> arrayList = new ArrayList<>();
+        this.moviePortfolio.getSavedMovies().sort(new Comparator<Movie>() {
+            @Override
+            public int compare(Movie m1, Movie m2) {
+                return m1.getTitle().compareTo(m2.getTitle());
+            }
+        });
 
-        arrayList.addAll(ML_myMovieList.getItems());
-        arrayList = alphaSort.sortMovies(arrayList);
-
-        ML_myMovieList.getItems().removeAll(MLmovieList);
-        ML_myMovieList.getItems().addAll(arrayList);
-
-        //alphaSort(ML_myMovieList, MLmovieList);
+        alphaSort(ML_myMovieList, MLmovieList);
 
     }
 
