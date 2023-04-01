@@ -32,13 +32,9 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-    - name: Download a Build Artifact
-      uses: actions/download-artifact@v2.1.1
+    - uses: actions/download-artifact@v3
       with:
-        # Artifact name
-        name: nightly-v1
-        # Destination path
-        path: .artifacts/
+        name: my-artifact
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
 #     - name: Update dependency graph
