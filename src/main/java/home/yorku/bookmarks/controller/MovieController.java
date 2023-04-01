@@ -14,7 +14,13 @@ public class MovieController extends MediaController {
     protected void display() {
         myListView.getItems().clear();
         for (Movie movie : movies) {
-            myListView.getItems().add(movie.getTitle() + " " + "(Release date: " + movie.getReleaseDate() + ")");
+
+            String title = movie.getTitle();
+
+            if(title.length() > 50){
+                title = title.substring(0, 50) + "..."; // truncate to 30 characters
+            }
+            myListView.getItems().add(title + " " + "(Release date: " + movie.getReleaseDate() + ")");
         }
     }
 

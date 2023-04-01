@@ -15,7 +15,19 @@ public class BookController extends MediaController {
     protected void display() {
         myListView.getItems().clear();
         for (Book book : books) {
-            myListView.getItems().add(book.getTitle() + " | | " + "Author: " + book.getAuthor());
+
+            String author = book.getAuthor().toString();
+            String title = book.getTitle();
+
+            if (author.length() > 30) {
+                author = author.substring(0, 30) + "..."; // truncate to 30 characters
+            }
+
+            if(title.length() > 38){
+                title = title.substring(0, 38) + "..."; // truncate to 30 characters
+            }
+
+            myListView.getItems().add(title + " | | " + "Author: " + author);
         }
     }
 

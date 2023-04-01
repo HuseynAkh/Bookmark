@@ -98,6 +98,9 @@ public class BookmarkController {
     private double sceneHeight;
     private double sceneWidth;
     private boolean logout = false;
+    private String myList = "";
+    private String upNext = "";
+
     public BookmarkController() {
     }
 
@@ -115,12 +118,6 @@ public class BookmarkController {
         ML_myMovieList.setItems(MLmovieList);
         favourite_books.setItems(MLfavBooks);
         favourite_movies.setItems(MLfavMovies);
-
-        //Update lists
-        updateBooks();
-        updateMovies();
-        updateFutureList();
-        //listUpdate();
 
         Scene scene = anchorPane.getScene();
         if (scene != null) {
@@ -196,6 +193,7 @@ public class BookmarkController {
         ErrorChecking.setTextFill(Color.WHITE);
 
         if(searchType.getValue().equals("Movies")){ // first drop down choice box
+
             SearchCriteria searchCriteria;
             switch (searchBy.getValue()) {
                 case "Title": {
@@ -233,6 +231,9 @@ public class BookmarkController {
                     ErrorChecking.setText("Please choose a selection from the drop down title \"Search by\" ");
                     break;
             }
+
+            myList = "Movies I've watched";
+            upNext = "Movies I want to watch";
 
         }else if (searchType.getValue().equals("Books")){
 
@@ -289,16 +290,19 @@ public class BookmarkController {
                     break;
             }
 
+            myList = "Books I've read";
+            upNext = "Books I want to read";
+
         } else {
             ErrorChecking.setTextFill(Color.RED);
             ErrorChecking.setText("Please choose a selection from the drop down title \"Type\" and \"Search by\" ");
         }
+
     }
 
-    protected String getType(){
+    protected String getType(int selectedIndex){
 
         String type = "";
-        final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
 
         if(MovieSet!=null){
             int i = 0;
@@ -321,46 +325,51 @@ public class BookmarkController {
         }
 
         return type;
-
     }
 
     @FXML
-    private void buttonControl(MouseEvent event){
-
-        AtomicReference<ContextMenu> currentMenu = new AtomicReference<>(null);
+    private void buttonControl(MouseEvent event) {
 
         myListView.setCellFactory(lv -> new ListCell<String>() {
-            private final Label button = new Label("Save to:");
-            //May need to change and customize for specific list
-            private final ContextMenu menu = new ContextMenu(new MenuItem("My Watched/Read List"), new MenuItem("Want to Watch/Read"));
+
+            private final ComboBox<String> comboBox = new ComboBox<>();
             private final StackPane stackPane = new StackPane();
 
             {
-                button.setVisible(false);
+                comboBox.setVisible(false);
+                comboBox.getItems().addAll(myList, upNext);
+                comboBox.setValue("Save to:");
+                comboBox.setPrefWidth(85);
                 stackPane.setAlignment(Pos.CENTER_LEFT);
-                StackPane.setAlignment(button, Pos.CENTER_RIGHT);
-                stackPane.getChildren().addAll(new Label(), button);
-                button.setOnMouseEntered(e -> button.setUnderline(true));
-                button.setOnMouseExited(e -> button.setUnderline(false));
+                StackPane.setAlignment(comboBox, Pos.CENTER_RIGHT);
+                stackPane.getChildren().addAll(new Label(), comboBox);
 
                 setOnMouseEntered(e -> {
-                    if (currentMenu.get() == null) {
-                        button.setVisible(true);
-                    }
+                    comboBox.setVisible(true);
                 });
+
                 setOnMouseExited(e -> {
-                    if (currentMenu.get() == null) {
-                        button.setVisible(false);
+                    if (!comboBox.isShowing()) {
+                        comboBox.setVisible(false);
                     }
                 });
-                button.setOnMouseClicked(e -> {
-                    currentMenu.set(menu);
-                    menu.show(button, Side.RIGHT, 0, 0);
-                    e.consume();
+
+                setOnMouseClicked(e -> {
+                    comboBox.setVisible(true);
                 });
-                menu.setOnHidden(e -> {
-                    currentMenu.set(null);
-                    button.setVisible(false);
+
+                comboBox.showingProperty().addListener((observable, oldValue, newValue) -> {
+                    if (!newValue && !comboBox.getSelectionModel().isEmpty()) {
+                        // Call the "saveToList" function when an item is selected from the ComboBox
+                        int listViewIndex = getListView().getItems().indexOf(getItem());
+                        int selectedIndex = comboBox.getSelectionModel().getSelectedIndex();
+
+                        if (selectedIndex == 0) {
+                            saveToMyCurrentList(listViewIndex);
+                        } else if (selectedIndex == 1) {
+                            saveToMyFutureList(listViewIndex);
+                        }
+                    }
                 });
 
             }
@@ -373,13 +382,8 @@ public class BookmarkController {
                     setGraphic(null);
                 } else {
                     Label label = new Label(item);
-                    MenuItem myCurrentList = menu.getItems().get(0);
-                    MenuItem myFutureList = menu.getItems().get(1);
                     stackPane.getChildren().set(0, label);
                     setGraphic(stackPane);
-                    // Call the "saveToList" function when Menu item 1 is clicked
-                    myCurrentList.setOnAction(e -> saveToMyCurrentList());
-                    myFutureList.setOnAction(e -> saveToMyFutureList());
                 }
             }
         });
@@ -393,18 +397,18 @@ public class BookmarkController {
         description.setText("");//Clear the descriptions
         description.setGraphic(null);
 
-        if(getType().equals("Movie")){
+        if(getType(selectedIndex).equals("Movie")){
 
             int i = 0;
             for (Movie m : MovieSet) {
-                if(i == selectedIndex ){
+                if(i == selectedIndex){
                     description.setText(m.getOverview());
                     description.setPadding(new Insets(5, 5, 5, 5));
                 }
                 i++;
             }
         }
-        if(getType().equals("Book")){
+        if(getType(selectedIndex).equals("Book")){
             CoverUrlExtractor url = new CoverUrlExtractor();
 
             int i = 0;
@@ -513,19 +517,20 @@ public class BookmarkController {
 
         futureList = FXCollections.observableList(method.pullFutureList(user.getValue()));
         upNextList.setItems(futureList);
+
+        method.closeConnection();
     }
 
     @FXML
-    private void saveToMyCurrentList(){
+    private void saveToMyCurrentList(int listViewIndex){
 
         ConnectionMethods method = new ConnectionMethods();
-        final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
 
-        if(getType().equals("Book")){
+        if(getType(listViewIndex).equals("Book")){
 
             int i = 0;
             for (Book b : BookSet) {
-                if(i == selectedIndex ){
+                if(i == listViewIndex){
 
                     method.insertBook(b.getIsbn(), user.getValue(), b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), b.getIsFavourite());
                 }
@@ -534,11 +539,11 @@ public class BookmarkController {
 
             updateBooks();
 
-        }else if(getType().equals("Movie")){
+        }else if(getType(listViewIndex).equals("Movie")){
 
             int i = 0;
             for (Movie m : MovieSet) {
-                if(i == selectedIndex ){
+                if(i == listViewIndex){
 
                     method.insertMovie(m.getId(), user.getValue(), m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(),0);
                 }
@@ -554,16 +559,15 @@ public class BookmarkController {
     }
 
     @FXML
-    private void saveToMyFutureList(){
+    private void saveToMyFutureList(int listViewIndex){
 
         ConnectionMethods method = new ConnectionMethods();
-        final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
 
-        if(getType().equals("Book")){
+        if(getType(listViewIndex).equals("Book")){
 
             int i = 0;
             for (Book b : BookSet) {
-                if(i == selectedIndex ){
+                if(i == listViewIndex){
 
                     method.insertFutureList(b.getIsbn(), 0L , user.getValue(), b.getIdentifier() , b.getTitle(), b.getAuthor().toString(), null, null);
                 }
@@ -572,11 +576,11 @@ public class BookmarkController {
 
             updateBooks();
 
-        }else if(getType().equals("Movie")){
+        }else if(getType(listViewIndex).equals("Movie")){
 
             int i = 0;
             for (Movie m : MovieSet) {
-                if(i == selectedIndex ){
+                if(i == listViewIndex){
 
                     method.insertFutureList("null", m.getId(), user.getValue(), m.getIdentifier(), m.getTitle(),  null, m.getReleaseDate(), m.getOverview());
                 }
