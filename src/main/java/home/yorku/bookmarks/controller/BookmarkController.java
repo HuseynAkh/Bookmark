@@ -5,10 +5,11 @@ import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
 import home.yorku.bookmarks.controller.search.MovieSearchManager;
 import home.yorku.bookmarks.controller.sorting.AlphaSort;
 import home.yorku.bookmarks.model.*;
+import javafx.animation.PauseTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -332,8 +334,10 @@ public class BookmarkController {
 
         myListView.setCellFactory(lv -> new ListCell<String>() {
 
-            private final ComboBox<String> comboBox = new ComboBox<>();
+            private ComboBox<String> activeComboBox = null;
             private final StackPane stackPane = new StackPane();
+            private final ComboBox<String> comboBox = new ComboBox<>();
+            private final PauseTransition delay = new PauseTransition(Duration.millis(150));
 
             {
                 comboBox.setVisible(false);
@@ -345,17 +349,27 @@ public class BookmarkController {
                 stackPane.getChildren().addAll(new Label(), comboBox);
 
                 setOnMouseEntered(e -> {
-                    comboBox.setVisible(true);
+                    if (activeComboBox != null && activeComboBox != comboBox) {
+                        comboBox.setVisible(false);
+                    }
+                    // Start the delay before showing the ComboBox
+                    delay.setOnFinished(event -> {
+                        comboBox.setVisible(true);
+                        activeComboBox = comboBox;
+                    });
+                    delay.playFromStart();
                 });
 
                 setOnMouseExited(e -> {
-                    if (!comboBox.isShowing()) {
-                        comboBox.setVisible(false);
+                    if (!isHover() && activeComboBox != null) {
+                        Bounds bounds = activeComboBox.localToScene(activeComboBox.getBoundsInLocal());
+                        if (!bounds.contains(e.getSceneX(), e.getSceneY())) {
+                            activeComboBox.setVisible(false);
+                            activeComboBox = null;
+                        }
                     }
-                });
 
-                setOnMouseClicked(e -> {
-                    comboBox.setVisible(true);
+                    delay.stop();
                 });
 
                 comboBox.showingProperty().addListener((observable, oldValue, newValue) -> {
