@@ -121,7 +121,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.mypackage.MyClass</mainClass>
+                            <mainClass>com.home.yorku.bookmarks.view.BookmarkApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
