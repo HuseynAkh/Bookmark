@@ -48,7 +48,7 @@ jobs:
         path: ./build_${{runner.os}}.jar
 
 
-    release:
+  release:
 
       runs-on: ubuntu-latest
       needs: build
