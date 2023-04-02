@@ -913,6 +913,7 @@ public class BookmarkController {
 
     }
 
+    // Responsible for locking, unlocking and displaying tabs when the user logs out
     public void logout(MouseEvent mouseEvent) {
 
         ConnectionMethods method = new ConnectionMethods();
@@ -931,6 +932,7 @@ public class BookmarkController {
 
     }
 
+    // Responsible for logging the user out if they click the close button instead of logout button
     public void listen() {
         ConnectionMethods method = new ConnectionMethods();
         stage = (Stage) tabPane.getScene().getWindow();
