@@ -1,4 +1,4 @@
-module com.example.hello {
+module com.home.yorku.bookmarks{
     requires javafx.controls;
     requires javafx.graphics;
     requires javafx.fxml;
