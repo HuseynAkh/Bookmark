@@ -7,7 +7,7 @@ module com.home.yorku.bookmarks{
     requires java.desktop;
     requires org.testng;
     requires org.junit.jupiter.api;
-
+    requires org.mariadb.jdbc;
 
     opens home.yorku.bookmarks.view to javafx.fxml;
     exports home.yorku.bookmarks.view;
