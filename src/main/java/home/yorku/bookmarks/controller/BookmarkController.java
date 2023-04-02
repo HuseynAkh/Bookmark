@@ -561,6 +561,9 @@ public class BookmarkController {
         method.closeConnection();
     }
 
+    // Responsible for sending the content of book and movie objects to the database for the "My book/movie List"
+    // saved objects and calling Book Movie functions to update the users list based on their actions on book/movie
+    // object
     @FXML
     private void saveToMyCurrentList(int listViewIndex){
 
@@ -598,6 +601,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for sending the content of a book/movie object to the database table for "My Future List"
+    // also updates the list the user sees by calling updateFutureList() method
     @FXML
     private void saveToMyFutureList(int listViewIndex){
 
@@ -635,6 +640,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for adding a book to the favourites list by updating the is_favourite flag in the database
+    // using method. calls, then also calls the updateBooks() method to update the books list seen by the user
     @FXML
     private void addBookToFavourites(ActionEvent event){
 
@@ -661,6 +668,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for removing a book to the favourites list by updating the is_favourite flag in the database
+    // using method. calls, then also calls the updateBooks() method to update the books list seen by the user
     @FXML
     private void removeBookFromFavourites(ActionEvent event){
 
@@ -687,6 +696,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for adding a movie to the favourites list by updating the is_favourite flag in the database
+    // using method. calls, then also calls the updateMovies() method to update the movies list seen by the user
     @FXML
     private void addMovieToFavourites(ActionEvent event){
 
@@ -713,6 +724,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for removing a movie to the favourites list by updating the is_favourite flag in the database
+    // using method. calls, then also calls the updateMovies() method to update the movies list seen by the user
     @FXML
     private void removeMovieFromFavourites(ActionEvent event){
 
@@ -739,6 +752,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for removing a book from the "My Book List" by removing the book from the database using its
+    // unique id(isbn) then also calls the updateBooks() method to update the movies list seen by the user
     @FXML
     private void removeBook(ActionEvent event){
 
@@ -765,6 +780,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for removing a movie from the "My Movie List" by removing the movie from the database using its
+    // unique id then also calls the updateMovies() method to update the movies list seen by the user
     @FXML
     private void removeMovie(ActionEvent event){
 
@@ -791,6 +808,9 @@ public class BookmarkController {
 
     }
 
+    // Responsible for removing a movie/book from the "My Future Movie/Book List" by removing the movie/book
+    // from the database using its unique id then also calls the updateFutureList() method to update the
+    // movies/books list seen by the user
     @FXML
     private void removeFutureList(ActionEvent event){
         //Need to change, will be problematic in the future
@@ -810,6 +830,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for sorting the visible Book list alphabetically as well as the book portfolio
+    // so that the references to unique Ids remain intact
     @FXML
     private void sortAlphaBook(MouseEvent event){
 
@@ -824,6 +846,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for sorting the visible Movie list alphabetically as well as the movie portfolio
+    // so that the references to unique Ids remain intact
     @FXML
     private void sortAlphaMovie(MouseEvent event){
         this.moviePortfolio.getSavedMovies().sort(new Comparator<Movie>() {
@@ -837,6 +861,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible actually sorting all the visible Book/Movie lists by converting the observable list to an
+    // array list, sorting it using alphaSort. methods, the returning the sorted array as an observable array
     private void alphaSort(ListView<String> list, ObservableList<String> items){
 
         AlphaSort alphaSort = new AlphaSort();
@@ -849,6 +875,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for displaying, locking and unlocking tabs at login as well as updating all users list
+    // on login
     public void login(MouseEvent mouseEvent) {
 
         ConnectionMethods method = new ConnectionMethods();
