@@ -105,13 +105,15 @@ public class BookmarkController {
 
     public BookmarkController() {
     }
-
+    // Initializes all listviews, dynamic buttons, tab views on login,
+    // book/movie portfolio's for each user session to manipulate during
+    // run time
     @FXML
-    private void initialize() { //Initializes all Listview items
-
+    private void initialize() {
+        // Initialize portfolios
         bookPortfolio = new BookPortfolio();
         moviePortfolio = new MoviePortfolio();
-        //Initialize the list when null
+        // Initialize the list when null
         user.setItems(userOptions);
         myBookList.setItems(bookList);
         upNextList.setItems(futureList);
@@ -146,21 +148,10 @@ public class BookmarkController {
 
         });
 
-        for (Tab tab : tabPane.getTabs()) {
+        // Initialize locked Panes
+        setPane();
 
-            if (!tab.getId().equals("LoginPane")) {
-                tab.setDisable(true);
-            }
-
-        }
-
-        Tab logoutTab = tabPane.getTabs().stream()
-                .filter(tab -> tab.getId().equals("LogoutPane"))
-                .findFirst()
-                .orElse(null);
-        removedTabs.add(logoutTab);
-        tabPane.getTabs().remove(logoutTab);
-
+        // Initialize search options for Books and Movies
         searchType.setOnAction(event -> {
 
             if (searchType.getValue().equals("Movies")) {
@@ -175,6 +166,26 @@ public class BookmarkController {
 
     }
 
+    // function to disable tabPanes on login/logout
+    private void setPane() {
+        for (Tab tab : tabPane.getTabs()) {
+
+            if (!tab.getId().equals("LoginPane")) {
+                tab.setDisable(true);
+            }
+
+        }
+
+        Tab logoutTab = tabPane.getTabs().stream()
+                .filter(tab -> tab.getId().equals("LogoutPane"))
+                .findFirst()
+                .orElse(null);
+        removedTabs.add(logoutTab);
+        tabPane.getTabs().remove(logoutTab);
+    }
+
+    // Used to clear the observable Book and Movie set returned from the search
+    // Is used when the user starts a new search
     private void clear(){
         if(MovieSet != null){
             MovieSet.clear();
@@ -187,6 +198,9 @@ public class BookmarkController {
         description.setGraphic(null);
     }
 
+    // Responsible for calling the specific search managers based on user filers
+    // and populating the Book and Movie observable list with the returned results from the
+    // manager
     @FXML
     private void onSearchButtonClick(ActionEvent event) {
 
@@ -302,6 +316,8 @@ public class BookmarkController {
 
     }
 
+    // Responsible for getting the type "Book" or "Movie" of the selected item (from the user)
+    // Is used to determine which list to add the selected item to "My Book/Movie list"
     protected String getType(int selectedIndex){
 
         String type = "";
@@ -329,6 +345,8 @@ public class BookmarkController {
         return type;
     }
 
+    // Responsible for the "Save to:" dropdown button which adds Books or Movies to the respective
+    // My Book/Movie list OR Future Book/Movie list
     @FXML
     private void buttonControl(MouseEvent event) {
 
@@ -403,6 +421,8 @@ public class BookmarkController {
         });
     }
 
+    // Updates the description view box with the description of the movie
+    // If the selection is a book it will load the cover image of the book
     @FXML
     private void callDescription(MouseEvent event) throws IOException {
 
@@ -455,6 +475,8 @@ public class BookmarkController {
 
     }
 
+    // Used to connect to the database and update the listViews for "my book list" in the "MyList" tab
+    // it also updates the book portfolio whenever a user adds/deletes or moves a book to/from the favourite's tab
     private void updateBooks(){
 
         Set<Book> localBookSet = new HashSet<Book>();
@@ -490,6 +512,8 @@ public class BookmarkController {
 
     }
 
+    // Used to connect to the database and update the listViews for "my movie list" in the "MyList" tab
+    // it also updates the movie portfolio whenever a user adds/deletes or moves a movie to/from the favourite's tab
     private void updateMovies(){
 
         Set<Movie> localMovieSet = new HashSet<Movie>();
@@ -525,6 +549,8 @@ public class BookmarkController {
 
     }
 
+    // Used to connect to the database and update the listViews for "my future list" in the "MyList" tab
+    // it updates the list whenever a user adds/deletes movie/book to/from the list
     private void updateFutureList(){
 
         ConnectionMethods method = new ConnectionMethods();
@@ -872,19 +898,7 @@ public class BookmarkController {
         tabPane.getTabs().add(0,removedTabs.get(0));
         removedTabs.clear();
 
-        for (Tab tab : tabPane.getTabs()) {
-            if (!tab.getId().equals("LoginPane")) {
-                tab.setDisable(true);
-            }
-        }
-
-        // Enable and show the login tab
-        Tab logoutTab = tabPane.getTabs().stream()
-                .filter(tab -> tab.getId().equals("LogoutPane"))
-                .findFirst()
-                .orElse(null);
-        removedTabs.add(logoutTab);
-        tabPane.getTabs().remove(logoutTab);
+        setPane();
         LoginError.setText("");
 
     }
