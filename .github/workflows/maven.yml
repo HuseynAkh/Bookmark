@@ -66,7 +66,7 @@ jobs:
 
         - name: Gen release info
           run: |
-            source release.env
+            source rel.env
             echo "RELEASE_VERSION=$(echo $RELEASE_VERSION | cut -c 1-6)" >> $GITHUB_ENV
             echo "RELEASE_NAME=$(echo $RELEASE_NAME | cut -c 1-6)" >> $GITHUB_ENV
             echo "RELEASE_DESCRIPTION=$(echo $RELEASE_DESCRIPTION | cut -c 1-6)" >> $GITHUB_ENV
