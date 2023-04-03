@@ -13,16 +13,16 @@ import java.util.Objects;
 public class BookmarkApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        //Load fxml
+        // Load fxml
         FXMLLoader fxmlLoader = new FXMLLoader(BookmarkApplication.class.getResource("/bookmark.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/stylesheet.css")).toExternalForm());
-        //Useful
-//        URL fxmlLocation = BookmarkApplication.class.getResource("/bookmark.fxml");
-//        System.out.println("fxmlLocation: " + fxmlLocation);
-//        System.out.println("fxml loaded");
-        //Set Original Stage
+        // Useful
+        // URL fxmlLocation = BookmarkApplication.class.getResource("/bookmark.fxml");
+        // System.out.println("fxmlLocation: " + fxmlLocation);
+        // System.out.println("fxml loaded");
+        // Set Original Stage
         stage.setTitle("Bookmark");
         stage.setWidth(260);
         stage.setHeight(200);
