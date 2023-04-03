@@ -11,9 +11,6 @@ module com.home.yorku.bookmarks{
 
     exports home.yorku.bookmarks.model;
     exports home.yorku.bookmarks.view;
-    exports home.yorku.bookmarks.model;
     exports home.yorku.bookmarks.controller;
-    opens home.yorku.bookmarks.view to javafx.graphics, javafx.fxml;
-    opens home.yorku.bookmarks.model to javafx.fxml, javafx.graphics;
-    opens home.yorku.bookmarks.controller to javafx.fxml, javafx.graphics;
+    opens home.yorku.bookmarks.controller to javafx.fxml;
 }
