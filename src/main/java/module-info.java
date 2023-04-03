@@ -6,7 +6,6 @@ module com.home.yorku.bookmarks{
     requires java.sql;
     requires java.desktop;
     requires org.testng;
-    requires org.junit.jupiter.api;
     requires org.mariadb.jdbc;
 
     exports home.yorku.bookmarks.model;
