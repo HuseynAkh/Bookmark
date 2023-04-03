@@ -92,6 +92,14 @@ public class BookmarkController {
     @FXML
     private ImageView coverImageView;
     @FXML
+    private Label titleLabel;
+    @FXML
+    private Label idLabel;
+    @FXML
+    private Label authorOrRelease;
+    @FXML
+    private Label descLabel;
+    @FXML
     private Label description;
     private Set<Movie> MovieSet;
     private Set<Book> BookSet;
@@ -186,7 +194,7 @@ public class BookmarkController {
 
     // Used to clear the observable Book and Movie set returned from the search
     // Is used when the user starts a new search
-    private void clear(){
+    private void clearSet(){
         if(MovieSet != null){
             MovieSet.clear();
         }
@@ -194,8 +202,6 @@ public class BookmarkController {
         if(BookSet != null){
             BookSet.clear();
         }
-        description.setText("");
-        description.setGraphic(null);
     }
 
     // Responsible for calling the specific search managers based on user filers
@@ -204,7 +210,8 @@ public class BookmarkController {
     @FXML
     private void onSearchButtonClick(ActionEvent event) {
 
-        clear();
+        clearSet();
+        clearDescription();
         searchString = searchText.getText();
         ErrorChecking.setTextFill(Color.WHITE);
 
@@ -428,20 +435,23 @@ public class BookmarkController {
 
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
 
-        description.setText("");//Clear the descriptions
-        description.setGraphic(null);
+        clearDescription();
 
         if(getType(selectedIndex).equals("Movie")){
 
             int i = 0;
             for (Movie m : MovieSet) {
                 if(i == selectedIndex){
+                    descLabel.setText("Description: ");
+                    descLabel.setPadding(new Insets(1, 1, 5, 5));
+                    setDescription(m.getTitle(), m.getIdentifier(), "Release date: ", m.getReleaseDate());
                     description.setText(m.getOverview());
                     description.setPadding(new Insets(5, 5, 5, 5));
                 }
                 i++;
             }
         }
+
         if(getType(selectedIndex).equals("Book")){
             CoverUrlExtractor url = new CoverUrlExtractor();
 
@@ -449,6 +459,7 @@ public class BookmarkController {
             for (Book b : BookSet) {
                 if(i == selectedIndex ){
                     url.getBookCover(b.getIsbn());
+                    setDescription(b.getTitle(), b.getIdentifier(), "Author(s): ", b.getAuthor().toString());
 
                     if(url.getBookCover(b.getIsbn())){
                         InputStream stream = Files.newInputStream(Paths.get("./temporary.jpg"));
@@ -456,14 +467,12 @@ public class BookmarkController {
                         coverImageView.setImage(coverImage);
                         coverImageView.setFitWidth(100);
                         coverImageView.setFitHeight(200);
-                        description.setGraphic(coverImageView);
                     }else{
                         InputStream stream = Files.newInputStream(Paths.get("Images/book-placeholder.jpg"));
                         Image coverImage = new Image(stream);
                         coverImageView.setImage(coverImage);
                         coverImageView.setFitWidth(100);
                         coverImageView.setFitHeight(200);
-                        description.setGraphic(coverImageView);
 
                     }
                 }
@@ -472,6 +481,34 @@ public class BookmarkController {
         }
 
         System.out.println("clicked on " + myListView.getSelectionModel().getSelectedItem());
+    }
+
+    // Responsible for setting, updating and formatting text labels and descriptions for movies and books
+    private void setDescription(String title, String identifier, String dynamicLabel, String dynamicText){
+
+        titleLabel.setText("Title: " + title);
+        titleLabel.setPadding(new Insets(1, 1, 5, 5));
+        idLabel.setText("Type: " + identifier);
+        idLabel.setPadding(new Insets(1, 1, 5, 5));
+
+        if(identifier.equals("Book")){
+            String author = dynamicText.substring(1, dynamicText.length() - 1);
+            authorOrRelease.setText(dynamicLabel + author);
+        } else {
+            authorOrRelease.setText(dynamicLabel + ": " + dynamicText);
+        }
+        authorOrRelease.setPadding(new Insets(1, 1, 5, 5));
+
+    }
+
+    private void clearDescription(){
+
+        titleLabel.setText("");
+        idLabel.setText("");
+        authorOrRelease.setText("");
+        descLabel.setText("");
+        description.setText("");
+        coverImageView.setImage(null);
 
     }
 
@@ -619,8 +656,6 @@ public class BookmarkController {
                 i++;
             }
 
-            updateBooks();
-
         }else if(getType(listViewIndex).equals("Movie")){
 
             int i = 0;
@@ -637,7 +672,6 @@ public class BookmarkController {
         }
 
         updateFutureList();
-
     }
 
     // Responsible for adding a book to the favourites list by updating the is_favourite flag in the database
@@ -665,7 +699,6 @@ public class BookmarkController {
         }
 
         updateBooks();
-
     }
 
     // Responsible for removing a book to the favourites list by updating the is_favourite flag in the database
@@ -693,7 +726,6 @@ public class BookmarkController {
         }
 
         updateBooks();
-
     }
 
     // Responsible for adding a movie to the favourites list by updating the is_favourite flag in the database
@@ -721,7 +753,6 @@ public class BookmarkController {
         }
 
         updateMovies();
-
     }
 
     // Responsible for removing a movie to the favourites list by updating the is_favourite flag in the database
@@ -749,7 +780,6 @@ public class BookmarkController {
         }
 
         updateMovies();
-
     }
 
     // Responsible for removing a book from the "My Book List" by removing the book from the database using its
@@ -777,7 +807,6 @@ public class BookmarkController {
         }
 
         updateBooks();
-
     }
 
     // Responsible for removing a movie from the "My Movie List" by removing the movie from the database using its
@@ -805,7 +834,6 @@ public class BookmarkController {
         }
 
         updateMovies();
-
     }
 
     // Responsible for removing a movie/book from the "My Future Movie/Book List" by removing the movie/book
@@ -825,9 +853,7 @@ public class BookmarkController {
         }
 
         method.removeFutureList(selectedItem, user.getValue());
-
         updateFutureList();
-
     }
 
     // Responsible for sorting the visible Book list alphabetically as well as the book portfolio
@@ -843,7 +869,6 @@ public class BookmarkController {
         });
 
         alphaSort(ML_myBookList, MLbookList);
-
     }
 
     // Responsible for sorting the visible Movie list alphabetically as well as the movie portfolio
@@ -858,7 +883,6 @@ public class BookmarkController {
         });
 
         alphaSort(ML_myMovieList, MLmovieList);
-
     }
 
     // Responsible actually sorting all the visible Book/Movie lists by converting the observable list to an
@@ -872,7 +896,6 @@ public class BookmarkController {
 
         list.getItems().removeAll(items);
         list.getItems().addAll(arrayList);
-
     }
 
     // Responsible for displaying, locking and unlocking tabs at login as well as updating all users list
@@ -910,7 +933,16 @@ public class BookmarkController {
             LoginError.setTextFill(Color.RED);
             LoginError.setText("Please select your Team to Login");
         }
+    }
 
+    @FXML
+    private void clearSearchTab(){
+        myListView.getItems().clear();
+        searchText.clear();
+        ErrorChecking.setText("");
+        searchType.setValue("Type");
+        searchBy.setValue("Search by");
+        user.setValue("Team: ");
     }
 
     // Responsible for locking, unlocking and displaying tabs when the user logs out
@@ -923,13 +955,15 @@ public class BookmarkController {
         stage.setWidth(300);
         stage.setHeight(300);
         listen();
+        clearSet();
+        clearSearchTab();
+        clearDescription();
 
         tabPane.getTabs().add(0,removedTabs.get(0));
         removedTabs.clear();
 
         setPane();
         LoginError.setText("");
-
     }
 
     // Responsible for logging the user out if they click the close button instead of logout button
@@ -942,6 +976,9 @@ public class BookmarkController {
 
                 if(!logout){
                     method.userLogin(user.getValue(), "Logout");
+                    clearSet();
+                    clearSearchTab();
+                    clearDescription();
                 }
 
             }

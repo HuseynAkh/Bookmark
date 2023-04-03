@@ -6,145 +6,139 @@
 <?import javafx.collections.FXCollections?>
 
 <?import javafx.scene.image.ImageView?>
-<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-         tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: #0f0e26;" xmlns:fx="http://javafx.com/fxml"
+<TabPane xmlns:fx="http://javafx.com/fxml" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+         minWidth="-Infinity" tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: #0f0e26;"
          fx:controller="home.yorku.bookmarks.controller.BookmarkController" stylesheets="@stylesheet.css">
 
-    <tabs>
-        <Tab fx:id="LoginPane" text="Login">
-            <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
-                <children>
-                    <Label fx:id="LoginError"/>
-                    <VBox fx:id="LoginBox">
-                    <ChoiceBox fx:id="user" id="choiceBox" value="Team:" layoutX="65.0" layoutY="33.0" prefHeight="24.0"
-                               prefWidth="100.0">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                            </FXCollections>
-                        </items>
-                    </ChoiceBox>
-                    <Button fx:id="Login" mnemonicParsing="false" text="Log in"
-                            prefWidth="100" onMouseClicked="#login"/>
-                    </VBox>
-                </children>
-            </AnchorPane>
-        </Tab>
-          <Tab fx:id="searchTab" id="SearchPane" text="Search">
-              <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
-                      <children>
-                          <Label fx:id="ErrorChecking"/>
-                          <TextField fx:id="searchText" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
-                          <ChoiceBox fx:id="searchType" value="Type" layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="78.0">
-                              <items>
-                                  <FXCollections fx:factory="observableArrayList">
-                                      <String fx:value="Movies" />
-                                      <String fx:value="Books" />
-                                  </FXCollections>
-                              </items>
-                          </ChoiceBox>
-                          <ChoiceBox fx:id="searchBy" value="Search by" layoutX="125.0" layoutY="33.0" prefHeight="24.0" prefWidth="150.0" ><!--fix x and width-->
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="-- Please choose a Type first --" />
-                                </FXCollections>
-                            </items>
-                        </ChoiceBox>
+    <Tab id="LoginPane" text="Login">
+        <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
+            <Label fx:id="LoginError"/>
+            <VBox fx:id="LoginBox">
+                <ChoiceBox fx:id="user" id="choiceBox" value="Team:" layoutX="65.0" layoutY="33.0" prefHeight="24.0"
+                           prefWidth="100.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList"/>
+                    </items>
+                </ChoiceBox>
+                <Button id="Login" mnemonicParsing="false" text="Log in" prefWidth="100" onMouseClicked="#login"/>
+            </VBox>
+        </AnchorPane>
+    </Tab>
 
-                        <Button fx:id="searchButton" layoutX="520.0" layoutY="33.0" mnemonicParsing="false" text="Search" onAction="#onSearchButtonClick"/>
+    <Tab id="SearchPane" text="Search">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
 
-                        <ListView fx:id="myListView" layoutX="24.0" layoutY="85.0" prefHeight="284.0" prefWidth="554.0" onMouseEntered="#buttonControl" onMouseClicked="#callDescription" />
+            <Label fx:id="ErrorChecking"/>
+            <TextField fx:id="searchText" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
 
-                        <Label layoutX="265.0" layoutY="380.0" text="Description" textFill="white"/>
-                        <ScrollPane fx:id="descriptionPane" layoutX="24.0" layoutY="400.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
+            <ChoiceBox fx:id="searchType" value="Type" layoutX="24.0" layoutY="33.0" prefHeight="24.0"
+                       prefWidth="78.0">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Movies"/>
+                        <String fx:value="Books"/>
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
 
-                            <!--  <Label fx:id="description" wrapText="true"/> !-->
-                                <Label fx:id="description" wrapText="true">
-                                     <graphic>
-                                         <ImageView fx:id="coverImageView" />
-                                     </graphic>
-                                 </Label>
+            <ChoiceBox fx:id="searchBy" value="Search by" layoutX="125.0" layoutY="33.0" prefHeight="24.0"
+                       prefWidth="150.0"><!--fix x and width-->
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="-- Please choose a Type first --"/>
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
 
-                        </ScrollPane>
+            <Button layoutX="520.0" layoutY="33.0" mnemonicParsing="false" text="Search"
+                    onAction="#onSearchButtonClick"/>
+            <ListView fx:id="myListView" layoutX="24.0" layoutY="85.0" prefHeight="284.0" prefWidth="554.0"
+                      onMouseEntered="#buttonControl" onMouseClicked="#callDescription"/>
+            <Label layoutX="265.0" layoutY="380.0" text="Description" textFill="white"/>
 
-                        <Label layoutX="690.0" layoutY="65.0" text="My Book List" textFill="white"/>
-                        <ListView fx:id="myBookList" layoutX="600.0" layoutY="85.0" prefHeight="224.0" prefWidth="263.0"/>
+            <ScrollPane layoutX="24.0" layoutY="400.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
+                <VBox>
+                    <HBox>
+                        <ImageView fx:id="coverImageView"/>
+                        <VBox>
+                            <Label fx:id="titleLabel" wrapText="true"/>
+                            <Label fx:id="idLabel" wrapText="true"/>
+                            <Label fx:id="authorOrRelease" wrapText="true"/>
+                        </VBox>
+                    </HBox>
+                    <Label fx:id="descLabel"/>
+                    <Label fx:id="description" wrapText="true"/>
+                </VBox>
+            </ScrollPane>
 
-                        <Label layoutX="690.0" layoutY="320.0" text="My Movie List" textFill="white"/>
-                        <ListView fx:id="myMovieList" layoutX="600.0" layoutY="340.0" prefHeight="224.0" prefWidth="263.0"/>
+            <Label layoutX="690.0" layoutY="65.0" text="My Book List" textFill="white"/>
+            <ListView fx:id="myBookList" layoutX="600.0" layoutY="85.0" prefHeight="224.0" prefWidth="263.0"/>
 
-                    </children>
-                </AnchorPane>
-            </content>
-        </Tab>
-        <Tab id="MyListPane" text="MyList">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" >
-                    <children>
-                    <!--
-                        <Label layoutX="405.0" layoutY="300.0" text="Description" textFill="white"/>
-                        <ScrollPane fx:id="ML_descriptionPane" layoutX="164.0" layoutY="320.0" prefHeight="184.0" prefWidth="554.0" fitToWidth="true">
-                            <Label fx:id="ML_description" wrapText="true"/>
-                        </ScrollPane>
-                    !-->
-                        <Label layoutX="24.0" layoutY="5.0" text="What to read/Watch Next" textFill="white"/>
-                        <ListView fx:id="upNextList" layoutX="24.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
-                        <Button fx:id="rmFutureList" layoutX="24.0" layoutY="260.0" mnemonicParsing="false" text="Remove from List" onAction="#removeFutureList"/>
+            <Label layoutX="690.0" layoutY="320.0" text="My Movie List" textFill="white"/>
+            <ListView fx:id="myMovieList" layoutX="600.0" layoutY="340.0" prefHeight="224.0" prefWidth="263.0"/>
 
-                        <Label layoutX="400.0" layoutY="5.0" text="Books I've Read" textFill="white"/>
+        </AnchorPane>
+    </Tab>
 
-                        <TabPane layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0">
-                            <tabs>
-                                <Tab text="Books" closable="false">
-                                    <content>
-                                        <ListView fx:id="ML_myBookList" layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0" />
-                                    </content>
-                                </Tab>
-                                <Tab text="Favorites" closable="false">
-                                    <content>
-                                        <ListView fx:id="favourite_books" layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0" />
-                                    </content>
-                                </Tab>
-                            </tabs>
-                        </TabPane>
+    <Tab id="MyListPane" text="MyList">
 
-                        <Button layoutX="310.0" layoutY="260.0" mnemonicParsing="false" text="Remove Book" onAction="#removeBook"/>
-                        <Button layoutX="405.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addBookToFavourites" />
-                        <Button layoutX="405.0" layoutY="300.0" mnemonicParsing="false" text="Remove From Favourites" onAction="#removeBookFromFavourites" />
-                        <Button layoutX="522.0" layoutY="260.0" mnemonicParsing="false" text="Sort" onMouseClicked="#sortAlphaBook" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
 
-                        <Label layoutX="690.0" layoutY="5.0" text="Movies I've Watched" textFill="white"/>
+            <Label layoutX="24.0" layoutY="5.0" text="What to read/Watch Next" textFill="white"/>
+            <ListView fx:id="upNextList" layoutX="24.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
+            <Button layoutX="24.0" layoutY="260.0" mnemonicParsing="false" text="Remove from List" onAction="#removeFutureList"/>
+            <Label layoutX="400.0" layoutY="5.0" text="Books I've Read" textFill="white"/>
 
-                        <TabPane layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0">
-                            <tabs>
-                                <Tab text="Movies" closable="false">
-                                    <content>
-                                        <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
-                                    </content>
-                                </Tab>
-                                <Tab text="Favorites" closable="false">
-                                    <content>
-                                        <ListView fx:id="favourite_movies" layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0" />
-                                    </content>
-                                </Tab>
-                            </tabs>
-                        </TabPane>
+            <TabPane layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0">
+                <Tab text="Books" closable="false">
+                    <ListView fx:id="ML_myBookList" layoutX="310.0" layoutY="25.0" prefHeight="224.0"
+                              prefWidth="263.0"/>
+                </Tab>
+                <Tab text="Favorites" closable="false">
+                    <ListView fx:id="favourite_books" layoutX="310.0" layoutY="25.0" prefHeight="224.0"
+                              prefWidth="263.0"/>
+                </Tab>
+            </TabPane>
 
-                        <Button layoutX="600.0" layoutY="260.0" mnemonicParsing="false" text="Remove Movie" onAction="#removeMovie"/>
-                        <Button layoutX="700.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites" onAction="#addMovieToFavourites"/>
-                        <Button layoutX="700.0" layoutY="300.0" mnemonicParsing="false" text="Remove From Favourites" onAction="#removeMovieFromFavourites"/>
-                        <Button layoutX="816.0" layoutY="260.0" mnemonicParsing="false" text="Sort" onMouseClicked="#sortAlphaMovie" />
+            <Button layoutX="310.0" layoutY="260.0" mnemonicParsing="false" text="Remove Book"
+                    onAction="#removeBook"/>
+            <Button layoutX="405.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites"
+                    onAction="#addBookToFavourites"/>
+            <Button layoutX="405.0" layoutY="300.0" mnemonicParsing="false" text="Remove From Favourites"
+                    onAction="#removeBookFromFavourites"/>
+            <Button layoutX="522.0" layoutY="260.0" mnemonicParsing="false" text="Sort"
+                    onMouseClicked="#sortAlphaBook"/>
 
-                    </children>
-                </AnchorPane>
-            </content>
-        </Tab>
-        <Tab fx:id="LogoutPane" text="Log out">
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
-                <children>
-                    <Button fx:id="Logout" layoutX="25.0" layoutY="25.0" mnemonicParsing="false" text="Log out" prefWidth="100" onMouseClicked="#logout"/>
-                </children>
-            </AnchorPane>
-        </Tab>
-    </tabs>
+            <Label layoutX="690.0" layoutY="5.0" text="Movies I've Watched" textFill="white"/>
+
+            <TabPane layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0">
+                <Tab text="Movies" closable="false">
+                    <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="25.0" prefHeight="224.0"
+                              prefWidth="263.0"/>
+                </Tab>
+                <Tab text="Favorites" closable="false">
+                    <ListView fx:id="favourite_movies" layoutX="310.0" layoutY="25.0" prefHeight="224.0"
+                              prefWidth="263.0"/>
+                </Tab>
+            </TabPane>
+
+            <Button layoutX="600.0" layoutY="260.0" mnemonicParsing="false" text="Remove Movie"
+                    onAction="#removeMovie"/>
+            <Button layoutX="700.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites"
+                    onAction="#addMovieToFavourites"/>
+            <Button layoutX="700.0" layoutY="300.0" mnemonicParsing="false" text="Remove From Favourites"
+                    onAction="#removeMovieFromFavourites"/>
+            <Button layoutX="816.0" layoutY="260.0" mnemonicParsing="false" text="Sort"
+                    onMouseClicked="#sortAlphaMovie"/>
+
+        </AnchorPane>
+    </Tab>
+
+    <Tab id="LogoutPane" text="Log out">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
+            <Button id="Logout" layoutX="25.0" layoutY="25.0" mnemonicParsing="false" text="Log out"
+                    prefWidth="100" onMouseClicked="#logout"/>
+        </AnchorPane>
+    </Tab>
+
 </TabPane>
