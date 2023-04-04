@@ -468,7 +468,7 @@ public class BookmarkController {
                         coverImageView.setFitWidth(100);
                         coverImageView.setFitHeight(200);
                     }else{
-                        InputStream stream = Files.newInputStream(Paths.get("Images/book-placeholder.jpg"));
+                        InputStream stream = Files.newInputStream(Paths.get("images/book-placeholder.jpg"));
                         Image coverImage = new Image(stream);
                         coverImageView.setImage(coverImage);
                         coverImageView.setFitWidth(100);
