@@ -121,7 +121,7 @@ public class ConnectionMethods {
         }
     }
 
-    public void insertMovie(Long movie_id, String user_id, String identifier, String title, String release_date, String movie_dsc, int is_favourite) {
+    public void insertMovie(Long movie_id, String user_id, String genre, String identifier, String title, String release_date, String movie_dsc, int is_favourite) {
 
         try {
 
@@ -129,11 +129,12 @@ public class ConnectionMethods {
             PreparedStatement statement = connection.query("Movie");
             statement.setLong(1, movie_id);
             statement.setString(2, user_id);
-            statement.setString(3, identifier);
-            statement.setString(4, title);
-            statement.setString(5, release_date);
-            statement.setString(6, movie_dsc);
-            statement.setInt(7, is_favourite);
+            statement.setString(3, genre);
+            statement.setString(4, identifier);
+            statement.setString(5, title);
+            statement.setString(6, release_date);
+            statement.setString(7, movie_dsc);
+            statement.setInt(8, is_favourite);
 
             int rowsInserted = statement.executeUpdate();
 
@@ -268,15 +269,32 @@ public class ConnectionMethods {
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
+                ArrayList<Long> genreToList = new ArrayList<>();
+
                 Long id = rs.getLong("movie_id");
                 String user = rs.getString("user_id");
+                String genre = rs.getString("genre");
                 String identifier = rs.getString("identifier");
                 String title = rs.getString("title");
                 String release_date = rs.getString("release_date");
                 String overview = rs.getString("movie_dsc");
                 int is_favourite = rs.getInt("is_favourite");
 
-                MovieToPortfolio movie = new MovieToPortfolio(id, user, identifier, title, release_date, overview, is_favourite);
+                String[] genreArray = genre.split(",");
+
+                for (String genreString : genreArray) {
+
+                    if(!genreString.isEmpty()){
+                        Long genreLong = Long.parseLong(genreString.trim());
+                        genreToList.add(genreLong);
+                    } else {
+                        genreToList.add(null);
+                    }
+
+
+                }
+
+                MovieToPortfolio movie = new MovieToPortfolio(id, user, genreToList, identifier, title, release_date, overview, is_favourite);
                 movies.add(movie);
             }
 

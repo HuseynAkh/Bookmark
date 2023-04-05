@@ -13,8 +13,6 @@ import java.util.Optional;
 public class CreateUserController {
 
     @FXML
-    private Label creationError;
-    @FXML
     private AnchorPane anchorPane;
     @FXML
     private VBox centerBox;

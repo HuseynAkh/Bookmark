@@ -10,6 +10,7 @@ import org.json.simple.parser.ParseException;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -83,6 +84,7 @@ public class MovieSearchManager {
         JSONArray array = new JSONArray();
         array.add(obj);
 
+
         JSONObject movieData = (JSONObject) array.get(0);
         JSONArray arr = (JSONArray) movieData.get(jsonKey);
         for (Object o : arr) {
@@ -94,7 +96,21 @@ public class MovieSearchManager {
             //get movie release date
             String releaseDate = (String) movie.get("release_date");
             Long id = (Long) movie.get("id");
-            Movie m = new Movie(id, title, releaseDate, overview, 0);
+
+
+            JSONArray genreArr = (JSONArray) movie.get("genre_ids");
+            ArrayList<Long> genres = new ArrayList<Long>();
+            if(genreArr == null){
+                genres.add(-1L);
+            }
+            else{
+                for(Object genre : genreArr){
+                    genres.add((Long)genre);
+                }
+            }
+
+
+            Movie m = new Movie(id, title, genres, releaseDate, overview, 0);
             movies.add(m);
         }
     }

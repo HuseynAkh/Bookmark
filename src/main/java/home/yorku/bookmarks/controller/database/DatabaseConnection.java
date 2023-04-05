@@ -65,7 +65,7 @@ public class DatabaseConnection {
                 break;
             }
             case "Movie":{
-                sql = "INSERT INTO my_movie_list (movie_id, user_id, identifier, title, release_date, movie_dsc, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, CONVERT_TZ(NOW(), '+00:00', '-04:00'))";
+                sql = "INSERT INTO my_movie_list (movie_id, user_id, genre, identifier, title, release_date, movie_dsc, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CONVERT_TZ(NOW(), '+00:00', '-04:00'))";
                 break;
             }
             case "Future_List":{
@@ -89,7 +89,7 @@ public class DatabaseConnection {
                 break;
             }
             case "Pull_Movies":{
-                sql = "SELECT user_id, movie_id, identifier, title, release_date, movie_dsc, is_favourite FROM my_movie_list WHERE user_id = ? ORDER BY time_stamp";
+                sql = "SELECT user_id, movie_id, genre, identifier, title, release_date, movie_dsc, is_favourite FROM my_movie_list WHERE user_id = ? ORDER BY time_stamp";
                 break;
             }
             case "Pull_Future_List":{

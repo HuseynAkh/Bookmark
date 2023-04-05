@@ -1,5 +1,7 @@
 package home.yorku.bookmarks.model;
 
+import java.util.ArrayList;
+
 public class Movie {
     private String title; //movie title
 
@@ -9,9 +11,12 @@ public class Movie {
     private Long id;
     private int is_favourite;
 
-    public Movie(Long id, String title, String releaseDate, String overview, int is_favourite) { //constructor
+    private ArrayList<Long> genre;
+
+    public Movie(Long id, String title, ArrayList<Long> genre, String releaseDate, String overview, int is_favourite) { //constructor
         this.id = id;
         this.title = title;
+        this.genre = genre;
         this.releaseDate = releaseDate;
         this.overview = overview;
         this.is_favourite = is_favourite;
@@ -31,6 +36,8 @@ public class Movie {
     public String getReleaseDate(){return this.releaseDate;}
 
     public String getIdentifier(){return this.identifier;}
+
+    public ArrayList<Long> getGenre(){return this.genre;}
 
     public int getIsFavourite(){return this.is_favourite;}
 

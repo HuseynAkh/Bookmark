@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BookmarkController {
     private final ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
@@ -630,10 +631,6 @@ public class BookmarkController {
 
         String isbn = b.getPbIsbn();
 
-        if (bookIds.size() == 0) {
-            method.insertBook(b.getPbIsbn(), b.getPbUsername(), b.getPbIdentifier(), b.getPbTitle(), b.getPbAuthor().toString(), b.getPbIsFavourite());
-        }
-
         if (bookIds.contains(isbn)) {
 
             if (b.getPbIsFavourite() == 0) {
@@ -652,10 +649,8 @@ public class BookmarkController {
     private void compareMovies(ArrayList<Long> movieIds, MovieToPortfolio m, ConnectionMethods method) {
 
         Long id = m.getPmId();
-
-        if (movieIds.size() == 0) {
-            method.insertMovie(m.getPmId(), m.getPmUsername(), m.getPmIdentifier(), m.getPmTitle(), m.getPmReleaseDate(), m.getPmDescription(), m.getPmIsFavourite());
-        }
+        ArrayList<Long> genre = new ArrayList<>(m.getGenre());
+        String genreString =  String.join(",", genre.stream().map(String::valueOf).collect(Collectors.toList()));
 
         if (movieIds.contains(id)) {
 
@@ -668,7 +663,7 @@ public class BookmarkController {
             return;
         }
 
-        method.insertMovie(m.getPmId(), m.getPmUsername(), m.getPmIdentifier(), m.getPmTitle(), m.getPmReleaseDate(), m.getPmDescription(), m.getPmIsFavourite());
+        method.insertMovie(m.getPmId(), m.getPmUsername(), genreString, m.getPmIdentifier(), m.getPmTitle(), m.getPmReleaseDate(), m.getPmDescription(), m.getPmIsFavourite());
 
     }
 
@@ -829,7 +824,7 @@ public class BookmarkController {
             for (Movie m : MovieSet) {
                 if (i == listViewIndex) {
 
-                    MovieToPortfolio movie = new MovieToPortfolio(m.getId(), validUserId, m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(), 0);
+                    MovieToPortfolio movie = new MovieToPortfolio(m.getId(), validUserId, m.getGenre(), m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(), 0);
                     updateMoviePortfolio(movie, "AddToSavedMovies");
                 }
                 i++;
@@ -975,6 +970,7 @@ public class BookmarkController {
 
             if (i == selectedIndex) {
 
+                System.out.println(m.getGenre());
                 updateMoviePortfolio(m, "AddToFavouriteMovies");
                 return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
             }

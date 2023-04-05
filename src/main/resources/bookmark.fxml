@@ -138,6 +138,19 @@
         </AnchorPane>
     </Tab>
 
+    <Tab id="MyRecommendations" text="Recommendations">
+
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
+
+            <Label layoutX="24.0" layoutY="5.0" text="What to read/Watch Next" textFill="white"/>
+            <ListView fx:id="recommendation" layoutX="24.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>
+            <Button layoutX="24.0" layoutY="260.0" mnemonicParsing="false" text="Remove from List" />
+            <Label layoutX="400.0" layoutY="5.0" text="Books I've Read" textFill="white"/>
+
+
+        </AnchorPane>
+    </Tab>
+
     <Tab id="LogoutPane" text="Log out">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
             <Button id="Logout" layoutX="25.0" layoutY="25.0" mnemonicParsing="false" text="Log out"
