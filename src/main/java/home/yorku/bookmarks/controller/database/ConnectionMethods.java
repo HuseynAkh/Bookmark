@@ -1,7 +1,9 @@
 package home.yorku.bookmarks.controller.database;
 
 import home.yorku.bookmarks.model.Book;
+import home.yorku.bookmarks.model.BookToPortfolio;
 import home.yorku.bookmarks.model.Movie;
+import home.yorku.bookmarks.model.MovieToPortfolio;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -68,8 +70,6 @@ public class ConnectionMethods {
                 verified = rs.getInt("user_verified");
             }
 
-            connection.closeConnection();
-
         } catch (SQLException e) {
             System.out.println("Error check user verification: " + e.getMessage());
         }
@@ -94,8 +94,6 @@ public class ConnectionMethods {
                 System.out.println("A user has logged-out");
             }
 
-            connection.closeConnection();
-
         } catch (SQLException e) {
             System.out.println("Error in login/logout: " + e.getMessage());
         }
@@ -117,8 +115,6 @@ public class ConnectionMethods {
             if (rowsInserted > 0) {
                 System.out.println("A new book was inserted into BOOK LIST successfully.");
             }
-
-            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error inserting book: " + e.getMessage());
@@ -144,8 +140,6 @@ public class ConnectionMethods {
             if (rowsInserted > 0) {
                 System.out.println("A new movie was inserted into MOVIE LIST successfully.");
             }
-
-            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error inserting movie: " + e.getMessage());
@@ -178,9 +172,59 @@ public class ConnectionMethods {
         }
     }
 
-    public Set<Book> pullBooks(String user_id) {
+    public ArrayList<String> pullBookIds(String user_id) {
 
-        Set<Book> books = new HashSet<>();
+        ArrayList<String> bookIds = new ArrayList<String>();
+
+        try {
+
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Pull_BookIds");
+            statement.setString(1, user_id);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+
+                String isbn = rs.getString("book_id");
+                bookIds.add(isbn);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error pulling Books: " + e.getMessage());
+
+        }
+
+        return bookIds;
+    }
+
+    public ArrayList<Long> pullMovieIds(String user_id) {
+
+        ArrayList<Long> movieIds = new ArrayList<Long>();
+
+        try {
+
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Pull_MovieIds");
+            statement.setString(1, user_id);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+
+                Long movie_id = rs.getLong("movie_id");
+                movieIds.add(movie_id);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error pulling Books: " + e.getMessage());
+
+        }
+
+        return movieIds;
+    }
+
+    public Set<BookToPortfolio> pullBooks(String user_id) {
+
+        Set<BookToPortfolio> books = new HashSet<>();
 
         try {
 
@@ -192,12 +236,14 @@ public class ConnectionMethods {
             while (rs.next()) {
                 ArrayList<String> authorToList = new ArrayList<>();
                 String isbn = rs.getString("book_id");
+                String user = rs.getString("user_id");
+                String identifier = rs.getString("identifier");
                 String title = rs.getString("title");
                 String author = rs.getString("author");
                 int is_favourite = rs.getInt("is_favourite");
                 authorToList.add(author);
 
-                Book book = new Book(title, authorToList, isbn, is_favourite);
+                BookToPortfolio book = new BookToPortfolio(isbn, user, identifier, title, authorToList, is_favourite);
                 books.add(book);
             }
 
@@ -210,9 +256,9 @@ public class ConnectionMethods {
         return books;
     }
 
-    public Set<Movie> pullMovies(String user_id) {
+    public Set<MovieToPortfolio> pullMovies(String user_id) {
 
-        Set<Movie> movies = new HashSet<>();
+        Set<MovieToPortfolio> movies = new HashSet<>();
 
         try {
 
@@ -223,12 +269,14 @@ public class ConnectionMethods {
 
             while (rs.next()) {
                 Long id = rs.getLong("movie_id");
+                String user = rs.getString("user_id");
+                String identifier = rs.getString("identifier");
                 String title = rs.getString("title");
-                String overview = rs.getString("movie_dsc");
                 String release_date = rs.getString("release_date");
+                String overview = rs.getString("movie_dsc");
                 int is_favourite = rs.getInt("is_favourite");
 
-                Movie movie = new Movie(id, title, release_date, overview, is_favourite);
+                MovieToPortfolio movie = new MovieToPortfolio(id, user, identifier, title, release_date, overview, is_favourite);
                 movies.add(movie);
             }
 
@@ -256,6 +304,7 @@ public class ConnectionMethods {
                 futureList.add(title);
             }
 
+            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error inserting into FUTURE LIST: " + e.getMessage());
@@ -294,7 +343,6 @@ public class ConnectionMethods {
             statement.executeUpdate();
 
             System.out.println("Favourite book added");
-            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error adding to favourite books: " + e.getMessage());
@@ -313,10 +361,27 @@ public class ConnectionMethods {
             statement.executeUpdate();
 
             System.out.println("Favourite book removed");
-            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error removing from favourite books: " + e.getMessage());
+
+        }
+    }
+
+    public void removeBook(String book_id, String user_id) {
+
+        try {
+
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Delete_Book");
+            statement.setString(1, book_id);
+            statement.setString(2, user_id);
+            int rowsDeleted = statement.executeUpdate();
+
+            System.out.println(rowsDeleted + " row deleted.");
+
+        } catch (SQLException e) {
+            System.out.println("Error removing book: " + e.getMessage());
 
         }
     }
@@ -332,7 +397,6 @@ public class ConnectionMethods {
             statement.executeUpdate();
 
             System.out.println("Favourite movie added");
-            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error adding to favourite movies: " + e.getMessage());
@@ -351,29 +415,9 @@ public class ConnectionMethods {
             statement.executeUpdate();
 
             System.out.println("Favourite movie removed");
-            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error removing from favourite movies: " + e.getMessage());
-
-        }
-    }
-
-    public void removeBook(String book_id, String user_id) {
-
-        try {
-
-            DatabaseConnection connection = DatabaseConnection.getInstance();
-            PreparedStatement statement = connection.query("Delete_Book");
-            statement.setString(1, book_id);
-            statement.setString(2, user_id);
-            int rowsDeleted = statement.executeUpdate();
-
-            System.out.println(rowsDeleted + " row deleted.");
-            connection.closeConnection();
-
-        } catch (SQLException e) {
-            System.out.println("Error removing book: " + e.getMessage());
 
         }
     }
@@ -389,7 +433,6 @@ public class ConnectionMethods {
             int rowsDeleted = statement.executeUpdate();
 
             System.out.println(rowsDeleted + " row deleted.");
-            connection.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("Error removing movie: " + e.getMessage());

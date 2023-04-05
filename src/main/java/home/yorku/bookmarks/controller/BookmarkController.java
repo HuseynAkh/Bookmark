@@ -1,4 +1,5 @@
 package home.yorku.bookmarks.controller;
+
 import home.yorku.bookmarks.controller.database.ConnectionMethods;
 import home.yorku.bookmarks.controller.search.BookSearchManager;
 import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
@@ -27,6 +28,7 @@ import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -34,6 +36,13 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class BookmarkController {
+    private final ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
+            "Title", "Actor"
+    );
+    private final ObservableList<String> booksSearchOptions = FXCollections.observableArrayList(
+            "Title", "Genre", "Author"
+    );
+    List<Tab> removedTabs = new ArrayList<>();
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -41,17 +50,10 @@ public class BookmarkController {
     @FXML
     private VBox LoginBox;
     private Stage stage;
-    List<Tab> removedTabs = new ArrayList<>();
     @FXML
     private ChoiceBox<String> searchType;
-    private final ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
-            "Title", "Actor"
-    );
     @FXML
     private ChoiceBox<String> searchBy;
-    private final ObservableList<String> booksSearchOptions = FXCollections.observableArrayList(
-            "Title", "Genre", "Author"
-    );
     @FXML
     private TextField usernameTxt;
     @FXML
@@ -68,22 +70,22 @@ public class BookmarkController {
     private ListView<String> myListView;
     @FXML
     private ListView<String> myBookList;
-    private ObservableList<String> bookList = FXCollections.observableArrayList();
+    private final ObservableList<String> bookList = FXCollections.observableArrayList();
     @FXML
     private ListView<String> myMovieList;
-    private ObservableList<String> movieList = FXCollections.observableArrayList();
+    private final ObservableList<String> movieList = FXCollections.observableArrayList();
     @FXML
     private ListView<String> ML_myBookList;
-    private ObservableList<String> MLbookList = FXCollections.observableArrayList();
+    private final ObservableList<String> MLbookList = FXCollections.observableArrayList();
     @FXML
     private ListView<String> favourite_books;
-    private ObservableList<String> MLfavBooks = FXCollections.observableArrayList();
+    private final ObservableList<String> MLfavBooks = FXCollections.observableArrayList();
     @FXML
     private ListView<String> ML_myMovieList;
-    private ObservableList<String> MLmovieList = FXCollections.observableArrayList();
+    private final ObservableList<String> MLmovieList = FXCollections.observableArrayList();
     @FXML
     private ListView<String> favourite_movies;
-    private ObservableList<String> MLfavMovies = FXCollections.observableArrayList();
+    private final ObservableList<String> MLfavMovies = FXCollections.observableArrayList();
     @FXML
     private ListView<String> upNextList;
     private ObservableList<String> futureList = FXCollections.observableArrayList();
@@ -99,8 +101,10 @@ public class BookmarkController {
     private Label descLabel;
     @FXML
     private Label description;
-    private Set<Movie> MovieSet;
     private Set<Book> BookSet;
+    private Set<Movie> MovieSet;
+    private final ArrayList<BookToPortfolio> removeBooks = new ArrayList<BookToPortfolio>();
+    private ArrayList<MovieToPortfolio> removeMovies = new ArrayList<MovieToPortfolio>();
     private BookPortfolio bookPortfolio;
     private MoviePortfolio moviePortfolio;
     private double sceneHeight;
@@ -111,6 +115,7 @@ public class BookmarkController {
 
     public BookmarkController() {
     }
+
     // Initializes all listviews, dynamic buttons, tab views on login,
     // book/movie portfolio's for each user session to manipulate during
     // run time
@@ -140,13 +145,13 @@ public class BookmarkController {
             if (newScene != null) {
                 newScene.heightProperty().addListener((obs, oldHeight, newHeight) -> {
                     sceneHeight = newHeight.doubleValue();
-                    LoginBox.setLayoutY((sceneHeight/2) - (20 + LoginBox.getHeight()/2)); // 20 for padding between boxes
+                    LoginBox.setLayoutY((sceneHeight / 2) - (20 + LoginBox.getHeight() / 2)); // 20 for padding between boxes
 
                 });
 
                 newScene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
                     sceneWidth = newWidth.doubleValue();
-                    LoginBox.setLayoutX((sceneWidth/2) - (LoginBox.getWidth()/2));
+                    LoginBox.setLayoutX((sceneWidth / 2) - (LoginBox.getWidth() / 2));
 
                 });
             }
@@ -191,12 +196,12 @@ public class BookmarkController {
 
     // Used to clear the observable Book and Movie set returned from the search
     // Is used when the user starts a new search
-    private void clearSet(){
-        if(MovieSet != null){
+    private void clearSet() {
+        if (MovieSet != null) {
             MovieSet.clear();
         }
 
-        if(BookSet != null){
+        if (BookSet != null) {
             BookSet.clear();
         }
     }
@@ -212,7 +217,7 @@ public class BookmarkController {
         searchString = searchText.getText();
         ErrorChecking.setTextFill(Color.WHITE);
 
-        if(searchType.getValue().equals("Movies")){ // first drop down choice box
+        if (searchType.getValue().equals("Movies")) { // first drop down choice box
 
             SearchCriteria searchCriteria;
             switch (searchBy.getValue()) {
@@ -225,7 +230,7 @@ public class BookmarkController {
                             searchString);
 
                     MovieSearchManager search = new MovieSearchManager();
-                    MovieSet  = search.searchMovie(searchCriteria);
+                    MovieSet = search.searchMovie(searchCriteria);
                     MovieController movieController = new MovieController(BookSet, MovieSet, myListView);
                     movieController.display();
 
@@ -240,7 +245,7 @@ public class BookmarkController {
                             searchString);
 
                     MovieSearchManager search = new MovieSearchManager();
-                    MovieSet  = search.searchMovie(searchCriteria);
+                    MovieSet = search.searchMovie(searchCriteria);
                     MovieController movieController = new MovieController(BookSet, MovieSet, myListView);
                     movieController.display();
 
@@ -255,7 +260,7 @@ public class BookmarkController {
             myList = "Movies I've watched";
             upNext = "Movies I want to watch";
 
-        }else if (searchType.getValue().equals("Books")){
+        } else if (searchType.getValue().equals("Books")) {
 
             SearchCriteria searchCriteria = null;
             switch (searchBy.getValue()) {
@@ -322,24 +327,24 @@ public class BookmarkController {
 
     // Responsible for getting the type "Book" or "Movie" of the selected item (from the user)
     // Is used to determine which list to add the selected item to "My Book/Movie list"
-    protected String getType(int selectedIndex){
+    protected String getType(int selectedIndex) {
 
         String type = "";
 
-        if(MovieSet!=null){
+        if (MovieSet != null) {
             int i = 0;
             for (Movie m : MovieSet) {
-                if(i == selectedIndex ){
+                if (i == selectedIndex) {
                     type = m.getIdentifier();
                 }
                 i++;
             }
         }
 
-        if(BookSet!=null){
+        if (BookSet != null) {
             int i = 0;
             for (Book b : BookSet) {
-                if(i == selectedIndex ){
+                if (i == selectedIndex) {
                     type = b.getIdentifier();
                 }
                 i++;
@@ -356,10 +361,10 @@ public class BookmarkController {
 
         myListView.setCellFactory(lv -> new ListCell<String>() {
 
-            private ComboBox<String> activeComboBox = null;
             private final StackPane stackPane = new StackPane();
             private final ComboBox<String> comboBox = new ComboBox<>();
             private final PauseTransition delay = new PauseTransition(Duration.millis(150));
+            private ComboBox<String> activeComboBox = null;
 
             {
                 comboBox.setVisible(false);
@@ -434,11 +439,11 @@ public class BookmarkController {
 
         clearDescription();
 
-        if(getType(selectedIndex).equals("Movie")){
+        if (getType(selectedIndex).equals("Movie")) {
 
             int i = 0;
             for (Movie m : MovieSet) {
-                if(i == selectedIndex){
+                if (i == selectedIndex) {
                     descLabel.setText("Description: ");
                     descLabel.setPadding(new Insets(1, 1, 5, 5));
                     setDescription(m.getTitle(), m.getIdentifier(), "Release date: ", m.getReleaseDate());
@@ -449,22 +454,22 @@ public class BookmarkController {
             }
         }
 
-        if(getType(selectedIndex).equals("Book")){
+        if (getType(selectedIndex).equals("Book")) {
             CoverUrlExtractor url = new CoverUrlExtractor();
 
             int i = 0;
             for (Book b : BookSet) {
-                if(i == selectedIndex ){
+                if (i == selectedIndex) {
                     url.getBookCover(b.getIsbn());
                     setDescription(b.getTitle(), b.getIdentifier(), "Author(s): ", b.getAuthor().toString());
 
-                    if(url.getBookCover(b.getIsbn())){
+                    if (url.getBookCover(b.getIsbn())) {
                         InputStream stream = Files.newInputStream(Paths.get("./temporary.jpg"));
                         Image coverImage = new Image(stream);
                         coverImageView.setImage(coverImage);
                         coverImageView.setFitWidth(100);
                         coverImageView.setFitHeight(200);
-                    }else{
+                    } else {
                         InputStream stream = Files.newInputStream(Paths.get("images/book-placeholder.jpg"));
                         Image coverImage = new Image(stream);
                         coverImageView.setImage(coverImage);
@@ -481,14 +486,14 @@ public class BookmarkController {
     }
 
     // Responsible for setting, updating and formatting text labels and descriptions for movies and books
-    private void setDescription(String title, String identifier, String dynamicLabel, String dynamicText){
+    private void setDescription(String title, String identifier, String dynamicLabel, String dynamicText) {
 
         titleLabel.setText("Title: " + title);
         titleLabel.setPadding(new Insets(1, 1, 5, 5));
         idLabel.setText("Type: " + identifier);
         idLabel.setPadding(new Insets(1, 1, 5, 5));
 
-        if(identifier.equals("Book")){
+        if (identifier.equals("Book")) {
             String author = dynamicText.substring(1, dynamicText.length() - 1);
             authorOrRelease.setText(dynamicLabel + author);
         } else {
@@ -498,7 +503,7 @@ public class BookmarkController {
 
     }
 
-    private void clearDescription(){
+    private void clearDescription() {
 
         titleLabel.setText("");
         idLabel.setText("");
@@ -511,30 +516,80 @@ public class BookmarkController {
 
     // Used to connect to the database and update the listViews for "my book list" in the "MyList" tab
     // it also updates the book portfolio whenever a user adds/deletes or moves a book to/from the favourite's tab
-    private void updateBooks(){
+    private void updateBookList(ConnectionMethods method) {
 
-        Set<Book> localBookSet = new HashSet<Book>();
-        ConnectionMethods method = new ConnectionMethods();
+        Set<BookToPortfolio> localBookSet = new HashSet<BookToPortfolio>();
 
         this.bookPortfolio.getSavedBooks().clear();
         this.bookPortfolio.getFavouriteBooks().clear();
+
+        localBookSet = method.pullBooks(validUserId);
+
+        for (BookToPortfolio b : localBookSet) {
+
+            if (b.getPbIsFavourite() == 1) {
+                this.bookPortfolio.AddToFavourites(b);
+            } else {
+                this.bookPortfolio.AddToSavedBooks(b);
+            }
+
+        }
+
+        displayBooks();
+    }
+
+    // Used to connect to the database and update the listViews for "my movie list" in the "MyList" tab
+    // it also updates the movie portfolio whenever a user adds/deletes or moves a movie to/from the favourite's tab
+    private void updateMovieList(ConnectionMethods method) {
+
+        Set<MovieToPortfolio> localMovieSet = new HashSet<MovieToPortfolio>();
+
+        this.moviePortfolio.getSavedMovies().clear();
+        this.moviePortfolio.getFavouriteMovies().clear();
+
+        localMovieSet = method.pullMovies(validUserId);
+
+        for (MovieToPortfolio m : localMovieSet) {
+
+            if (m.getPmIsFavourite() == 1) {
+                this.moviePortfolio.AddToFavourites(m);
+            } else {
+                this.moviePortfolio.AddToSavedMovies(m);
+
+            }
+
+        }
+
+        displayMovies();
+    }
+
+    // Used to connect to the database and update the listViews for "my future list" in the "MyList" tab
+    // it updates the list whenever a user adds/deletes movie/book to/from the list
+    private void updateFutureList(ConnectionMethods method) {
+
+        futureList = FXCollections.observableList(method.pullFutureList(validUserId));
+        upNextList.setItems(futureList);
+
+    }
+
+    @FXML
+    private void displayBooks() {
+
         bookList.clear();
         MLbookList.clear();
         MLfavBooks.clear();
 
-        localBookSet = method.pullBooks(validUserId);
+        for (BookToPortfolio b : this.bookPortfolio.getSavedBooks()) {
 
-        for (Book b : localBookSet) {
+            MLbookList.add(b.getPbTitle());
+            bookList.add(b.getPbTitle());
 
-            if(b.getIsFavourite() == 1){
-                this.bookPortfolio.AddToFavourites(b);
-                MLfavBooks.add(b.getTitle());
-                bookList.add("*" + b.getTitle());
-            } else {
-                this.bookPortfolio.AddToSavedBooks(b);
-                MLbookList.add(b.getTitle());
-                bookList.add(b.getTitle());
-            }
+        }
+
+        for (BookToPortfolio b : this.bookPortfolio.getFavouriteBooks()) {
+
+            MLfavBooks.add(b.getPbTitle());
+            bookList.add("*" + b.getPbTitle());
 
         }
 
@@ -542,36 +597,26 @@ public class BookmarkController {
         ML_myBookList.setItems(MLbookList);
         favourite_books.setItems(MLfavBooks);
 
-        method.closeConnection();
-
     }
 
-    // Used to connect to the database and update the listViews for "my movie list" in the "MyList" tab
-    // it also updates the movie portfolio whenever a user adds/deletes or moves a movie to/from the favourite's tab
-    private void updateMovies(){
+    @FXML
+    private void displayMovies() {
 
-        Set<Movie> localMovieSet = new HashSet<Movie>();
-        ConnectionMethods method = new ConnectionMethods();
-
-        this.moviePortfolio.getSavedMovies().clear();
-        this.moviePortfolio.getFavouriteMovies().clear();
         movieList.clear();
         MLmovieList.clear();
         MLfavMovies.clear();
 
-        localMovieSet = method.pullMovies(validUserId);
+        for (MovieToPortfolio m : this.moviePortfolio.getSavedMovies()) {
 
-        for (Movie m : localMovieSet) {
+            MLmovieList.add(m.getPmTitle());
+            movieList.add(m.getPmTitle());
 
-            if(m.getIsFavourite() == 1){
-                this.moviePortfolio.AddToFavourites(m);
-                MLfavMovies.add(m.getTitle());
-                movieList.add("*" + m.getTitle());
-            } else {
-                this.moviePortfolio.AddToSavedMovies(m);
-                MLmovieList.add(m.getTitle());
-                movieList.add(m.getTitle());
-            }
+        }
+
+        for (MovieToPortfolio m : this.moviePortfolio.getFavouriteMovies()) {
+
+            MLfavMovies.add(m.getPmTitle());
+            movieList.add("*" + m.getPmTitle());
 
         }
 
@@ -579,57 +624,218 @@ public class BookmarkController {
         ML_myMovieList.setItems(MLmovieList);
         favourite_movies.setItems(MLfavMovies);
 
-        method.closeConnection();
+    }
+
+    private void compareBooks(ArrayList<String> bookIds, BookToPortfolio b, ConnectionMethods method) {
+
+        String isbn = b.getPbIsbn();
+
+        if (bookIds.size() == 0) {
+            method.insertBook(b.getPbIsbn(), b.getPbUsername(), b.getPbIdentifier(), b.getPbTitle(), b.getPbAuthor().toString(), b.getPbIsFavourite());
+        }
+
+        if (bookIds.contains(isbn)) {
+
+            if (b.getPbIsFavourite() == 0) {
+                method.removeFavouriteBook(b.getPbIsbn(), b.getPbUsername());
+            } else {
+                method.addFavouriteBook(b.getPbIsbn(), b.getPbUsername());
+            }
+
+            return;
+        }
+
+        method.insertBook(b.getPbIsbn(), b.getPbUsername(), b.getPbIdentifier(), b.getPbTitle(), b.getPbAuthor().toString(), b.getPbIsFavourite());
 
     }
 
-    // Used to connect to the database and update the listViews for "my future list" in the "MyList" tab
-    // it updates the list whenever a user adds/deletes movie/book to/from the list
-    private void updateFutureList(){
+    private void compareMovies(ArrayList<Long> movieIds, MovieToPortfolio m, ConnectionMethods method) {
 
-        ConnectionMethods method = new ConnectionMethods();
+        Long id = m.getPmId();
 
-        futureList = FXCollections.observableList(method.pullFutureList(validUserId));
-        upNextList.setItems(futureList);
+        if (movieIds.size() == 0) {
+            method.insertMovie(m.getPmId(), m.getPmUsername(), m.getPmIdentifier(), m.getPmTitle(), m.getPmReleaseDate(), m.getPmDescription(), m.getPmIsFavourite());
+        }
+
+        if (movieIds.contains(id)) {
+
+            if (m.getPmIsFavourite() == 0) {
+                method.removeFavouriteMovie(m.getPmId(), m.getPmUsername());
+            } else {
+                method.addFavouriteMovie(m.getPmId(), m.getPmUsername());
+            }
+
+            return;
+        }
+
+        method.insertMovie(m.getPmId(), m.getPmUsername(), m.getPmIdentifier(), m.getPmTitle(), m.getPmReleaseDate(), m.getPmDescription(), m.getPmIsFavourite());
+
+    }
+
+    private void sendToDatabase(ConnectionMethods method) {
+
+        ArrayList<String> bookIds = method.pullBookIds(validUserId);
+        ArrayList<Long> movieIds = method.pullMovieIds(validUserId);
+
+        for (BookToPortfolio b : removeBooks) {
+
+            for (String id : bookIds) {
+                if (id.equals(b.getPbIsbn())) {
+                    method.removeBook(b.getPbIsbn(), b.getPbUsername());
+                }
+            }
+
+        }
+
+        for (MovieToPortfolio m : removeMovies) {
+
+            for (Long id : movieIds) {
+                if (id.equals(m.getPmId())) {
+                    method.removeMovie(m.getPmId(), m.getPmUsername());
+                }
+            }
+
+        }
+
+        for (BookToPortfolio b : this.bookPortfolio.getSavedBooks()) {
+            compareBooks(bookIds, b, method);
+        }
+
+        for (BookToPortfolio b : this.bookPortfolio.getFavouriteBooks()) {
+            compareBooks(bookIds, b, method);
+        }
+
+        for (MovieToPortfolio m : this.moviePortfolio.getSavedMovies()) {
+            compareMovies(movieIds, m, method);
+        }
+
+        for (MovieToPortfolio m : this.moviePortfolio.getFavouriteMovies()) {
+            compareMovies(movieIds, m, method);
+        }
 
         method.closeConnection();
+    }
+
+    private void updateBookPortfolio(BookToPortfolio book, String update) {
+
+        switch (update) {
+            case "AddToSavedBooks": {
+
+                if (this.bookPortfolio.getSavedBooks().stream().anyMatch(b -> b.getPbIsbn().equals(book.getPbIsbn()))) {
+                    System.out.println("Book is already in your saved");
+                } else {
+                    this.bookPortfolio.AddToSavedBooks(book);
+                    displayBooks();
+                }
+
+                break;
+            }
+            case "RemoveFromSavedBooks": {
+
+                removeBooks.add(book);
+                this.bookPortfolio.RemoveFromSavedBooks(book);
+                displayBooks();
+
+                break;
+            }
+            case "AddToFavouriteBooks": {
+
+                book.setPbIsFavourite(1);
+                this.bookPortfolio.AddToFavourites(book);
+                this.bookPortfolio.RemoveFromSavedBooks(book);
+                displayBooks();
+
+                break;
+            }
+            case "RemoveFromFavouriteBooks": {
+
+                book.setPbIsFavourite(0);
+                this.bookPortfolio.AddToSavedBooks(book);
+                this.bookPortfolio.RemoveFromFavouriteBooks(book);
+                displayBooks();
+
+                break;
+            }
+        }
+
+    }
+
+    private void updateMoviePortfolio(MovieToPortfolio movie, String update) {
+
+        switch (update) {
+            case "AddToSavedMovies": {
+
+                if (this.moviePortfolio.getSavedMovies().stream().anyMatch(m -> m.getPmId().equals(movie.getPmId()))) {
+                    System.out.println("Movie is already in your saved");
+                } else {
+                    this.moviePortfolio.AddToSavedMovies(movie);
+                    displayMovies();
+                }
+
+                break;
+            }
+            case "RemoveFromSavedMovies": {
+
+                removeMovies.add(movie);
+                this.moviePortfolio.RemoveFromSavedMovies(movie);
+                displayMovies();
+
+                break;
+            }
+            case "AddToFavouriteMovies": {
+
+                movie.setPmIsFavourite(1);
+                this.moviePortfolio.AddToFavourites(movie);
+                this.moviePortfolio.RemoveFromSavedMovies(movie);
+                displayMovies();
+
+                break;
+            }
+            case "RemoveFromFavouriteMovies": {
+
+                movie.setPmIsFavourite(0);
+                this.moviePortfolio.AddToSavedMovies(movie);
+                this.moviePortfolio.RemoveFromFavouriteMovies(movie);
+                displayMovies();
+
+                break;
+            }
+        }
+
     }
 
     // Responsible for sending the content of book and movie objects to the database for the "My book/movie List"
     // saved objects and calling Book Movie functions to update the users list based on their actions on book/movie
     // object
     @FXML
-    private void saveToMyCurrentList(int listViewIndex){
+    private void saveToMyCurrentList(int listViewIndex) {
 
-        ConnectionMethods method = new ConnectionMethods();
-
-        if(getType(listViewIndex).equals("Book")){
+        if (getType(listViewIndex).equals("Book")) {
 
             int i = 0;
             for (Book b : BookSet) {
-                if(i == listViewIndex){
+                if (i == listViewIndex) {
 
-                    method.insertBook(b.getIsbn(), validUserId, b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), b.getIsFavourite());
+                    BookToPortfolio book = new BookToPortfolio(b.getIsbn(), validUserId, b.getIdentifier(), b.getTitle(), b.getAuthor(), 0);
+                    updateBookPortfolio(book, "AddToSavedBooks");
+
                 }
                 i++;
             }
 
-            updateBooks();
-
-        }else if(getType(listViewIndex).equals("Movie")){
+        } else if (getType(listViewIndex).equals("Movie")) {
 
             int i = 0;
             for (Movie m : MovieSet) {
-                if(i == listViewIndex){
+                if (i == listViewIndex) {
 
-                    method.insertMovie(m.getId(), validUserId, m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(),0);
+                    MovieToPortfolio movie = new MovieToPortfolio(m.getId(), validUserId, m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(), 0);
+                    updateMoviePortfolio(movie, "AddToSavedMovies");
                 }
                 i++;
             }
 
-            updateMovies();
-
-        }else{
+        } else {
             System.out.println("Error near line 557: No searchType value");
         }
 
@@ -638,45 +844,44 @@ public class BookmarkController {
     // Responsible for sending the content of a book/movie object to the database table for "My Future List"
     // also updates the list the user sees by calling updateFutureList() method
     @FXML
-    private void saveToMyFutureList(int listViewIndex){
+    private void saveToMyFutureList(int listViewIndex) {
 
         ConnectionMethods method = new ConnectionMethods();
 
-        if(getType(listViewIndex).equals("Book")){
+        if (getType(listViewIndex).equals("Book")) {
 
             int i = 0;
             for (Book b : BookSet) {
-                if(i == listViewIndex){
+                if (i == listViewIndex) {
 
-                    method.insertFutureList(b.getIsbn(), 0L , validUserId, b.getIdentifier() , b.getTitle(), b.getAuthor().toString(), null, null);
+                    method.insertFutureList(b.getIsbn(), 0L, validUserId, b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), null, null);
                 }
                 i++;
             }
 
-        }else if(getType(listViewIndex).equals("Movie")){
+        } else if (getType(listViewIndex).equals("Movie")) {
 
             int i = 0;
             for (Movie m : MovieSet) {
-                if(i == listViewIndex){
+                if (i == listViewIndex) {
 
-                    method.insertFutureList("null", m.getId(), validUserId, m.getIdentifier(), m.getTitle(),  null, m.getReleaseDate(), m.getOverview());
+                    method.insertFutureList("null", m.getId(), validUserId, m.getIdentifier(), m.getTitle(), null, m.getReleaseDate(), m.getOverview());
                 }
                 i++;
             }
 
-        }else{
+        } else {
             System.out.println("Error near line 593: No searchType value");
         }
 
-        updateFutureList();
+        updateFutureList(method);
     }
 
     // Responsible for adding a book to the favourites list by updating the is_favourite flag in the database
     // using method. calls, then also calls the updateBooks() method to update the books list seen by the user
     @FXML
-    private void addBookToFavourites(){
+    private void addBookToFavourites() {
 
-        ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myBookList.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex == -1) {
@@ -685,25 +890,25 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for(Book b: this.bookPortfolio.getSavedBooks()){
+        for (BookToPortfolio b : this.bookPortfolio.getSavedBooks()) {
 
-            if(i == selectedIndex){
+            if (i == selectedIndex) {
 
-                method.addFavouriteBook(b.getIsbn(), validUserId);
+                updateBookPortfolio(b, "AddToFavouriteBooks");
+                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+
             }
-            i++;
 
+            i++;
         }
 
-        updateBooks();
     }
 
     // Responsible for removing a book to the favourites list by updating the is_favourite flag in the database
     // using method. calls, then also calls the updateBooks() method to update the books list seen by the user
     @FXML
-    private void removeBookFromFavourites(){
+    private void removeBookFromFavourites() {
 
-        ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = favourite_books.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex == -1) {
@@ -712,79 +917,25 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for(Book b: this.bookPortfolio.getFavouriteBooks()){
+        for (BookToPortfolio b : this.bookPortfolio.getFavouriteBooks()) {
 
-            if(i == selectedIndex){
+            if (i == selectedIndex) {
 
-                method.removeFavouriteBook(b.getIsbn(), validUserId);
+                updateBookPortfolio(b, "RemoveFromFavouriteBooks");
+                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+
             }
+
             i++;
-
         }
 
-        updateBooks();
-    }
-
-    // Responsible for adding a movie to the favourites list by updating the is_favourite flag in the database
-    // using method. calls, then also calls the updateMovies() method to update the movies list seen by the user
-    @FXML
-    private void addMovieToFavourites(){
-
-        ConnectionMethods method = new ConnectionMethods();
-        int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
-
-        if (selectedIndex == -1) {
-            System.out.println("No Selected Item");
-            return; // exit the method
-        }
-
-        int i = 0;
-        for(Movie m: this.moviePortfolio.getSavedMovies()){
-
-            if(i == selectedIndex){
-
-                method.addFavouriteMovie(m.getId(), validUserId);
-            }
-            i++;
-
-        }
-
-        updateMovies();
-    }
-
-    // Responsible for removing a movie to the favourites list by updating the is_favourite flag in the database
-    // using method. calls, then also calls the updateMovies() method to update the movies list seen by the user
-    @FXML
-    private void removeMovieFromFavourites(){
-
-        ConnectionMethods method = new ConnectionMethods();
-        int selectedIndex = favourite_movies.getSelectionModel().getSelectedIndex();
-
-        if (selectedIndex == -1) {
-            System.out.println("No Selected Item");
-            return; // exit the method
-        }
-
-        int i = 0;
-        for(Movie m: this.moviePortfolio.getFavouriteMovies()){
-
-            if(i == selectedIndex){
-
-                method.removeFavouriteMovie(m.getId(), validUserId);
-            }
-            i++;
-
-        }
-
-        updateMovies();
     }
 
     // Responsible for removing a book from the "My Book List" by removing the book from the database using its
     // unique id(isbn) then also calls the updateBooks() method to update the movies list seen by the user
     @FXML
-    private void removeBook(){
+    private void removeBook() {
 
-        ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myBookList.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex == -1) {
@@ -793,25 +944,25 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for(Book b: this.bookPortfolio.getSavedBooks()){
+        for (BookToPortfolio b : this.bookPortfolio.getSavedBooks()) {
 
-            if(i == selectedIndex){
+            if (i == selectedIndex) {
 
-                method.removeBook(b.getIsbn(), validUserId);
+                updateBookPortfolio(b, "RemoveFromSavedBooks");
+                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+
             }
-            i++;
 
+            i++;
         }
 
-        updateBooks();
     }
 
-    // Responsible for removing a movie from the "My Movie List" by removing the movie from the database using its
-    // unique id then also calls the updateMovies() method to update the movies list seen by the user
+    // Responsible for adding a movie to the favourites list by updating the is_favourite flag in the database
+    // using method. calls, then also calls the updateMovies() method to update the movies list seen by the user
     @FXML
-    private void removeMovie(){
+    private void addMovieToFavourites() {
 
-        ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex == -1) {
@@ -820,24 +971,72 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for(Movie m: this.moviePortfolio.getSavedMovies()){
+        for (MovieToPortfolio m : this.moviePortfolio.getSavedMovies()) {
 
-            if(i == selectedIndex){
+            if (i == selectedIndex) {
 
-                method.removeMovie(m.getId(), validUserId);
+                updateMoviePortfolio(m, "AddToFavouriteMovies");
+                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
             }
             i++;
 
         }
+    }
 
-        updateMovies();
+    // Responsible for removing a movie to the favourites list by updating the is_favourite flag in the database
+    // using method. calls, then also calls the updateMovies() method to update the movies list seen by the user
+    @FXML
+    private void removeMovieFromFavourites() {
+
+        int selectedIndex = favourite_movies.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            System.out.println("No Selected Item");
+            return; // exit the method
+        }
+
+        int i = 0;
+        for (MovieToPortfolio m : this.moviePortfolio.getFavouriteMovies()) {
+
+            if (i == selectedIndex) {
+                updateMoviePortfolio(m, "RemoveFromFavouriteMovies");
+                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+            }
+
+            i++;
+        }
+    }
+
+    // Responsible for removing a movie from the "My Movie List" by removing the movie from the database using its
+    // unique id then also calls the updateMovies() method to update the movies list seen by the user
+    @FXML
+    private void removeMovie() {
+
+        int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            System.out.println("No Selected Item");
+            return; // exit the method
+        }
+
+        int i = 0;
+        for (MovieToPortfolio m : this.moviePortfolio.getSavedMovies()) {
+
+            if (i == selectedIndex) {
+
+                updateMoviePortfolio(m, "RemoveFromSavedMovies");
+                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+            }
+
+            i++;
+        }
     }
 
     // Responsible for removing a movie/book from the "My Future Movie/Book List" by removing the movie/book
     // from the database using its unique id then also calls the updateFutureList() method to update the
     // movies/books list seen by the user
     @FXML
-    private void removeFutureList(){
+    private void removeFutureList() {
         //Need to change, will be problematic in the future
         ConnectionMethods method = new ConnectionMethods();
 
@@ -850,33 +1049,35 @@ public class BookmarkController {
         }
 
         method.removeFutureList(selectedItem, validUserId);
-        updateFutureList();
+        updateFutureList(method);
     }
 
     // Responsible for sorting the visible Book list alphabetically as well as the book portfolio
     // so that the references to unique Ids remain intact
     @FXML
-    private void sortAlphaBook(){
+    private void sortAlphaBook() {
 
-        this.bookPortfolio.getSavedBooks().sort(new Comparator<Book>() {
+        this.bookPortfolio.getSavedBooks().sort(new Comparator<BookToPortfolio>() {
             @Override
-            public int compare(Book b1, Book b2) {
-                return b1.getTitle().compareTo(b2.getTitle());
+            public int compare(BookToPortfolio b1, BookToPortfolio b2) {
+                return b1.getPbTitle().compareTo(b2.getPbTitle());
             }
         });
 
         alphaSort(ML_myBookList, MLbookList);
     }
 
+
     // Responsible for sorting the visible Movie list alphabetically as well as the movie portfolio
     // so that the references to unique Ids remain intact
     @FXML
-    private void sortAlphaMovie(){
-        this.moviePortfolio.getSavedMovies().sort(new Comparator<Movie>() {
+    private void sortAlphaMovie() {
+        this.moviePortfolio.getSavedMovies().sort(new Comparator<MovieToPortfolio>() {
             @Override
-            public int compare(Movie m1, Movie m2) {
-                return m1.getTitle().compareTo(m2.getTitle());
+            public int compare(MovieToPortfolio m1, MovieToPortfolio m2) {
+                return m1.getPmTitle().compareTo(m2.getPmTitle());
             }
+
         });
 
         alphaSort(ML_myMovieList, MLmovieList);
@@ -884,7 +1085,7 @@ public class BookmarkController {
 
     // Responsible actually sorting all the visible Book/Movie lists by converting the observable list to an
     // array list, sorting it using alphaSort. methods, the returning the sorted array as an observable array
-    private void alphaSort(ListView<String> list, ObservableList<String> items){
+    private void alphaSort(ListView<String> list, ObservableList<String> items) {
 
         AlphaSort alphaSort = new AlphaSort();
 
@@ -895,6 +1096,37 @@ public class BookmarkController {
         list.getItems().addAll(arrayList);
     }
 
+    private void onLogin() {
+
+        ConnectionMethods method = new ConnectionMethods();
+
+        method.userLogin(validUserId, "Login");
+        updateBookList(method);
+        updateMovieList(method);
+        updateFutureList(method);
+
+        method.closeConnection();
+
+    }
+
+    public void setLoginPane(){
+
+        tabPane.getTabs().addAll(removedTabs);
+        removedTabs.clear();
+
+        for (Tab tab : tabPane.getTabs()) {
+            tab.setDisable(false);
+        }
+
+        // Enable and show the login tab
+        Tab loginTab = tabPane.getTabs().stream()
+                .filter(tab -> tab.getId().equals("LoginPane"))
+                .findFirst()
+                .orElse(null);
+        removedTabs.add(loginTab);
+        tabPane.getTabs().remove(loginTab);
+    }
+
     // Responsible for displaying, locking and unlocking tabs at login as well as updating all users list
     // on login
     public void login() {
@@ -903,37 +1135,21 @@ public class BookmarkController {
         String username = usernameTxt.getText();
         String password = passwordTxt.getText();
 
-        if(!username.equals("") && !password.equals("")){
+        if (!username.equals("") && !password.equals("")) {
 
             int verify = method.checkCrd(username, password);
 
-            if(verify == 1){
+            if (verify == 1) {
 
                 validUserId = username;
-                method.userLogin(username, "Login");
-                updateBooks();
-                updateMovies();
-                updateFutureList();
                 logout = false;
                 stage = (Stage) tabPane.getScene().getWindow();
                 stage.setWidth(900);
                 stage.setHeight(680);
+                onLogin();
                 listen();
 
-                tabPane.getTabs().addAll(removedTabs);
-                removedTabs.clear();
-
-                for (Tab tab : tabPane.getTabs()) {
-                    tab.setDisable(false);
-                }
-
-                // Enable and show the login tab
-                Tab loginTab = tabPane.getTabs().stream()
-                        .filter(tab -> tab.getId().equals("LoginPane"))
-                        .findFirst()
-                        .orElse(null);
-                removedTabs.add(loginTab);
-                tabPane.getTabs().remove(loginTab);
+                setLoginPane();
 
             } else {
                 // Later feature add for get password or prompt user to creat account
@@ -942,12 +1158,12 @@ public class BookmarkController {
 
             }
 
-        } else if (usernameTxt.getText().isEmpty() && !passwordTxt.getText().isEmpty()){
+        } else if (usernameTxt.getText().isEmpty() && !passwordTxt.getText().isEmpty()) {
 
             LoginError.setTextFill(Color.RED);
             LoginError.setText("Please enter a username to Login");
 
-        } else if (!usernameTxt.getText().isEmpty() && passwordTxt.getText().isEmpty()){
+        } else if (!usernameTxt.getText().isEmpty() && passwordTxt.getText().isEmpty()) {
 
             LoginError.setTextFill(Color.RED);
             LoginError.setText("Please enter a password to Login");
@@ -977,33 +1193,41 @@ public class BookmarkController {
     }
 
     @FXML
-    private void clearSearchTab(){
+    private void clearPane() {
+
+        ConnectionMethods method = new ConnectionMethods();
+        method.userLogin(validUserId, "Logout");
+
+        clearSet();
+        sendToDatabase(method);
         clearDescription();
+        validUserId = "";
+        searchText.clear();
+        removeBooks.clear();
         usernameTxt.clear();
         passwordTxt.clear();
-        myListView.getItems().clear();
-        searchText.clear();
         ErrorChecking.setText("");
         searchType.setValue("Type");
+        myListView.getItems().clear();
         searchBy.setValue("Search by");
+        this.bookPortfolio.getSavedBooks().clear();
+        this.bookPortfolio.getFavouriteBooks().clear();
+        this.moviePortfolio.getSavedMovies().clear();
+        this.moviePortfolio.getFavouriteMovies().clear();
+
     }
 
     // Responsible for locking, unlocking and displaying tabs when the user logs out
     public void logout() {
 
-        ConnectionMethods method = new ConnectionMethods();
-        method.userLogin(validUserId, "Logout");
-        validUserId = "";
         logout = true;
         stage = (Stage) tabPane.getScene().getWindow();
         stage.setWidth(600);
         stage.setHeight(550);
+        clearPane();
         listen();
-        clearSet();
-        clearSearchTab();
-        clearDescription();
 
-        tabPane.getTabs().add(0,removedTabs.get(0));
+        tabPane.getTabs().add(0, removedTabs.get(0));
         removedTabs.clear();
 
         setPane();
@@ -1012,17 +1236,14 @@ public class BookmarkController {
 
     // Responsible for logging the user out if they click the close button instead of logout button
     public void listen() {
-        ConnectionMethods method = new ConnectionMethods();
+
         stage = (Stage) tabPane.getScene().getWindow();
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
 
-                if(!logout){
-                    method.userLogin(validUserId, "Logout");
-                    clearSet();
-                    clearSearchTab();
-                    clearDescription();
+                if (!logout) {
+                    clearPane();
                 }
 
             }

@@ -139,7 +139,7 @@
     </Tab>
 
     <Tab id="LogoutPane" text="Log out">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
             <Button id="Logout" layoutX="25.0" layoutY="25.0" mnemonicParsing="false" text="Log out"
                     prefWidth="100" onAction="#logout"/>
         </AnchorPane>

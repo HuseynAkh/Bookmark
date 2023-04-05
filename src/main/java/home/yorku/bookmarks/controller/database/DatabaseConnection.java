@@ -85,15 +85,23 @@ public class DatabaseConnection {
                 break;
             }
             case "Pull_Books":{
-                sql = "SELECT book_id, title, author, is_favourite FROM my_book_list WHERE user_id = ? ORDER BY time_stamp";
+                sql = "SELECT user_id, book_id, identifier, title, author, is_favourite FROM my_book_list WHERE user_id = ? ORDER BY time_stamp";
                 break;
             }
             case "Pull_Movies":{
-                sql = "SELECT movie_id, title, release_date, movie_dsc, is_favourite FROM my_movie_list WHERE user_id = ? ORDER BY time_stamp";
+                sql = "SELECT user_id, movie_id, identifier, title, release_date, movie_dsc, is_favourite FROM my_movie_list WHERE user_id = ? ORDER BY time_stamp";
                 break;
             }
             case "Pull_Future_List":{
                 sql = "SELECT title FROM my_future_list WHERE user_id = ? ORDER BY time_stamp";
+                break;
+            }
+            case "Pull_BookIds":{
+                sql = "SELECT book_id FROM my_book_list WHERE user_id = ?";
+                break;
+            }
+            case "Pull_MovieIds":{
+                sql = "SELECT movie_id FROM my_movie_list WHERE user_id = ?";
                 break;
             }
             case "Add_FavouriteBook":{

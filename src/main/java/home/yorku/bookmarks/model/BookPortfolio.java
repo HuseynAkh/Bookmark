@@ -3,32 +3,27 @@ package home.yorku.bookmarks.model;
 import java.util.ArrayList;
 
 public class BookPortfolio {
-    private ArrayList<Book> FavouriteBooks = new ArrayList<Book>(); //list of a users favourite books
-    private ArrayList<Book> SavedBooks = new ArrayList<Book>(); //list of a users saved books
+    private ArrayList<BookToPortfolio> FavouriteBooks = new ArrayList<BookToPortfolio>(); //list of a users favourite books
+    private ArrayList<BookToPortfolio> SavedBooks = new ArrayList<BookToPortfolio>(); //list of a users saved books
 
     public BookPortfolio (){
 
     }
 
-    public void AddToFavourites(Book book){
+    public void AddToFavourites(BookToPortfolio book){
         FavouriteBooks.add(book);
     }
-    public void AddToSavedBooks (Book book){
+    public void AddToSavedBooks (BookToPortfolio book){
         SavedBooks.add(book);
     }
-
-    //No need for removes statements in Book & movie portfolio, the Db updates removed items automatically
-    public void RemoveFromSavedBooks(Book book){
+    public void RemoveFromSavedBooks(BookToPortfolio book){
         SavedBooks.remove(book);
     }
-
-    public void RemoveFromFavouriteBooks (Book book) {
-        FavouriteBooks.remove(book);
-    } // Removes book object from favourite list
-    public ArrayList<Book> getFavouriteBooks(){
+    public void RemoveFromFavouriteBooks (BookToPortfolio book) { FavouriteBooks.remove(book); } // Removes book object from favourite list
+    public ArrayList<BookToPortfolio> getFavouriteBooks(){
         return this.FavouriteBooks;
     }
-    public ArrayList<Book> getSavedBooks(){
+    public ArrayList<BookToPortfolio> getSavedBooks(){
         return this.SavedBooks;
     }
 
