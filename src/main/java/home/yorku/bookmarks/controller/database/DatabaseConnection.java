@@ -49,23 +49,27 @@ public class DatabaseConnection {
         switch(type){
 
             case "Insert_User":{
-                sql = "INSERT INTO user_tbl (username, pswrd, email, time_stamp) VALUES (?, ?, ?, NOW())";
+                sql = "INSERT INTO user_tbl (username, pswrd, email, time_stamp) VALUES (?, ?, ?, CONVERT_TZ(NOW(), '+00:00', '-04:00'))";
+                break;
+            }
+            case "Check_Crd":{
+                sql = "SELECT COUNT(*) as user_verified FROM user_tbl WHERE username = ? AND pswrd = ?";
                 break;
             }
             case "User":{
-                sql = "INSERT INTO user_log (user_id, type_log, time_stamp) VALUES (?, ?, NOW())";
+                sql = "INSERT INTO user_log (user_id, type_log, time_stamp) VALUES (?, ?, CONVERT_TZ(NOW(), '+00:00', '-04:00'))";
                 break;
             }
             case "Book":{
-                sql = "INSERT INTO my_book_list (book_id, user_id, identifier, title, author, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, NOW())";
+                sql = "INSERT INTO my_book_list (book_id, user_id, identifier, title, author, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, CONVERT_TZ(NOW(), '+00:00', '-04:00'))";
                 break;
             }
             case "Movie":{
-                sql = "INSERT INTO my_movie_list (movie_id, user_id, identifier, title, release_date, movie_dsc, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+                sql = "INSERT INTO my_movie_list (movie_id, user_id, identifier, title, release_date, movie_dsc, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, CONVERT_TZ(NOW(), '+00:00', '-04:00'))";
                 break;
             }
             case "Future_List":{
-                sql = "INSERT INTO my_future_list (book_id, movie_id, user_ID, identifier, title, author, release_date, movie_dsc, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                sql = "INSERT INTO my_future_list (book_id, movie_id, user_ID, identifier, title, author, release_date, movie_dsc, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CONVERT_TZ(NOW(), '+00:00', '-04:00'))";
                 break;
             }
             case "Delete_Movie":{

@@ -24,8 +24,8 @@ public class BookmarkApplication extends Application {
         // System.out.println("fxml loaded");
         // Set Original Stage
         stage.setTitle("Bookmark");
-        stage.setWidth(260);
-        stage.setHeight(200);
+        stage.setWidth(600);
+        stage.setHeight(550);
         stage.setScene(scene);
         stage.show();
 

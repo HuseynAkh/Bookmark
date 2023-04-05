@@ -8,9 +8,11 @@ import home.yorku.bookmarks.model.*;
 import javafx.animation.PauseTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -55,10 +57,10 @@ public class BookmarkController {
             "Title", "Genre", "Author"
     );
     @FXML
-    private ChoiceBox<String> user;
-    private ObservableList<String> userOptions = FXCollections.observableArrayList(
-            "QA", "TA", "Client"
-    );
+    private TextField usernameTxt;
+    @FXML
+    private TextField passwordTxt;
+    private String validUserId = "";
     @FXML
     private TextField searchText;
     @FXML
@@ -122,7 +124,6 @@ public class BookmarkController {
         bookPortfolio = new BookPortfolio();
         moviePortfolio = new MoviePortfolio();
         // Initialize the list when null
-        user.setItems(userOptions);
         myBookList.setItems(bookList);
         upNextList.setItems(futureList);
         myMovieList.setItems(movieList);
@@ -137,7 +138,7 @@ public class BookmarkController {
             sceneWidth = scene.getWidth();
         }
 
-        // All dynamic button layouts
+        // All dynamic login box layouts
         anchorPane.sceneProperty().addListener((observable, oldScene, newScene) -> {
 
             if (newScene != null) {
@@ -525,7 +526,7 @@ public class BookmarkController {
         MLbookList.clear();
         MLfavBooks.clear();
 
-        localBookSet = method.pullBooks(user.getValue());
+        localBookSet = method.pullBooks(validUserId);
 
         for (Book b : localBookSet) {
 
@@ -562,7 +563,7 @@ public class BookmarkController {
         MLmovieList.clear();
         MLfavMovies.clear();
 
-        localMovieSet = method.pullMovies(user.getValue());
+        localMovieSet = method.pullMovies(validUserId);
 
         for (Movie m : localMovieSet) {
 
@@ -592,7 +593,7 @@ public class BookmarkController {
 
         ConnectionMethods method = new ConnectionMethods();
 
-        futureList = FXCollections.observableList(method.pullFutureList(user.getValue()));
+        futureList = FXCollections.observableList(method.pullFutureList(validUserId));
         upNextList.setItems(futureList);
 
         method.closeConnection();
@@ -612,7 +613,7 @@ public class BookmarkController {
             for (Book b : BookSet) {
                 if(i == listViewIndex){
 
-                    method.insertBook(b.getIsbn(), user.getValue(), b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), b.getIsFavourite());
+                    method.insertBook(b.getIsbn(), validUserId, b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), b.getIsFavourite());
                 }
                 i++;
             }
@@ -625,7 +626,7 @@ public class BookmarkController {
             for (Movie m : MovieSet) {
                 if(i == listViewIndex){
 
-                    method.insertMovie(m.getId(), user.getValue(), m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(),0);
+                    method.insertMovie(m.getId(), validUserId, m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(),0);
                 }
                 i++;
             }
@@ -651,7 +652,7 @@ public class BookmarkController {
             for (Book b : BookSet) {
                 if(i == listViewIndex){
 
-                    method.insertFutureList(b.getIsbn(), 0L , user.getValue(), b.getIdentifier() , b.getTitle(), b.getAuthor().toString(), null, null);
+                    method.insertFutureList(b.getIsbn(), 0L , validUserId, b.getIdentifier() , b.getTitle(), b.getAuthor().toString(), null, null);
                 }
                 i++;
             }
@@ -662,7 +663,7 @@ public class BookmarkController {
             for (Movie m : MovieSet) {
                 if(i == listViewIndex){
 
-                    method.insertFutureList("null", m.getId(), user.getValue(), m.getIdentifier(), m.getTitle(),  null, m.getReleaseDate(), m.getOverview());
+                    method.insertFutureList("null", m.getId(), validUserId, m.getIdentifier(), m.getTitle(),  null, m.getReleaseDate(), m.getOverview());
                 }
                 i++;
             }
@@ -692,7 +693,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.addFavouriteBook(b.getIsbn(), user.getValue());
+                method.addFavouriteBook(b.getIsbn(), validUserId);
             }
             i++;
 
@@ -719,7 +720,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.removeFavouriteBook(b.getIsbn(), user.getValue());
+                method.removeFavouriteBook(b.getIsbn(), validUserId);
             }
             i++;
 
@@ -746,7 +747,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.addFavouriteMovie(m.getId(), user.getValue());
+                method.addFavouriteMovie(m.getId(), validUserId);
             }
             i++;
 
@@ -773,7 +774,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.removeFavouriteMovie(m.getId(), user.getValue());
+                method.removeFavouriteMovie(m.getId(), validUserId);
             }
             i++;
 
@@ -800,7 +801,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.removeBook(b.getIsbn(), user.getValue());
+                method.removeBook(b.getIsbn(), validUserId);
             }
             i++;
 
@@ -827,7 +828,7 @@ public class BookmarkController {
 
             if(i == selectedIndex){
 
-                method.removeMovie(m.getId(), user.getValue());
+                method.removeMovie(m.getId(), validUserId);
             }
             i++;
 
@@ -852,7 +853,7 @@ public class BookmarkController {
             return; // exit the method
         }
 
-        method.removeFutureList(selectedItem, user.getValue());
+        method.removeFutureList(selectedItem, validUserId);
         updateFutureList();
     }
 
@@ -903,57 +904,101 @@ public class BookmarkController {
     public void login(MouseEvent mouseEvent) {
 
         ConnectionMethods method = new ConnectionMethods();
+        String username = usernameTxt.getText();
+        String password = passwordTxt.getText();
 
-        if(!user.getValue().equals("Team:")){
-            method.userLogin(user.getValue(), "Login");
-            updateBooks();
-            updateMovies();
-            updateFutureList();
-            logout = false;
-            stage = (Stage) tabPane.getScene().getWindow();
-            stage.setWidth(900);
-            stage.setHeight(680);
-            listen();
+        if(!username.equals("") && !password.equals("")){
 
-            tabPane.getTabs().addAll(removedTabs);
-            removedTabs.clear();
+            int verify = method.checkCrd(username, password);
 
-            for (Tab tab : tabPane.getTabs()) {
-                tab.setDisable(false);
+            if(verify == 1){
+
+                validUserId = username;
+                method.userLogin(username, "Login");
+                updateBooks();
+                updateMovies();
+                updateFutureList();
+                logout = false;
+                stage = (Stage) tabPane.getScene().getWindow();
+                stage.setWidth(900);
+                stage.setHeight(680);
+                listen();
+
+                tabPane.getTabs().addAll(removedTabs);
+                removedTabs.clear();
+
+                for (Tab tab : tabPane.getTabs()) {
+                    tab.setDisable(false);
+                }
+
+                // Enable and show the login tab
+                Tab loginTab = tabPane.getTabs().stream()
+                        .filter(tab -> tab.getId().equals("LoginPane"))
+                        .findFirst()
+                        .orElse(null);
+                removedTabs.add(loginTab);
+                tabPane.getTabs().remove(loginTab);
+
+            } else {
+                // Later feature add for get password or prompt user to creat account
+                LoginError.setTextFill(Color.RED);
+                LoginError.setText("Invalid user name or password");
+
             }
 
-            // Enable and show the login tab
-            Tab loginTab = tabPane.getTabs().stream()
-                    .filter(tab -> tab.getId().equals("LoginPane"))
-                    .findFirst()
-                    .orElse(null);
-            removedTabs.add(loginTab);
-            tabPane.getTabs().remove(loginTab);
-        }else{
+        } else if (usernameTxt.getText().isEmpty() && !passwordTxt.getText().isEmpty()){
+
             LoginError.setTextFill(Color.RED);
-            LoginError.setText("Please select your Team to Login");
+            LoginError.setText("Please enter a username to Login");
+
+        } else if (!usernameTxt.getText().isEmpty() && passwordTxt.getText().isEmpty()){
+
+            LoginError.setTextFill(Color.RED);
+            LoginError.setText("Please enter a password to Login");
+
+        } else {
+            LoginError.setTextFill(Color.RED);
+            LoginError.setText("Please enter a username & password to Login");
         }
     }
 
     @FXML
+    private void createAccount(MouseEvent mouseEvent) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/create_account.fxml"));
+        Parent root = loader.load();
+
+        Stage newStage = new Stage();
+        newStage.setScene(new Scene(root));
+        newStage.setTitle("Create an Account");
+        newStage.setWidth(500);
+        newStage.setHeight(500);
+        newStage.show();
+
+    }
+
+    @FXML
     private void clearSearchTab(){
+        clearDescription();
+        usernameTxt.clear();
+        passwordTxt.clear();
         myListView.getItems().clear();
         searchText.clear();
         ErrorChecking.setText("");
         searchType.setValue("Type");
         searchBy.setValue("Search by");
-        user.setValue("Team: ");
     }
 
     // Responsible for locking, unlocking and displaying tabs when the user logs out
     public void logout(MouseEvent mouseEvent) {
 
         ConnectionMethods method = new ConnectionMethods();
-        method.userLogin(user.getValue(), "Logout");
+        method.userLogin(validUserId, "Logout");
+        validUserId = "";
         logout = true;
         stage = (Stage) tabPane.getScene().getWindow();
-        stage.setWidth(300);
-        stage.setHeight(300);
+        stage.setWidth(600);
+        stage.setHeight(550);
         listen();
         clearSet();
         clearSearchTab();
@@ -975,7 +1020,7 @@ public class BookmarkController {
             public void handle(WindowEvent event) {
 
                 if(!logout){
-                    method.userLogin(user.getValue(), "Logout");
+                    method.userLogin(validUserId, "Logout");
                     clearSet();
                     clearSearchTab();
                     clearDescription();

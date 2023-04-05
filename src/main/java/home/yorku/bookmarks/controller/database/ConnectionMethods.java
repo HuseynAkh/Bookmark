@@ -25,8 +25,10 @@ public class ConnectionMethods {
             int rowsInserted = statement.executeUpdate();
 
             if (rowsInserted > 0) {
-                System.out.println("A user successfully has been added");
+                System.out.println("A user has successfully been added");
             }
+
+            connection.closeConnection();
 
         } catch (SQLException e) {
 
@@ -47,8 +49,32 @@ public class ConnectionMethods {
 
         }
 
-
         return exitCode;
+    }
+
+    public Integer checkCrd(String username, String password){
+
+        int verified = 0;
+
+        try {
+
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Check_Crd");
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                verified = rs.getInt("user_verified");
+            }
+
+            connection.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println("Error check user verification: " + e.getMessage());
+        }
+
+        return verified;
     }
 
     public void userLogin(String user_id, String type) {
@@ -384,5 +410,4 @@ public class ConnectionMethods {
         }
 
     }
-
 }

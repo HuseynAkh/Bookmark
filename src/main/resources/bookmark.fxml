@@ -14,13 +14,15 @@
         <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
             <Label fx:id="LoginError"/>
             <VBox fx:id="LoginBox">
-                <ChoiceBox fx:id="user" id="choiceBox" value="Team:" layoutX="65.0" layoutY="33.0" prefHeight="24.0"
-                           prefWidth="100.0">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList"/>
-                    </items>
-                </ChoiceBox>
+
+                <Label id="Username" text="Username: " textFill="white"/>
+                <TextField fx:id="usernameTxt" prefWidth="200.0"/>
+                <Label id="Password" text="Password: " textFill="white"/>
+                <TextField fx:id="passwordTxt" prefWidth="200.0"/>
+
+
                 <Button id="Login" mnemonicParsing="false" text="Log in" prefWidth="100" onMouseClicked="#login"/>
+                <Button id="CreateAccount" mnemonicParsing="false" text="Create Account" prefWidth="100" onMouseClicked="#createAccount"/>
             </VBox>
         </AnchorPane>
     </Tab>
