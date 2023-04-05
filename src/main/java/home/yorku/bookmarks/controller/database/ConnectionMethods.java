@@ -12,6 +12,45 @@ import java.util.Set;
 
 public class ConnectionMethods {
 
+    public Integer insertUser(String username, String password, String email) {
+
+        int exitCode = 0;
+
+        try {
+            DatabaseConnection connection = DatabaseConnection.getInstance();
+            PreparedStatement statement = connection.query("Insert_User");
+            statement.setString(1, username);
+            statement.setString(2, password);
+            statement.setString(3, email);
+            int rowsInserted = statement.executeUpdate();
+
+            if (rowsInserted > 0) {
+                System.out.println("A user successfully has been added");
+            }
+
+        } catch (SQLException e) {
+
+            if (e.getErrorCode() == 1062) { // Duplication error code "1062"
+                String errorMessage = e.getMessage().toLowerCase();
+                if (errorMessage.contains("primary")) {
+                    exitCode = 1;
+                } else if (errorMessage.contains("email")) {
+                    exitCode = 2;
+                } else {
+                    exitCode = -1;
+                    System.out.println("Duplication error " + e.getMessage());
+                }
+            } else {
+                exitCode = -1;
+                System.out.println("Error adding user " + e.getMessage());
+            }
+
+        }
+
+
+        return exitCode;
+    }
+
     public void userLogin(String user_id, String type) {
 
         try {

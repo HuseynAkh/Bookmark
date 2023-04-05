@@ -47,20 +47,25 @@ public class DatabaseConnection {
         String sql = "null";
 
         switch(type){
+
+            case "Insert_User":{
+                sql = "INSERT INTO user_tbl (username, pswrd, email, time_stamp) VALUES (?, ?, ?, NOW())";
+                break;
+            }
             case "User":{
-                sql = "INSERT INTO user_log (user_id, type_log, time_stamp) VALUES (?, ?, CURRENT_TIMESTAMP)";
+                sql = "INSERT INTO user_log (user_id, type_log, time_stamp) VALUES (?, ?, NOW())";
                 break;
             }
             case "Book":{
-                sql = "INSERT INTO my_book_list (book_id, user_id, identifier, title, author, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                sql = "INSERT INTO my_book_list (book_id, user_id, identifier, title, author, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, NOW())";
                 break;
             }
             case "Movie":{
-                sql = "INSERT INTO my_movie_list (movie_id, user_id, identifier, title, release_date, movie_dsc, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                sql = "INSERT INTO my_movie_list (movie_id, user_id, identifier, title, release_date, movie_dsc, is_favourite, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
                 break;
             }
             case "Future_List":{
-                sql = "INSERT INTO my_future_list (book_id, movie_id, user_ID, identifier, title, author, release_date, movie_dsc, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                sql = "INSERT INTO my_future_list (book_id, movie_id, user_ID, identifier, title, author, release_date, movie_dsc, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
                 break;
             }
             case "Delete_Movie":{
