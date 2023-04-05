@@ -21,8 +21,8 @@
                 <TextField fx:id="passwordTxt" prefWidth="200.0"/>
 
 
-                <Button id="Login" mnemonicParsing="false" text="Log in" prefWidth="100" onMouseClicked="#login"/>
-                <Button id="CreateAccount" mnemonicParsing="false" text="Create Account" prefWidth="100" onMouseClicked="#createAccount"/>
+                <Button id="Login" mnemonicParsing="false" text="Log in" prefWidth="100" onAction="#login"/>
+                <Button id="CreateAccount" mnemonicParsing="false" text="Create Account" prefWidth="100" onAction="#createAccount"/>
             </VBox>
         </AnchorPane>
     </Tab>
@@ -109,7 +109,7 @@
             <Button layoutX="405.0" layoutY="300.0" mnemonicParsing="false" text="Remove From Favourites"
                     onAction="#removeBookFromFavourites"/>
             <Button layoutX="522.0" layoutY="260.0" mnemonicParsing="false" text="Sort"
-                    onMouseClicked="#sortAlphaBook"/>
+                    onAction="#sortAlphaBook"/>
 
             <Label layoutX="690.0" layoutY="5.0" text="Movies I've Watched" textFill="white"/>
 
@@ -131,7 +131,7 @@
             <Button layoutX="700.0" layoutY="300.0" mnemonicParsing="false" text="Remove From Favourites"
                     onAction="#removeMovieFromFavourites"/>
             <Button layoutX="816.0" layoutY="260.0" mnemonicParsing="false" text="Sort"
-                    onMouseClicked="#sortAlphaMovie"/>
+                    onAction="#sortAlphaMovie"/>
 
         </AnchorPane>
     </Tab>
@@ -139,7 +139,7 @@
     <Tab id="LogoutPane" text="Log out">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
             <Button id="Logout" layoutX="25.0" layoutY="25.0" mnemonicParsing="false" text="Log out"
-                    prefWidth="100" onMouseClicked="#logout"/>
+                    prefWidth="100" onAction="#logout"/>
         </AnchorPane>
     </Tab>
 

@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -73,7 +72,7 @@ public class CreateUserController {
         timeline.play();
     }
 
-    public void createAccount(MouseEvent mouseEvent) {
+    public void createAccount() {
 
         ConnectionMethods method = new ConnectionMethods();
 

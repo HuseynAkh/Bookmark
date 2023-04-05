@@ -20,7 +20,7 @@
         <Label id="createEmail" text="Enter your email: " textFill="white"/>
         <TextField fx:id="emailCrtTxt" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
 
-        <Button id="CreatAccount" mnemonicParsing="false" text="Create Account" prefWidth="100" onMouseClicked="#createAccount"/>
+        <Button id="CreatAccount" mnemonicParsing="false" text="Create Account" prefWidth="100" onAction="#createAccount"/>
 
     </VBox>
 </AnchorPane>

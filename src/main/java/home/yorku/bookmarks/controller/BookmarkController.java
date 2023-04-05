@@ -17,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.collections.FXCollections;
@@ -28,14 +27,11 @@ import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public class BookmarkController {
     @FXML
@@ -48,12 +44,12 @@ public class BookmarkController {
     List<Tab> removedTabs = new ArrayList<>();
     @FXML
     private ChoiceBox<String> searchType;
-    private ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
+    private final ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
             "Title", "Actor"
     );
     @FXML
     private ChoiceBox<String> searchBy;
-    private ObservableList<String> booksSearchOptions = FXCollections.observableArrayList(
+    private final ObservableList<String> booksSearchOptions = FXCollections.observableArrayList(
             "Title", "Genre", "Author"
     );
     @FXML
@@ -356,7 +352,7 @@ public class BookmarkController {
     // Responsible for the "Save to:" dropdown button which adds Books or Movies to the respective
     // My Book/Movie list OR Future Book/Movie list
     @FXML
-    private void buttonControl(MouseEvent event) {
+    private void buttonControl() {
 
         myListView.setCellFactory(lv -> new ListCell<String>() {
 
@@ -432,7 +428,7 @@ public class BookmarkController {
     // Updates the description view box with the description of the movie
     // If the selection is a book it will load the cover image of the book
     @FXML
-    private void callDescription(MouseEvent event) throws IOException {
+    private void callDescription() throws IOException {
 
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
 
@@ -678,7 +674,7 @@ public class BookmarkController {
     // Responsible for adding a book to the favourites list by updating the is_favourite flag in the database
     // using method. calls, then also calls the updateBooks() method to update the books list seen by the user
     @FXML
-    private void addBookToFavourites(ActionEvent event){
+    private void addBookToFavourites(){
 
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myBookList.getSelectionModel().getSelectedIndex();
@@ -705,7 +701,7 @@ public class BookmarkController {
     // Responsible for removing a book to the favourites list by updating the is_favourite flag in the database
     // using method. calls, then also calls the updateBooks() method to update the books list seen by the user
     @FXML
-    private void removeBookFromFavourites(ActionEvent event){
+    private void removeBookFromFavourites(){
 
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = favourite_books.getSelectionModel().getSelectedIndex();
@@ -732,7 +728,7 @@ public class BookmarkController {
     // Responsible for adding a movie to the favourites list by updating the is_favourite flag in the database
     // using method. calls, then also calls the updateMovies() method to update the movies list seen by the user
     @FXML
-    private void addMovieToFavourites(ActionEvent event){
+    private void addMovieToFavourites(){
 
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
@@ -759,7 +755,7 @@ public class BookmarkController {
     // Responsible for removing a movie to the favourites list by updating the is_favourite flag in the database
     // using method. calls, then also calls the updateMovies() method to update the movies list seen by the user
     @FXML
-    private void removeMovieFromFavourites(ActionEvent event){
+    private void removeMovieFromFavourites(){
 
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = favourite_movies.getSelectionModel().getSelectedIndex();
@@ -786,7 +782,7 @@ public class BookmarkController {
     // Responsible for removing a book from the "My Book List" by removing the book from the database using its
     // unique id(isbn) then also calls the updateBooks() method to update the movies list seen by the user
     @FXML
-    private void removeBook(ActionEvent event){
+    private void removeBook(){
 
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myBookList.getSelectionModel().getSelectedIndex();
@@ -813,7 +809,7 @@ public class BookmarkController {
     // Responsible for removing a movie from the "My Movie List" by removing the movie from the database using its
     // unique id then also calls the updateMovies() method to update the movies list seen by the user
     @FXML
-    private void removeMovie(ActionEvent event){
+    private void removeMovie(){
 
         ConnectionMethods method = new ConnectionMethods();
         int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
@@ -841,7 +837,7 @@ public class BookmarkController {
     // from the database using its unique id then also calls the updateFutureList() method to update the
     // movies/books list seen by the user
     @FXML
-    private void removeFutureList(ActionEvent event){
+    private void removeFutureList(){
         //Need to change, will be problematic in the future
         ConnectionMethods method = new ConnectionMethods();
 
@@ -860,7 +856,7 @@ public class BookmarkController {
     // Responsible for sorting the visible Book list alphabetically as well as the book portfolio
     // so that the references to unique Ids remain intact
     @FXML
-    private void sortAlphaBook(MouseEvent event){
+    private void sortAlphaBook(){
 
         this.bookPortfolio.getSavedBooks().sort(new Comparator<Book>() {
             @Override
@@ -875,7 +871,7 @@ public class BookmarkController {
     // Responsible for sorting the visible Movie list alphabetically as well as the movie portfolio
     // so that the references to unique Ids remain intact
     @FXML
-    private void sortAlphaMovie(MouseEvent event){
+    private void sortAlphaMovie(){
         this.moviePortfolio.getSavedMovies().sort(new Comparator<Movie>() {
             @Override
             public int compare(Movie m1, Movie m2) {
@@ -901,7 +897,7 @@ public class BookmarkController {
 
     // Responsible for displaying, locking and unlocking tabs at login as well as updating all users list
     // on login
-    public void login(MouseEvent mouseEvent) {
+    public void login() {
 
         ConnectionMethods method = new ConnectionMethods();
         String username = usernameTxt.getText();
@@ -963,7 +959,7 @@ public class BookmarkController {
     }
 
     @FXML
-    private void createAccount(MouseEvent mouseEvent) throws IOException {
+    private void createAccount() throws IOException {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/create_account.fxml"));
         Parent root = loader.load();
@@ -990,7 +986,7 @@ public class BookmarkController {
     }
 
     // Responsible for locking, unlocking and displaying tabs when the user logs out
-    public void logout(MouseEvent mouseEvent) {
+    public void logout() {
 
         ConnectionMethods method = new ConnectionMethods();
         method.userLogin(validUserId, "Logout");
