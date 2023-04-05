@@ -5,7 +5,7 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="-Infinity"
-            minWidth="-Infinity" style="-fx-background-color: #0f0e26;"
+            minWidth="-Infinity" style="-fx-background-color: #7689ad;"
             fx:controller="home.yorku.bookmarks.controller.CreateUserController" stylesheets="@stylesheet.css">
 
     <Label fx:id="creationError"/>

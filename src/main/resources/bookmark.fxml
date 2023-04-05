@@ -11,9 +11,11 @@
          fx:controller="home.yorku.bookmarks.controller.BookmarkController" stylesheets="@stylesheet.css">
 
     <Tab id="LoginPane" text="Login">
-        <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
-            <Label fx:id="LoginError"/>
+        <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
             <VBox fx:id="LoginBox">
+                <Label id="heading">WELCOME TO BOOKMARK</Label>
+                <Label id="heading2">Time to find your favourite books and movies!</Label>
+                <Label fx:id="LoginError"/>
 
                 <Label id="Username" text="Username: " textFill="white"/>
                 <TextField fx:id="usernameTxt" prefWidth="200.0"/>
@@ -27,8 +29,8 @@
         </AnchorPane>
     </Tab>
 
-    <Tab id="SearchPane" text="Search">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
+    <Tab id="SearchPane" text="Search" style="-fx-background-color: magenta;">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
 
             <Label fx:id="ErrorChecking"/>
             <TextField fx:id="searchText" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
@@ -44,7 +46,7 @@
             </ChoiceBox>
 
             <ChoiceBox fx:id="searchBy" value="Search by" layoutX="125.0" layoutY="33.0" prefHeight="24.0"
-                       prefWidth="150.0"><!--fix x and width-->
+                       prefWidth="150.0">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="-- Please choose a Type first --"/>
@@ -84,7 +86,7 @@
 
     <Tab id="MyListPane" text="MyList">
 
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
 
             <Label layoutX="24.0" layoutY="5.0" text="What to read/Watch Next" textFill="white"/>
             <ListView fx:id="upNextList" layoutX="24.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0"/>

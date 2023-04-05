@@ -964,8 +964,11 @@ public class BookmarkController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/create_account.fxml"));
         Parent root = loader.load();
 
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/stylesheet.css")).toExternalForm());
+
         Stage newStage = new Stage();
-        newStage.setScene(new Scene(root));
+        newStage.setScene(scene);
         newStage.setTitle("Create an Account");
         newStage.setWidth(500);
         newStage.setHeight(500);

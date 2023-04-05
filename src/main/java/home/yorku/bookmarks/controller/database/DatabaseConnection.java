@@ -53,7 +53,7 @@ public class DatabaseConnection {
                 break;
             }
             case "Check_Crd":{
-                sql = "SELECT COUNT(*) as user_verified FROM user_tbl WHERE username = ? AND pswrd = ?";
+                sql = "SELECT COUNT(*) as user_verified FROM user_tbl WHERE BINARY username = ? AND BINARY pswrd = ?";
                 break;
             }
             case "User":{

@@ -7,8 +7,113 @@
 
 #LoginBox {
     -fx-spacing: 20px;
+    -fx-alignment: center;
+    -fx-background-color: rgb(220, 197, 135);
+    -fx-text-alignment: center;
+    -fx-padding: 20px;
+    -fx-background-radius:10%;;
+    -fx-effect: dropshadow(gaussian , #2a2a2a, 6 , 0.2 , 10 , 5);
 }
 
+#Login{
+    -fx-text-fill: black;
+    -fx-background-color: darkgray;
+    -fx-effect: dropshadow(gaussian , black , 6 , 0.2 , 2 , 5);
+
+}
+
+#Login:hover{
+    -fx-text-fill: white;
+    -fx-background-color: #922c40;
+
+
+}
+#centerBox {
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+    -fx-background-color: rgb(220, 197, 135);
+    -fx-text-alignment: center;
+    -fx-padding: 20px;
+    -fx-background-radius:10%;;
+    -fx-effect: dropshadow(gaussian , #2a2a2a, 6 , 0.2 , 10 , 5);
+}
+
+#CreateAccount{
+    -fx-text-fill: black;
+    -fx-background-color: darkgray;
+    -fx-effect: dropshadow(gaussian , black , 6 , 0.2 , 2 , 5);
+
+}
+
+#CreateAccount:hover{
+    -fx-text-fill: white;
+    -fx-background-color: #922c40;
+
+
+}
 #choiceBox .label {
     -fx-alignment: center;
+}
+
+#heading {
+    -fx-font-family: "Arial Narrow";
+    -fx-font-size: 20px;
+}
+#heading1 {
+    -fx-font-family: "Arial Narrow";
+    -fx-font-size: 14px;
+}
+
+
+.choice-box .context-menu {
+    -fx-background-color: darkgray;
+    -fx-border-color: black;
+}
+
+.choice-box .menu-item:focused {
+    -fx-background-color: #922c40;
+}
+
+.choice-box .menu-item > .label {
+    -fx-text-fill: black;
+
+}
+
+.choice-box .menu-item:focused > .label {
+    -fx-text-fill: white;
+}
+
+.choice-box {
+    -fx-background-color: darkgray;
+    -fx-mark-color: #922c40;
+    -fx-effect: dropshadow(gaussian , black , 6 , 0.15 , 1 , 5);
+}
+.choice-box:hover {
+    -fx-background-color: darkgray;
+    -fx-mark-color: white;
+    -fx-text-fill: white;
+}
+
+#searchButton{
+    -fx-text-fill: black;
+    -fx-background-color: darkgray;
+    -fx-effect: dropshadow(gaussian , black , 6 , 0.2 , 2 , 5);
+}
+
+#searchButton:hover{
+    -fx-text-fill: white;
+    -fx-background-color: #922c40;
+}
+
+Button{
+    -fx-text-fill: black;
+    -fx-background-color: darkgray;
+    -fx-effect: dropshadow(gaussian , black , 6 , 0.2 , 2 , 5);
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+
+}
+Button:hover{
+    -fx-text-fill: white;
+    -fx-background-color: #922c40;
 }

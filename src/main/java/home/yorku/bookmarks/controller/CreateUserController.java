@@ -1,20 +1,14 @@
 package home.yorku.bookmarks.controller;
 
 import home.yorku.bookmarks.controller.database.ConnectionMethods;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class CreateUserController {
 
@@ -64,12 +58,20 @@ public class CreateUserController {
     }
 
     @FXML
-    private void handleButtonAction() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
+    private void addUser() {
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText("Account successfully created!");
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().setAll(okButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == okButton) {
             Stage stage = (Stage) centerBox.getScene().getWindow();
             stage.close();
-        }));
-        timeline.play();
+        }
     }
 
     public void createAccount() {
@@ -87,10 +89,20 @@ public class CreateUserController {
 
             if(password.equals(checkPass)){
 
-                method.insertUser(username, password, email);
-                creationError.setTextFill(Color.GREEN);
-                creationError.setText("Account created successfully!");
-                handleButtonAction();
+                int check = method.insertUser(username, password, email);
+
+                if(check == 0){
+                    addUser();
+                } else if (check == 1) {
+                    System.out.println("Username already used");
+                    method.closeConnection();
+                } else if (check == 2) {
+                    System.out.println("email already used");
+                    method.closeConnection();
+                } else {
+                    System.out.println("something else");
+                    method.closeConnection();
+                }
 
             } else {
 
