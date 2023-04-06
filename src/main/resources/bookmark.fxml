@@ -144,15 +144,15 @@
 
             <VBox fx:id="RecoBox">
 
-                <Label fx:id="recoTitle" layoutX="24.0" layoutY="10.0" text="Here are your recommendations: " textFill="Black"/>
-                <Label fx:id="recoDesc" layoutX="24.0" layoutY="10.0" text="Select Book or Movie to begin: " textFill="Black"/>
+                <Label id="recoTitle" layoutX="24.0" layoutY="10.0" text="Here are your recommendations: " textFill="Black"/>
+                <Label id="recoDesc" layoutX="24.0" layoutY="10.0" text="Select Book or Movie to begin: " textFill="Black"/>
 
 
-                <ChoiceBox fx:id="sortReco" value="Sort by: " layoutX="125.0" layoutY="33.0" prefHeight="24.0" prefWidth="100.0">
+                <ChoiceBox fx:id="sortReco" value="Sort by: " layoutX="125.0" layoutY="33.0" prefHeight="24.0" prefWidth="100.0" onAction="#recoSort">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Book"/>
-                            <String fx:value="Movie"/>
+                           <!-- <String fx:value="Book"/>
+                            <String fx:value="Movie"/> -->
                             <String fx:value="Alphabetical"/>
                         </FXCollections>
                     </items>

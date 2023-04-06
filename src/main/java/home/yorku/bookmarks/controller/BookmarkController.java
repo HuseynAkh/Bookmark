@@ -61,6 +61,8 @@ public class BookmarkController {
     @FXML
     private ChoiceBox<String> searchBy;
     @FXML
+    private ChoiceBox<String> sortReco;
+    @FXML
     private TextField usernameTxt;
     @FXML
     private PasswordField passwordTxt;
@@ -95,6 +97,11 @@ public class BookmarkController {
     @FXML
     private ListView<String> upNextList;
     private ObservableList<String> futureList = FXCollections.observableArrayList();
+
+    @FXML
+    private ListView<String> recommendation;
+    private ObservableList<String> recos = FXCollections.observableArrayList();
+
     @FXML
     private ImageView coverImageView;
     @FXML
@@ -156,6 +163,7 @@ public class BookmarkController {
         moviePortfolio = new MoviePortfolio();
         // Initialize the list when null
         myBookList.setItems(bookList);
+        recommendation.setItems(recos);
         upNextList.setItems(futureList);
         myMovieList.setItems(movieList);
         ML_myBookList.setItems(MLbookList);
@@ -1307,11 +1315,34 @@ public class BookmarkController {
         });
     }
     public void callRecommendation() { //fro books
+
+        recommendation.getItems().clear();
+
         recommendation reco = new recommendation();
         Set<Book> recommendedBooks = reco.getBookRecommendation(this.bookPortfolio.getSavedBooks()); // or getFavouriteBooks()
         Set<Movie> recommendedMovies = reco.getMovieRecommendation(this.moviePortfolio.getSavedMovies());
+
+        for(Book b : recommendedBooks) {
+            String bookInfo = b.getTitle() + " by " + b.getAuthor() + " || Type: " + b.getIdentifier();
+            recos.add(bookInfo);
+        }
+
+        for(Movie m : recommendedMovies) {
+            String movieInfo = m.getTitle() + " released: " + m.getReleaseDate() + " || Type: " + m.getIdentifier();
+            recos.add(movieInfo);
+        }
+
+        recommendation.setItems(recos);
     }
 
+    @FXML
+    private void recoSort(){
+
+        if(sortReco.getValue().equals("Alphabetical")){
+            alphaSort(recommendation, recos);
+        }
+
+    }
 
 
 }
