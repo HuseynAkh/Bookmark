@@ -1019,22 +1019,19 @@ public class BookmarkController {
     @FXML
     private void clearPane() {
 
-        ConnectionMethods method = new ConnectionMethods();
-        method.userLogin(validUserId, "Logout");
-
-        clearSet();
-        clearDescription();
-        validUserId = "";
-        searchText.clear();
-        usernameTxt.clear();
-        passwordTxt.clear();
-        ErrorChecking.setText("");
-        searchType.setValue("Type");
-        myListView.getItems().clear();
-        searchBy.setValue("Search by");
         database.sendToDatabase(validUserId);
-        portfolio.clearBookPortfolio();
         portfolio.clearMoviePortfolio();
+        portfolio.clearBookPortfolio();
+        searchBy.setValue("Search by");
+        myListView.getItems().clear();
+        searchType.setValue("Type");
+        ErrorChecking.setText("");
+        passwordTxt.clear();
+        usernameTxt.clear();
+        searchText.clear();
+        validUserId = "";
+        clearDescription();
+        clearSet();
 
     }
 

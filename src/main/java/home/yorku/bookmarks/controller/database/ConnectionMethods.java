@@ -1,9 +1,6 @@
 package home.yorku.bookmarks.controller.database;
 
-import home.yorku.bookmarks.model.Book;
-import home.yorku.bookmarks.model.BookToPortfolio;
-import home.yorku.bookmarks.model.Movie;
-import home.yorku.bookmarks.model.MovieToPortfolio;
+import home.yorku.bookmarks.model.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -156,9 +153,9 @@ public class ConnectionMethods {
     }
 
 
-    public ArrayList<String> pullBookIds(String user_id) {
+    public Set<BookCheck> pullBookIds(String user_id) {
 
-        ArrayList<String> bookIds = new ArrayList<String>();
+        Set<BookCheck> books = new HashSet<>();
 
         try {
 
@@ -170,7 +167,10 @@ public class ConnectionMethods {
             while (rs.next()) {
 
                 String isbn = rs.getString("book_id");
-                bookIds.add(isbn);
+                int is_favourite = rs.getInt("is_favourite");
+
+                BookCheck book = new BookCheck(isbn, is_favourite);
+                books.add(book);
             }
 
         } catch (SQLException e) {
@@ -178,29 +178,7 @@ public class ConnectionMethods {
 
         }
 
-        return bookIds;
-    }
-
-    public Integer checkBook(String isbn){
-
-        int verified = 0;
-
-        try {
-
-            DatabaseConnection connection = DatabaseConnection.getInstance();
-            PreparedStatement statement = connection.query("Check_Book");
-            statement.setString(1, isbn);
-            ResultSet rs = statement.executeQuery();
-
-            while (rs.next()) {
-                verified = rs.getInt("book_exists");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error checking if book exists: " + e.getMessage());
-        }
-
-        return verified;
+        return books;
     }
 
     public void addFavouriteBook(String book_id, String user_id) {
@@ -213,10 +191,10 @@ public class ConnectionMethods {
             statement.setString(2, user_id);
             statement.executeUpdate();
 
-            System.out.println("Favourite book added");
+            System.out.println("Favourite book updated");
 
         } catch (SQLException e) {
-            System.out.println("Error adding to favourite books: " + e.getMessage());
+            System.out.println("Error updating to favourite books: " + e.getMessage());
 
         }
     }
@@ -231,10 +209,10 @@ public class ConnectionMethods {
             statement.setString(2, user_id);
             statement.executeUpdate();
 
-            System.out.println("Favourite book removed");
+            System.out.println("Favourite book updated");
 
         } catch (SQLException e) {
-            System.out.println("Error removing from favourite books: " + e.getMessage());
+            System.out.println("Error updating from favourite books: " + e.getMessage());
 
         }
     }
@@ -332,9 +310,9 @@ public class ConnectionMethods {
         return movies;
     }
 
-    public ArrayList<Long> pullMovieIds(String user_id) {
+    public Set<MovieCheck> pullMovieIds(String user_id) {
 
-        ArrayList<Long> movieIds = new ArrayList<Long>();
+        Set<MovieCheck> movies = new HashSet<>();
 
         try {
 
@@ -346,7 +324,10 @@ public class ConnectionMethods {
             while (rs.next()) {
 
                 Long movie_id = rs.getLong("movie_id");
-                movieIds.add(movie_id);
+                int is_favourite = rs.getInt("is_favourite");
+
+                MovieCheck movie = new MovieCheck(movie_id, is_favourite);
+                movies.add(movie);
             }
 
         } catch (SQLException e) {
@@ -354,29 +335,7 @@ public class ConnectionMethods {
 
         }
 
-        return movieIds;
-    }
-
-    public Integer checkMovie(Long id){
-
-        int verified = 0;
-
-        try {
-
-            DatabaseConnection connection = DatabaseConnection.getInstance();
-            PreparedStatement statement = connection.query("Check_Movie");
-            statement.setLong(1, id);
-            ResultSet rs = statement.executeQuery();
-
-            while (rs.next()) {
-                verified = rs.getInt("movie_exists");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error checking if movie exists: " + e.getMessage());
-        }
-
-        return verified;
+        return movies;
     }
 
     public void addFavouriteMovie(Long movie_id, String user_id) {
@@ -389,10 +348,10 @@ public class ConnectionMethods {
             statement.setString(2, user_id);
             statement.executeUpdate();
 
-            System.out.println("Favourite movie added");
+            System.out.println("Favourite movie updated");
 
         } catch (SQLException e) {
-            System.out.println("Error adding to favourite movies: " + e.getMessage());
+            System.out.println("Error updating to favourite movies: " + e.getMessage());
 
         }
     }
@@ -407,10 +366,10 @@ public class ConnectionMethods {
             statement.setString(2, user_id);
             statement.executeUpdate();
 
-            System.out.println("Favourite movie removed");
+            System.out.println("Favourite movie updated");
 
         } catch (SQLException e) {
-            System.out.println("Error removing from favourite movies: " + e.getMessage());
+            System.out.println("Error updating from favourite movies: " + e.getMessage());
 
         }
     }

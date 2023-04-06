@@ -69,11 +69,7 @@ public class DatabaseConnection {
                 break;
             }
             case "Pull_BookIds":{
-                sql = "SELECT book_id FROM my_book_list WHERE user_id = ?";
-                break;
-            }
-            case "Check_Book":{
-                sql = "SELECT COUNT(*) as book_exists FROM my_book_list WHERE book_id = ?";
+                sql = "SELECT book_id, is_favourite FROM my_book_list WHERE user_id = ?";
                 break;
             }
             case "Add_FavouriteBook":{
@@ -97,11 +93,7 @@ public class DatabaseConnection {
                 break;
             }
             case "Pull_MovieIds":{
-                sql = "SELECT movie_id FROM my_movie_list WHERE user_id = ?";
-                break;
-            }
-            case "Check_Movie":{
-                sql = "SELECT COUNT(*) as movie_exists FROM my_movie_list WHERE movie_id = ?";
+                sql = "SELECT movie_id, is_favourite FROM my_movie_list WHERE user_id = ?";
                 break;
             }
             case "Add_FavouriteMovie":{

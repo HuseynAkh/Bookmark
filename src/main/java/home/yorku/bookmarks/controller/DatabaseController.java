@@ -1,7 +1,9 @@
 package home.yorku.bookmarks.controller;
 
 import home.yorku.bookmarks.controller.database.ConnectionMethods;
+import home.yorku.bookmarks.model.BookCheck;
 import home.yorku.bookmarks.model.BookToPortfolio;
+import home.yorku.bookmarks.model.MovieCheck;
 import home.yorku.bookmarks.model.MovieToPortfolio;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,6 +14,9 @@ public class DatabaseController {
 
     private PortfolioController portfolio;
     private BookmarkController bookmark;
+
+    private Set<BookCheck> booksToCheck;
+    private Set<MovieCheck> moviesToCheck;
     public DatabaseController(BookmarkController bookmark, PortfolioController portfolio){
 
         this.bookmark = bookmark;
@@ -65,14 +70,24 @@ public class DatabaseController {
     private void compareBooks(BookToPortfolio b, ConnectionMethods method) {
 
         String isbn = b.getPbIsbn();
-        int bookExists = method.checkBook(isbn);
+        int favourite = 0;
+        int exists = 0;
 
-        if (bookExists == 1) {
-            if (b.getPbIsFavourite() == 0) {
-                method.removeFavouriteBook(b.getPbIsbn(), b.getPbUsername());
-            } else {
-                method.addFavouriteBook(b.getPbIsbn(), b.getPbUsername());
+        for(BookCheck book: booksToCheck){
+            if(isbn.equals(book.getIsbn())){
+                favourite = book.getFavourite();
+                exists++;
+                break;
             }
+        }
+
+        if (exists > 0) {
+            if (b.getPbIsFavourite() == 0 && favourite == 1) {
+                method.removeFavouriteBook(b.getPbIsbn(), b.getPbUsername());
+            } else if (b.getPbIsFavourite() == 1 && favourite == 0){
+                method.addFavouriteBook(b.getPbIsbn(), b.getPbUsername());
+            } // Else Do nothing
+
         } else {
             method.insertBook(b.getPbIsbn(), b.getPbUsername(), b.getPbIdentifier(), b.getPbTitle(), b.getPbAuthor().toString(), b.getPbIsFavourite());
         }
@@ -81,36 +96,50 @@ public class DatabaseController {
 
     private void compareMovies(MovieToPortfolio m, ConnectionMethods method) {
 
-        Long id = m.getPmId();
-        int movieExists = method.checkMovie(id);
+        int exists = 0;
+        int favourite = 0;
+        Long movieId = m.getPmId();
+
         ArrayList<Long> genre = new ArrayList<>(m.getGenre());
-        String genreString =  String.join(",", genre.stream().map(String::valueOf).collect(Collectors.toList()));
+        String genreString = String.join(",", genre.stream().map(String::valueOf).collect(Collectors.toList()));
 
-        if (movieExists == 1) {
-
-            if (m.getPmIsFavourite() == 0) {
-                method.removeFavouriteMovie(m.getPmId(), m.getPmUsername());
-            } else {
-                method.addFavouriteMovie(m.getPmId(), m.getPmUsername());
+        for(MovieCheck movie: moviesToCheck){
+            if(movieId.equals(movie.getId())){
+                favourite = movie.getFavourite();
+                exists++;
+                break;
             }
-            return;
         }
 
-        method.insertMovie(m.getPmId(), m.getPmUsername(), genreString, m.getPmIdentifier(), m.getPmTitle(), m.getPmReleaseDate(), m.getPmDescription(), m.getPmIsFavourite());
+        if (exists > 0) {
+
+            if (m.getPmIsFavourite() == 0 && favourite == 1) {
+                method.removeFavouriteMovie(m.getPmId(), m.getPmUsername());
+            } else if (m.getPmIsFavourite() == 1 && favourite == 0){
+                method.addFavouriteMovie(m.getPmId(), m.getPmUsername());
+            } // Else Do nothing
+
+
+        } else {
+            method.insertMovie(m.getPmId(), m.getPmUsername(), genreString, m.getPmIdentifier(), m.getPmTitle(), m.getPmReleaseDate(), m.getPmDescription(), m.getPmIsFavourite());
+        }
 
     }
 
     public void sendToDatabase(String user) {
 
         ConnectionMethods method = new ConnectionMethods();
+        method.userLogin(user, "Logout");
 
-        ArrayList<String> bookIds = method.pullBookIds(user);
-        ArrayList<Long> movieIds = method.pullMovieIds(user);
+        booksToCheck = method.pullBookIds(user);
+        moviesToCheck = method.pullMovieIds(user);
 
         for (BookToPortfolio b : portfolio.getRemovedBooks()) {
 
-            for (String id : bookIds) {
-                if (id.equals(b.getPbIsbn())) {
+            for (BookCheck book : booksToCheck) {
+
+                String bookId = book.getIsbn();
+                if (bookId.equals(b.getPbIsbn())) {
                     method.removeBook(b.getPbIsbn(), b.getPbUsername());
                 }
             }
@@ -119,8 +148,10 @@ public class DatabaseController {
 
         for (MovieToPortfolio m : portfolio.getRemovedMovies()) {
 
-            for (Long id : movieIds) {
-                if (id.equals(m.getPmId())) {
+            for (MovieCheck movie : moviesToCheck) {
+
+                Long movieId = movie.getId();
+                if (movieId.equals(m.getPmId())) {
                     method.removeMovie(m.getPmId(), m.getPmUsername());
                 }
             }
