@@ -11,13 +11,13 @@
     -fx-background-color: rgb(220, 197, 135);
     -fx-text-alignment: center;
     -fx-padding: 20px;
-    -fx-background-radius:10%;;
+    -fx-background-radius:10%;
     -fx-effect: dropshadow(gaussian , #2a2a2a, 6 , 0.2 , 10 , 5);
 }
 
 #Login{
     -fx-text-fill: black;
-    -fx-background-color: darkgray;
+    -fx-background-color: #efefef;
     -fx-effect: dropshadow(gaussian , black , 6 , 0.2 , 2 , 5);
 
 }
@@ -63,7 +63,7 @@
 
 #CreateAccount{
     -fx-text-fill: black;
-    -fx-background-color: darkgray;
+    -fx-background-color: #efefef;
     -fx-effect: dropshadow(gaussian , black , 6 , 0.2 , 2 , 5);
 
 }
@@ -89,7 +89,7 @@
 
 
 .choice-box .context-menu {
-    -fx-background-color: darkgray;
+    -fx-background-color: #efefef;
     -fx-border-color: black;
 }
 
@@ -107,19 +107,19 @@
 }
 
 .choice-box {
-    -fx-background-color: darkgray;
+    -fx-background-color: #efefef;
     -fx-mark-color: #922c40;
     -fx-effect: dropshadow(gaussian , black , 6 , 0.15 , 1 , 5);
 }
 .choice-box:hover {
-    -fx-background-color: darkgray;
+    -fx-background-color: #efefef;
     -fx-mark-color: white;
     -fx-text-fill: white;
 }
 
 #searchButton{
     -fx-text-fill: black;
-    -fx-background-color: darkgray;
+    -fx-background-color: #efefef;
     -fx-effect: dropshadow(gaussian , black , 6 , 0.2 , 2 , 5);
 }
 
@@ -130,7 +130,7 @@
 
 Button{
     -fx-text-fill: black;
-    -fx-background-color: darkgray;
+    -fx-background-color: #efefef;
     -fx-effect: dropshadow(gaussian , black , 6 , 0.2 , 2 , 5);
     -fx-padding: 5px;
     -fx-border-insets: 5px;

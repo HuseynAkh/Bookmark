@@ -118,12 +118,6 @@ public class BookmarkController {
     private String myList = "";
     private String upNext = "";
 
-    @FXML
-    private Button removeBookFavBtn;
-
-    @FXML
-    private Button removeMovieFavBtn;
-
     //private Tab Book;
 
     public BookmarkController() {
@@ -1259,25 +1253,5 @@ public class BookmarkController {
             }
         });
     }
-
-   @FXML
-    private void onFavBookTabClicked(Event ev){
-        removeBookFavBtn.setVisible(true);
-    }
-
-   @FXML
-    private void onFavMovieTabClicked(Event ev){
-        removeMovieFavBtn.setVisible(true);
-    }
-
-   /* @FXML
-    private void onBookChange(Event ev){
-        removeBookFavBtn.setVisible(false);
-    }*/
-
-    /*@FXML
-    private void onMovieChange(Event ev){
-        removeMovieFavBtn.setVisible(false);
-    }*/
 
 }

@@ -10,16 +10,16 @@
          minWidth="-Infinity" tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: #0f0e26;"
          fx:controller="home.yorku.bookmarks.controller.BookmarkController" stylesheets="@stylesheet.css">
 
-    <Tab id="LoginPane" text="Login">
+    <Tab id="LoginPane" text="Login" style="-fx-background-color: #909fc4;">
         <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
             <VBox fx:id="LoginBox">
                 <Label id="heading">WELCOME TO BOOKMARK</Label>
                 <Label id="heading2">Time to find your favourite books and movies!</Label>
                 <Label fx:id="LoginError"/>
 
-                <Label id="Username" text="Username: " textFill="white"/>
+                <Label id="Username" text="Username: " textFill="black"/>
                 <TextField fx:id="usernameTxt" prefWidth="200.0"/>
-                <Label id="Password" text="Password: " textFill="white"/>
+                <Label id="Password" text="Password: " textFill="black"/>
                 <PasswordField  fx:id="passwordTxt" prefWidth="200.0"/>
 
 
@@ -29,7 +29,7 @@
         </AnchorPane>
     </Tab>
 
-    <Tab id="SearchPane" text="Search" >
+    <Tab id="SearchPane" text="Search" style="-fx-background-color: #909fc4;">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
 
             <Label fx:id="ErrorChecking"/>
@@ -84,7 +84,7 @@
         </AnchorPane>
     </Tab>
 
-    <Tab id="MyListPane" text="MyList">
+    <Tab id="MyListPane" text="MyList" style="-fx-background-color: #909fc4;">
 
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
 
@@ -94,11 +94,11 @@
             <Label layoutX="400.0" layoutY="5.0" text="Books I've Read" textFill="white"/>
 
             <TabPane layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0">
-                <Tab text="Books" closable="false" >
+                <Tab text="Books" closable="false" style="-fx-background-color: #909fc4;">
                     <ListView fx:id="ML_myBookList" layoutX="310.0" layoutY="25.0" prefHeight="224.0"
                               prefWidth="263.0"/>
                 </Tab>
-                <Tab text="Favorites" closable="false" onSelectionChanged="#onFavBookTabClicked">
+                <Tab text="Favorites" closable="false" onSelectionChanged="#onFavBookTabClicked" style="-fx-background-color: #909fc4;">
                     <ListView fx:id="favourite_books" layoutX="310.0" layoutY="25.0" prefHeight="224.0"
                               prefWidth="263.0"/>
                 </Tab>
@@ -116,11 +116,11 @@
             <Label layoutX="690.0" layoutY="5.0" text="Movies I've Watched" textFill="white"/>
 
             <TabPane layoutX="600.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0">
-                <Tab text="Movies" closable="false">
+                <Tab text="Movies" closable="false" style="-fx-background-color: #909fc4;">
                     <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="25.0" prefHeight="224.0"
                               prefWidth="263.0"/>
                 </Tab>
-                <Tab text="Favorites" closable="false" onSelectionChanged="#onFavMovieTabClicked">
+                <Tab text="Favorites" closable="false" onSelectionChanged="#onFavMovieTabClicked" style="-fx-background-color: #909fc4;">
                     <ListView fx:id="favourite_movies" layoutX="310.0" layoutY="25.0" prefHeight="224.0"
                               prefWidth="263.0"/>
                 </Tab>
@@ -138,7 +138,7 @@
         </AnchorPane>
     </Tab>
 
-    <Tab id="MyRecommendations" text="Recommendations">
+    <Tab id="MyRecommendations" text="Recommendations" style="-fx-background-color: #909fc4;">
 
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
 
@@ -165,7 +165,7 @@
         </AnchorPane>
     </Tab>
 
-    <Tab id="LogoutPane" text="Log out">
+    <Tab id="LogoutPane" text="Log out" style="-fx-background-color: #909fc4;">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
             <Button id="Logout" layoutX="25.0" layoutY="25.0" mnemonicParsing="false" text="Log out"
                     prefWidth="100" onAction="#logout"/>
