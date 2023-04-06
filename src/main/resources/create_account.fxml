@@ -14,9 +14,9 @@
         <Label id="createUsername" text="Enter a username: " textFill="white"/>
         <TextField fx:id="usernameCrtTxt" prefWidth="200.0"/>
         <Label id="createPassword" text="Enter a password: " textFill="white"/>
-        <TextField fx:id="passwordCrtTxt" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
+        <PasswordField fx:id="passwordCrtTxt" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
         <Label id="recreatePassword" text="Re-enter password: " textFill="white"/>
-        <TextField fx:id="checkPassword" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
+        <PasswordField fx:id="checkPassword" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
         <Label id="createEmail" text="Enter your email: " textFill="white"/>
         <TextField fx:id="emailCrtTxt" layoutX="300.0" layoutY="33.0" prefWidth="200.0"/>
 

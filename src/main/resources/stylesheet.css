@@ -25,10 +25,19 @@
 #Login:hover{
     -fx-text-fill: white;
     -fx-background-color: #922c40;
-
-
 }
+
 #centerBox {
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+    -fx-background-color: rgb(220, 197, 135);
+    -fx-text-alignment: center;
+    -fx-padding: 20px;
+    -fx-background-radius:10%;;
+    -fx-effect: dropshadow(gaussian , #2a2a2a, 6 , 0.2 , 10 , 5);
+}
+
+#RecoBox {
     -fx-spacing: 20px;
     -fx-alignment: center;
     -fx-background-color: rgb(220, 197, 135);

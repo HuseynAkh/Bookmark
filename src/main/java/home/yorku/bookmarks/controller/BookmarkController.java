@@ -50,6 +50,8 @@ public class BookmarkController {
     private TabPane tabPane;
     @FXML
     private VBox LoginBox;
+    @FXML
+    private VBox RecoBox;
     private Stage stage;
     @FXML
     private ChoiceBox<String> searchType;
@@ -58,7 +60,7 @@ public class BookmarkController {
     @FXML
     private TextField usernameTxt;
     @FXML
-    private TextField passwordTxt;
+    private PasswordField passwordTxt;
     private String validUserId = "";
     @FXML
     private TextField searchText;
@@ -147,12 +149,14 @@ public class BookmarkController {
                 newScene.heightProperty().addListener((obs, oldHeight, newHeight) -> {
                     sceneHeight = newHeight.doubleValue();
                     LoginBox.setLayoutY((sceneHeight / 2) - (20 + LoginBox.getHeight() / 2)); // 20 for padding between boxes
+                    RecoBox.setLayoutY((sceneHeight / 2) - (20 + RecoBox.getHeight() / 2));
 
                 });
 
                 newScene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
                     sceneWidth = newWidth.doubleValue();
                     LoginBox.setLayoutX((sceneWidth / 2) - (LoginBox.getWidth() / 2));
+                    RecoBox.setLayoutX((sceneWidth / 2) - (RecoBox.getWidth() / 2));
 
                 });
             }

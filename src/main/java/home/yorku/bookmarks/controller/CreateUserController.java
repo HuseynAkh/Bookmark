@@ -19,9 +19,9 @@ public class CreateUserController {
     @FXML
     private TextField usernameCrtTxt;
     @FXML
-    private TextField passwordCrtTxt;
+    private PasswordField passwordCrtTxt;
     @FXML
-    private TextField checkPassword;
+    private PasswordField checkPassword;
     @FXML
     private TextField emailCrtTxt;
     private double sceneHeight;
