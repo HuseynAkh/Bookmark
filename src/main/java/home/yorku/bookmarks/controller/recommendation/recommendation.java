@@ -1,7 +1,8 @@
 package home.yorku.bookmarks.controller.recommendation;
 
-import home.yorku.bookmarks.model.BookToPortfolio;
-import home.yorku.bookmarks.model.MovieToPortfolio;
+import home.yorku.bookmarks.controller.search.BookSearchManager;
+import home.yorku.bookmarks.controller.search.MovieSearchManager;
+import home.yorku.bookmarks.model.*;
 
 
 import java.util.*;
@@ -14,11 +15,10 @@ public class recommendation {
 
 
 
-    public void getBookRecommendation (ArrayList<BookToPortfolio> booklist){
+    public Set<Book> getBookRecommendation (ArrayList<BookToPortfolio> booklist){
         Map<String, Integer> tally = new HashMap<String, Integer>();
         for(BookToPortfolio b : booklist){
             String author = b.getPbAuthor().get(0);
-            System.out.println(author);
             if(tally.containsKey(author)){
                 tally.replace(author, tally.get(author)+1);
             }
@@ -26,27 +26,21 @@ public class recommendation {
                 tally.put(author, 1);
             }
         }
-
-
-
-
         List<Integer> count = new ArrayList<Integer>(tally.values());
         int maxVal = 0;
-
-
-
-
         for(int i : count){
             if(i>maxVal){
                 maxVal = i;
             }
         }
         String result = getKey(tally, maxVal);
-        System.out.println(result);
+        BookSearchManager bm = new BookSearchManager();
+        Set<Book> resultList = bm.searchBook(new SearchCriteria(
+                BookmarkConstants.TYPE_BOOK,
+                BookmarkConstants.KEY_BOOK_AUTHOR,
+                result));
 
-
-
-
+        return resultList;
     }
 
 
@@ -71,7 +65,7 @@ public class recommendation {
 
 
 
-    public void getMovieRecommendation (ArrayList<MovieToPortfolio> movieList){
+    public Set<Movie> getMovieRecommendation (ArrayList<MovieToPortfolio> movieList){
         Map<Long, Integer> tally = new HashMap<Long, Integer>();
         for(MovieToPortfolio m : movieList) {
             ArrayList<Long> genres = m.getGenre();
@@ -98,8 +92,15 @@ public class recommendation {
                 maxVal = i;
             }
         }
+
         Long result = getMovieKey(tally, maxVal);
-        System.out.println(result);
+        MovieSearchManager mm = new MovieSearchManager();
+        Set<Movie> resultList = mm.searchMovie(new SearchCriteria(
+                BookmarkConstants.TYPE_MOVIE,
+                BookmarkConstants.KEY_MOVIE_GENRE,
+                (result.toString())));
+
+        return resultList;
     }
 
 

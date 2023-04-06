@@ -46,6 +46,10 @@ public class MovieSearchManager {
             jsonKey = BookmarkConstants.JSON_KEY_MOVIE_CAST;
 
         }
+        else if(searchCriteria.getSearchKey().equals(BookmarkConstants.KEY_MOVIE_GENRE)){
+            jsonKey = BookmarkConstants.JSON_KEY_MOVIE_RESULTS;
+
+        }
 
         searchMoviesAPI(movies, searchStrategy.getSearchURL(searchCriteria), jsonKey );
         return movies;
@@ -108,8 +112,6 @@ public class MovieSearchManager {
                     genres.add((Long)genre);
                 }
             }
-
-
             Movie m = new Movie(id, title, genres, releaseDate, overview, 0);
             movies.add(m);
         }

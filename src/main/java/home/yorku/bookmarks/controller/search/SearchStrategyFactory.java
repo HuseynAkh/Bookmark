@@ -17,6 +17,9 @@ public class SearchStrategyFactory {
         }else if(key.equals(BookmarkConstants.KEY_MOVIE_ACTOR)) {
             searchStrategy = new MovieActorSearchStrategy();
         }
+        else if (key.equals(BookmarkConstants.KEY_MOVIE_GENRE)){
+            searchStrategy = new MovieGenreSearchStrategy();
+        }
 
         return searchStrategy;
     }

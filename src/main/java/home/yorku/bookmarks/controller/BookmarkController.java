@@ -1308,8 +1308,8 @@ public class BookmarkController {
     }
     public void callRecommendation() { //fro books
         recommendation reco = new recommendation();
-        reco.getBookRecommendation(this.bookPortfolio.getSavedBooks()); // or getFavouriteBooks()
-        reco.getMovieRecommendation(this.moviePortfolio.getSavedMovies());
+        Set<Book> recommendedBooks = reco.getBookRecommendation(this.bookPortfolio.getSavedBooks()); // or getFavouriteBooks()
+        Set<Movie> recommendedMovies = reco.getMovieRecommendation(this.moviePortfolio.getSavedMovies());
     }
 
 

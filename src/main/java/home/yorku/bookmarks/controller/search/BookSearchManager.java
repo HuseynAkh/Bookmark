@@ -101,7 +101,6 @@ public class BookSearchManager {
                     authors.add((String) author);
                 }
             }
-
             Book b = new Book(title, authors, isbn, 0);
             books.add(b);
         }
