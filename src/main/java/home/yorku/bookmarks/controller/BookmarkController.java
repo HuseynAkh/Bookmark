@@ -119,6 +119,28 @@ public class BookmarkController {
     private String myList = "";
     private String upNext = "";
 
+    @FXML
+    private Tab FavouriteBookTab;
+    @FXML
+    private Button removeBookFavBtn;
+    @FXML
+    private Button removeBook;
+    @FXML
+    private Button addBookToFav;
+    @FXML
+    private Button bookSort;
+
+    @FXML
+    private Tab FavouriteMovieTab;
+    @FXML
+    private Button removeMovieFavBtn;
+    @FXML
+    private Button removeMovie;
+    @FXML
+    private Button addMovieToFav;
+    @FXML
+    private Button movieSort;
+
     //private Tab Book;
 
     public BookmarkController() {
@@ -166,6 +188,36 @@ public class BookmarkController {
                 });
             }
 
+        });
+
+        FavouriteBookTab.setOnSelectionChanged(event -> {
+            if (FavouriteBookTab.isSelected()) {
+                removeBookFavBtn.setVisible(true);
+                removeBook.setVisible(false);
+                addBookToFav.setVisible(false);
+                bookSort.setVisible(false);
+
+            } else {
+                removeBookFavBtn.setVisible(false);
+                removeBook.setVisible(true);
+                addBookToFav.setVisible(true);
+                bookSort.setVisible(true);
+            }
+        });
+
+        FavouriteMovieTab.setOnSelectionChanged(event -> {
+            if (FavouriteMovieTab.isSelected()) {
+                removeMovieFavBtn.setVisible(true);
+                removeMovie.setVisible(false);
+                addMovieToFav.setVisible(false);
+                movieSort.setVisible(false);
+
+            } else {
+                removeMovieFavBtn.setVisible(false);
+                removeMovie.setVisible(true);
+                addMovieToFav.setVisible(true);
+                movieSort.setVisible(true);
+            }
         });
 
         // Initialize locked Panes
@@ -1254,12 +1306,12 @@ public class BookmarkController {
             }
         });
     }
-    public void callRecommendation(){ //fro books
+    public void callRecommendation() { //fro books
         recommendation reco = new recommendation();
         reco.getBookRecommendation(this.bookPortfolio.getSavedBooks()); // or getFavouriteBooks()
         reco.getMovieRecommendation(this.moviePortfolio.getSavedMovies());
-
-
     }
+
+
 
 }
