@@ -7,6 +7,8 @@ import home.yorku.bookmarks.controller.search.MovieSearchManager;
 import home.yorku.bookmarks.controller.sorting.AlphaSort;
 import home.yorku.bookmarks.model.*;
 import javafx.animation.PauseTransition;
+//import javafx.event.Event;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -115,6 +117,14 @@ public class BookmarkController {
     private boolean logout = false;
     private String myList = "";
     private String upNext = "";
+
+    @FXML
+    private Button removeBookFavBtn;
+
+    @FXML
+    private Button removeMovieFavBtn;
+
+    //private Tab Book;
 
     public BookmarkController() {
     }
@@ -1249,5 +1259,25 @@ public class BookmarkController {
             }
         });
     }
+
+   @FXML
+    private void onFavBookTabClicked(Event ev){
+        removeBookFavBtn.setVisible(true);
+    }
+
+   @FXML
+    private void onFavMovieTabClicked(Event ev){
+        removeMovieFavBtn.setVisible(true);
+    }
+
+   /* @FXML
+    private void onBookChange(Event ev){
+        removeBookFavBtn.setVisible(false);
+    }*/
+
+    /*@FXML
+    private void onMovieChange(Event ev){
+        removeMovieFavBtn.setVisible(false);
+    }*/
 
 }

@@ -29,7 +29,7 @@
         </AnchorPane>
     </Tab>
 
-    <Tab id="SearchPane" text="Search" style="-fx-background-color: magenta;">
+    <Tab id="SearchPane" text="Search" >
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="785.0" prefWidth="895.0" style="-fx-background-color: #7689ad;">
 
             <Label fx:id="ErrorChecking"/>
@@ -94,11 +94,11 @@
             <Label layoutX="400.0" layoutY="5.0" text="Books I've Read" textFill="white"/>
 
             <TabPane layoutX="310.0" layoutY="25.0" prefHeight="224.0" prefWidth="263.0">
-                <Tab text="Books" closable="false">
+                <Tab text="Books" closable="false" >
                     <ListView fx:id="ML_myBookList" layoutX="310.0" layoutY="25.0" prefHeight="224.0"
                               prefWidth="263.0"/>
                 </Tab>
-                <Tab text="Favorites" closable="false">
+                <Tab text="Favorites" closable="false" onSelectionChanged="#onFavBookTabClicked">
                     <ListView fx:id="favourite_books" layoutX="310.0" layoutY="25.0" prefHeight="224.0"
                               prefWidth="263.0"/>
                 </Tab>
@@ -108,8 +108,8 @@
                     onAction="#removeBook"/>
             <Button layoutX="405.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites"
                     onAction="#addBookToFavourites"/>
-            <Button layoutX="405.0" layoutY="300.0" mnemonicParsing="false" text="Remove From Favourites"
-                    onAction="#removeBookFromFavourites"/>
+            <Button fx:id="removeBookFavBtn" layoutX="405.0" layoutY="300.0" mnemonicParsing="false" text="Remove From Favourites"
+                    onAction="#removeBookFromFavourites" visible="false"/>
             <Button layoutX="522.0" layoutY="260.0" mnemonicParsing="false" text="Sort"
                     onAction="#sortAlphaBook"/>
 
@@ -120,7 +120,7 @@
                     <ListView fx:id="ML_myMovieList" layoutX="600.0" layoutY="25.0" prefHeight="224.0"
                               prefWidth="263.0"/>
                 </Tab>
-                <Tab text="Favorites" closable="false">
+                <Tab text="Favorites" closable="false" onSelectionChanged="#onFavMovieTabClicked">
                     <ListView fx:id="favourite_movies" layoutX="310.0" layoutY="25.0" prefHeight="224.0"
                               prefWidth="263.0"/>
                 </Tab>
@@ -130,8 +130,8 @@
                     onAction="#removeMovie"/>
             <Button layoutX="700.0" layoutY="260.0" mnemonicParsing="false" text="Add To Favourites"
                     onAction="#addMovieToFavourites"/>
-            <Button layoutX="700.0" layoutY="300.0" mnemonicParsing="false" text="Remove From Favourites"
-                    onAction="#removeMovieFromFavourites"/>
+            <Button fx:id="removeMovieFavBtn" layoutX="700.0" layoutY="300.0" mnemonicParsing="false" text="Remove From Favourites"
+                    onAction="#removeMovieFromFavourites" visible="false"/>
             <Button layoutX="816.0" layoutY="260.0" mnemonicParsing="false" text="Sort"
                     onAction="#sortAlphaMovie"/>
 
@@ -144,8 +144,9 @@
 
             <VBox fx:id="RecoBox">
 
-                <Label layoutX="24.0" layoutY="10.0" text="Your recommendations: " textFill="white"/>
-                <Button layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="78.0" mnemonicParsing="false" text="Refresh" />
+                <Label fx:id="recoTitle" layoutX="24.0" layoutY="10.0" text="Here are your recommendations: " textFill="Black"/>
+                <Label fx:id="recoDesc" layoutX="24.0" layoutY="10.0" text="Select Book or Movie to begin: " textFill="Black"/>
+
 
                 <ChoiceBox fx:id="sortReco" value="Sort by: " layoutX="125.0" layoutY="33.0" prefHeight="24.0" prefWidth="100.0">
                     <items>
@@ -158,6 +159,8 @@
                 </ChoiceBox>
 
                 <ListView fx:id="recommendation" layoutX="24.0" layoutY="85.0" prefHeight="284.0" prefWidth="554.0"/>
+
+                <Button layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="78.0" mnemonicParsing="false" text="Refresh" />
             </VBox>
         </AnchorPane>
     </Tab>

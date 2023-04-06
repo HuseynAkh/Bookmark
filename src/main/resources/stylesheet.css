@@ -47,6 +47,20 @@
     -fx-effect: dropshadow(gaussian , #2a2a2a, 6 , 0.2 , 10 , 5);
 }
 
+#recoTitle{
+    -fx-font-family: "Arial Narrow";
+    -fx-font-size: 20px;
+}
+
+#recoDesc{
+    -fx-font-family: "Arial Narrow";
+    -fx-font-size: 14px;
+}
+
+#recommendation{
+    -fx-border-radius: 10%;
+}
+
 #CreateAccount{
     -fx-text-fill: black;
     -fx-background-color: darkgray;
