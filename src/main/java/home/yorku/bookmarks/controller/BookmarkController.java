@@ -1,6 +1,7 @@
 package home.yorku.bookmarks.controller;
 
 import home.yorku.bookmarks.controller.database.ConnectionMethods;
+import home.yorku.bookmarks.controller.recommendation.recommendation;
 import home.yorku.bookmarks.controller.search.BookSearchManager;
 import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
 import home.yorku.bookmarks.controller.search.MovieSearchManager;
@@ -1252,6 +1253,13 @@ public class BookmarkController {
 
             }
         });
+    }
+    public void callRecommendation(){ //fro books
+        recommendation reco = new recommendation();
+        reco.getBookRecommendation(this.bookPortfolio.getSavedBooks()); // or getFavouriteBooks()
+        reco.getMovieRecommendation(this.moviePortfolio.getSavedMovies());
+
+
     }
 
 }

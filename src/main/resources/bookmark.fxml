@@ -160,7 +160,7 @@
 
                 <ListView fx:id="recommendation" layoutX="24.0" layoutY="85.0" prefHeight="284.0" prefWidth="554.0"/>
 
-                <Button layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="78.0" mnemonicParsing="false" text="Refresh" />
+                <Button layoutX="24.0" layoutY="33.0" prefHeight="24.0" prefWidth="78.0" mnemonicParsing="false" text="Refresh" onAction="#callRecommendation" />
             </VBox>
         </AnchorPane>
     </Tab>
