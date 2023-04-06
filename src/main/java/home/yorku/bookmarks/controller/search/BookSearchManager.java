@@ -23,7 +23,7 @@ public class BookSearchManager {
 
     SearchStrategyIF searchStrategy = null;
 
-    public Set searchBook (SearchCriteria searchCriteria){
+    public Set<Book> searchBook (SearchCriteria searchCriteria){
         Set<Book> books = new HashSet<Book>();
         URL url = null;
         //OPTION-1: instantiating the relevant search strategy using Factory pattern
