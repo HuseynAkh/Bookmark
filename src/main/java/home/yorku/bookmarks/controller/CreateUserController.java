@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class CreateUserController {
-
     @FXML
     private AnchorPane anchorPane;
     @FXML
