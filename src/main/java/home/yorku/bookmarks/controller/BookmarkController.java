@@ -1,6 +1,7 @@
 package home.yorku.bookmarks.controller;
 
 import home.yorku.bookmarks.controller.database.ConnectionMethods;
+import home.yorku.bookmarks.controller.DatabaseController;
 import home.yorku.bookmarks.controller.recommendation.recommendation;
 import home.yorku.bookmarks.controller.search.BookSearchManager;
 import home.yorku.bookmarks.controller.search.CoverUrlExtractor;
@@ -101,7 +102,6 @@ public class BookmarkController {
     @FXML
     private ListView<String> recommendation;
     private ObservableList<String> recos = FXCollections.observableArrayList();
-
     @FXML
     private ImageView coverImageView;
     @FXML
@@ -116,10 +116,7 @@ public class BookmarkController {
     private Label description;
     private Set<Book> BookSet;
     private Set<Movie> MovieSet;
-    private final ArrayList<BookToPortfolio> removeBooks = new ArrayList<BookToPortfolio>();
-    private ArrayList<MovieToPortfolio> removeMovies = new ArrayList<MovieToPortfolio>();
-    private BookPortfolio bookPortfolio;
-    private MoviePortfolio moviePortfolio;
+
     private double sceneHeight;
     private double sceneWidth;
     private boolean logout = false;
@@ -148,9 +145,12 @@ public class BookmarkController {
     @FXML
     private Button movieSort;
 
-    //private Tab Book;
+    private PortfolioController portfolio;
+    private DatabaseController database;
 
     public BookmarkController() {
+        portfolio = new PortfolioController(this);
+        database = new DatabaseController(this, portfolio);
     }
 
     // Initializes all listviews, dynamic buttons, tab views on login,
@@ -159,8 +159,8 @@ public class BookmarkController {
     @FXML
     private void initialize() {
         // Initialize portfolios
-        bookPortfolio = new BookPortfolio();
-        moviePortfolio = new MoviePortfolio();
+        // bookPortfolio = new BookPortfolio();
+       // moviePortfolio = new MoviePortfolio();
         // Initialize the list when null
         myBookList.setItems(bookList);
         recommendation.setItems(recos);
@@ -584,55 +584,6 @@ public class BookmarkController {
 
     }
 
-    // Used to connect to the database and update the listViews for "my book list" in the "MyList" tab
-    // it also updates the book portfolio whenever a user adds/deletes or moves a book to/from the favourite's tab
-    private void updateBookList(ConnectionMethods method) {
-
-        Set<BookToPortfolio> localBookSet = new HashSet<BookToPortfolio>();
-
-        this.bookPortfolio.getSavedBooks().clear();
-        this.bookPortfolio.getFavouriteBooks().clear();
-
-        localBookSet = method.pullBooks(validUserId);
-
-        for (BookToPortfolio b : localBookSet) {
-
-            if (b.getPbIsFavourite() == 1) {
-                this.bookPortfolio.AddToFavourites(b);
-            } else {
-                this.bookPortfolio.AddToSavedBooks(b);
-            }
-
-        }
-
-        displayBooks();
-    }
-
-    // Used to connect to the database and update the listViews for "my movie list" in the "MyList" tab
-    // it also updates the movie portfolio whenever a user adds/deletes or moves a movie to/from the favourite's tab
-    private void updateMovieList(ConnectionMethods method) {
-
-        Set<MovieToPortfolio> localMovieSet = new HashSet<MovieToPortfolio>();
-
-        this.moviePortfolio.getSavedMovies().clear();
-        this.moviePortfolio.getFavouriteMovies().clear();
-
-        localMovieSet = method.pullMovies(validUserId);
-
-        for (MovieToPortfolio m : localMovieSet) {
-
-            if (m.getPmIsFavourite() == 1) {
-                this.moviePortfolio.AddToFavourites(m);
-            } else {
-                this.moviePortfolio.AddToSavedMovies(m);
-
-            }
-
-        }
-
-        displayMovies();
-    }
-
     // Used to connect to the database and update the listViews for "my future list" in the "MyList" tab
     // it updates the list whenever a user adds/deletes movie/book to/from the list
     private void updateFutureList(ConnectionMethods method) {
@@ -643,20 +594,20 @@ public class BookmarkController {
     }
 
     @FXML
-    private void displayBooks() {
+    public void displayBooks() {
 
         bookList.clear();
         MLbookList.clear();
         MLfavBooks.clear();
 
-        for (BookToPortfolio b : this.bookPortfolio.getSavedBooks()) {
+        for (BookToPortfolio b : portfolio.getSavedBookList()) {
 
             MLbookList.add(b.getPbTitle());
             bookList.add(b.getPbTitle());
 
         }
 
-        for (BookToPortfolio b : this.bookPortfolio.getFavouriteBooks()) {
+        for (BookToPortfolio b : portfolio.getFavouriteBookList()) {
 
             MLfavBooks.add(b.getPbTitle());
             bookList.add("*" + b.getPbTitle());
@@ -670,20 +621,20 @@ public class BookmarkController {
     }
 
     @FXML
-    private void displayMovies() {
+    public void displayMovies() {
 
         movieList.clear();
         MLmovieList.clear();
         MLfavMovies.clear();
 
-        for (MovieToPortfolio m : this.moviePortfolio.getSavedMovies()) {
+        for (MovieToPortfolio m : portfolio.getSavedMovieList()) {
 
             MLmovieList.add(m.getPmTitle());
             movieList.add(m.getPmTitle());
 
         }
 
-        for (MovieToPortfolio m : this.moviePortfolio.getFavouriteMovies()) {
+        for (MovieToPortfolio m : portfolio.getFavouriteMovieList()) {
 
             MLfavMovies.add(m.getPmTitle());
             movieList.add("*" + m.getPmTitle());
@@ -693,178 +644,6 @@ public class BookmarkController {
         alphaSort(myMovieList, movieList);
         ML_myMovieList.setItems(MLmovieList);
         favourite_movies.setItems(MLfavMovies);
-
-    }
-
-    private void compareBooks(ArrayList<String> bookIds, BookToPortfolio b, ConnectionMethods method) {
-
-        String isbn = b.getPbIsbn();
-
-        if (bookIds.contains(isbn)) {
-
-            if (b.getPbIsFavourite() == 0) {
-                method.removeFavouriteBook(b.getPbIsbn(), b.getPbUsername());
-            } else {
-                method.addFavouriteBook(b.getPbIsbn(), b.getPbUsername());
-            }
-
-            return;
-        }
-
-        method.insertBook(b.getPbIsbn(), b.getPbUsername(), b.getPbIdentifier(), b.getPbTitle(), b.getPbAuthor().toString(), b.getPbIsFavourite());
-
-    }
-
-    private void compareMovies(ArrayList<Long> movieIds, MovieToPortfolio m, ConnectionMethods method) {
-
-        Long id = m.getPmId();
-        ArrayList<Long> genre = new ArrayList<>(m.getGenre());
-        String genreString =  String.join(",", genre.stream().map(String::valueOf).collect(Collectors.toList()));
-
-        if (movieIds.contains(id)) {
-
-            if (m.getPmIsFavourite() == 0) {
-                method.removeFavouriteMovie(m.getPmId(), m.getPmUsername());
-            } else {
-                method.addFavouriteMovie(m.getPmId(), m.getPmUsername());
-            }
-
-            return;
-        }
-
-        method.insertMovie(m.getPmId(), m.getPmUsername(), genreString, m.getPmIdentifier(), m.getPmTitle(), m.getPmReleaseDate(), m.getPmDescription(), m.getPmIsFavourite());
-
-    }
-
-    private void sendToDatabase(ConnectionMethods method) {
-
-        ArrayList<String> bookIds = method.pullBookIds(validUserId);
-        ArrayList<Long> movieIds = method.pullMovieIds(validUserId);
-
-        for (BookToPortfolio b : removeBooks) {
-
-            for (String id : bookIds) {
-                if (id.equals(b.getPbIsbn())) {
-                    method.removeBook(b.getPbIsbn(), b.getPbUsername());
-                }
-            }
-
-        }
-
-        for (MovieToPortfolio m : removeMovies) {
-
-            for (Long id : movieIds) {
-                if (id.equals(m.getPmId())) {
-                    method.removeMovie(m.getPmId(), m.getPmUsername());
-                }
-            }
-
-        }
-
-        for (BookToPortfolio b : this.bookPortfolio.getSavedBooks()) {
-            compareBooks(bookIds, b, method);
-        }
-
-        for (BookToPortfolio b : this.bookPortfolio.getFavouriteBooks()) {
-            compareBooks(bookIds, b, method);
-        }
-
-        for (MovieToPortfolio m : this.moviePortfolio.getSavedMovies()) {
-            compareMovies(movieIds, m, method);
-        }
-
-        for (MovieToPortfolio m : this.moviePortfolio.getFavouriteMovies()) {
-            compareMovies(movieIds, m, method);
-        }
-
-        method.closeConnection();
-    }
-
-    private void updateBookPortfolio(BookToPortfolio book, String update) {
-
-        switch (update) {
-            case "AddToSavedBooks": {
-
-                if (this.bookPortfolio.getSavedBooks().stream().anyMatch(b -> b.getPbIsbn().equals(book.getPbIsbn()))) {
-                    System.out.println("Book is already in your saved");
-                } else {
-                    this.bookPortfolio.AddToSavedBooks(book);
-                    displayBooks();
-                }
-
-                break;
-            }
-            case "RemoveFromSavedBooks": {
-
-                removeBooks.add(book);
-                this.bookPortfolio.RemoveFromSavedBooks(book);
-                displayBooks();
-
-                break;
-            }
-            case "AddToFavouriteBooks": {
-
-                book.setPbIsFavourite(1);
-                this.bookPortfolio.AddToFavourites(book);
-                this.bookPortfolio.RemoveFromSavedBooks(book);
-                displayBooks();
-
-                break;
-            }
-            case "RemoveFromFavouriteBooks": {
-
-                book.setPbIsFavourite(0);
-                this.bookPortfolio.AddToSavedBooks(book);
-                this.bookPortfolio.RemoveFromFavouriteBooks(book);
-                displayBooks();
-
-                break;
-            }
-        }
-
-    }
-
-    private void updateMoviePortfolio(MovieToPortfolio movie, String update) {
-
-        switch (update) {
-            case "AddToSavedMovies": {
-
-                if (this.moviePortfolio.getSavedMovies().stream().anyMatch(m -> m.getPmId().equals(movie.getPmId()))) {
-                    System.out.println("Movie is already in your saved");
-                } else {
-                    this.moviePortfolio.AddToSavedMovies(movie);
-                    displayMovies();
-                }
-
-                break;
-            }
-            case "RemoveFromSavedMovies": {
-
-                removeMovies.add(movie);
-                this.moviePortfolio.RemoveFromSavedMovies(movie);
-                displayMovies();
-
-                break;
-            }
-            case "AddToFavouriteMovies": {
-
-                movie.setPmIsFavourite(1);
-                this.moviePortfolio.AddToFavourites(movie);
-                this.moviePortfolio.RemoveFromSavedMovies(movie);
-                displayMovies();
-
-                break;
-            }
-            case "RemoveFromFavouriteMovies": {
-
-                movie.setPmIsFavourite(0);
-                this.moviePortfolio.AddToSavedMovies(movie);
-                this.moviePortfolio.RemoveFromFavouriteMovies(movie);
-                displayMovies();
-
-                break;
-            }
-        }
 
     }
 
@@ -881,7 +660,7 @@ public class BookmarkController {
                 if (i == listViewIndex) {
 
                     BookToPortfolio book = new BookToPortfolio(b.getIsbn(), validUserId, b.getIdentifier(), b.getTitle(), b.getAuthor(), 0);
-                    updateBookPortfolio(book, "AddToSavedBooks");
+                    portfolio.updateBookPortfolio(book, "AddToSavedBooks");
 
                 }
                 i++;
@@ -894,7 +673,7 @@ public class BookmarkController {
                 if (i == listViewIndex) {
 
                     MovieToPortfolio movie = new MovieToPortfolio(m.getId(), validUserId, m.getGenre(), m.getIdentifier(), m.getTitle(), m.getReleaseDate(), m.getOverview(), 0);
-                    updateMoviePortfolio(movie, "AddToSavedMovies");
+                    portfolio.updateMoviePortfolio(movie, "AddToSavedMovies");
                 }
                 i++;
             }
@@ -954,11 +733,11 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for (BookToPortfolio b : this.bookPortfolio.getSavedBooks()) {
+        for (BookToPortfolio b : portfolio.getSavedBookList()) {
 
             if (i == selectedIndex) {
 
-                updateBookPortfolio(b, "AddToFavouriteBooks");
+                portfolio.updateBookPortfolio(b, "AddToFavouriteBooks");
                 return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
 
             }
@@ -981,11 +760,11 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for (BookToPortfolio b : this.bookPortfolio.getFavouriteBooks()) {
+        for (BookToPortfolio b : portfolio.getFavouriteBookList()) {
 
             if (i == selectedIndex) {
 
-                updateBookPortfolio(b, "RemoveFromFavouriteBooks");
+                portfolio.updateBookPortfolio(b, "RemoveFromFavouriteBooks");
                 return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
 
             }
@@ -1008,11 +787,11 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for (BookToPortfolio b : this.bookPortfolio.getSavedBooks()) {
+        for (BookToPortfolio b : portfolio.getSavedBookList()) {
 
             if (i == selectedIndex) {
 
-                updateBookPortfolio(b, "RemoveFromSavedBooks");
+                portfolio.updateBookPortfolio(b, "RemoveFromSavedBooks");
                 return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
 
             }
@@ -1035,12 +814,12 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for (MovieToPortfolio m : this.moviePortfolio.getSavedMovies()) {
+        for (MovieToPortfolio m : portfolio.getSavedMovieList()) {
 
             if (i == selectedIndex) {
 
                 System.out.println(m.getGenre());
-                updateMoviePortfolio(m, "AddToFavouriteMovies");
+                portfolio.updateMoviePortfolio(m, "AddToFavouriteMovies");
                 return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
             }
             i++;
@@ -1061,10 +840,10 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for (MovieToPortfolio m : this.moviePortfolio.getFavouriteMovies()) {
+        for (MovieToPortfolio m : portfolio.getFavouriteMovieList()) {
 
             if (i == selectedIndex) {
-                updateMoviePortfolio(m, "RemoveFromFavouriteMovies");
+                portfolio.updateMoviePortfolio(m, "RemoveFromFavouriteMovies");
                 return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
             }
 
@@ -1085,11 +864,11 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for (MovieToPortfolio m : this.moviePortfolio.getSavedMovies()) {
+        for (MovieToPortfolio m : portfolio.getSavedMovieList()) {
 
             if (i == selectedIndex) {
 
-                updateMoviePortfolio(m, "RemoveFromSavedMovies");
+                portfolio.updateMoviePortfolio(m, "RemoveFromSavedMovies");
                 return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
             }
 
@@ -1122,13 +901,7 @@ public class BookmarkController {
     @FXML
     private void sortAlphaBook() {
 
-        this.bookPortfolio.getSavedBooks().sort(new Comparator<BookToPortfolio>() {
-            @Override
-            public int compare(BookToPortfolio b1, BookToPortfolio b2) {
-                return b1.getPbTitle().compareTo(b2.getPbTitle());
-            }
-        });
-
+        portfolio.movieSort();
         alphaSort(ML_myBookList, MLbookList);
     }
 
@@ -1137,14 +910,7 @@ public class BookmarkController {
     // so that the references to unique Ids remain intact
     @FXML
     private void sortAlphaMovie() {
-        this.moviePortfolio.getSavedMovies().sort(new Comparator<MovieToPortfolio>() {
-            @Override
-            public int compare(MovieToPortfolio m1, MovieToPortfolio m2) {
-                return m1.getPmTitle().compareTo(m2.getPmTitle());
-            }
-
-        });
-
+        portfolio.bookSort();
         alphaSort(ML_myMovieList, MLmovieList);
     }
 
@@ -1163,14 +929,7 @@ public class BookmarkController {
 
     private void onLogin() {
 
-        ConnectionMethods method = new ConnectionMethods();
-
-        method.userLogin(validUserId, "Login");
-        updateBookList(method);
-        updateMovieList(method);
-        updateFutureList(method);
-
-        method.closeConnection();
+        database.onLogin(validUserId);
 
     }
 
@@ -1264,21 +1023,18 @@ public class BookmarkController {
         method.userLogin(validUserId, "Logout");
 
         clearSet();
-        sendToDatabase(method);
         clearDescription();
         validUserId = "";
         searchText.clear();
-        removeBooks.clear();
         usernameTxt.clear();
         passwordTxt.clear();
         ErrorChecking.setText("");
         searchType.setValue("Type");
         myListView.getItems().clear();
         searchBy.setValue("Search by");
-        this.bookPortfolio.getSavedBooks().clear();
-        this.bookPortfolio.getFavouriteBooks().clear();
-        this.moviePortfolio.getSavedMovies().clear();
-        this.moviePortfolio.getFavouriteMovies().clear();
+        database.sendToDatabase(validUserId);
+        portfolio.clearBookPortfolio();
+        portfolio.clearMoviePortfolio();
 
     }
 
@@ -1319,8 +1075,8 @@ public class BookmarkController {
         recommendation.getItems().clear();
 
         recommendation reco = new recommendation();
-        Set<Book> recommendedBooks = reco.getBookRecommendation(this.bookPortfolio.getSavedBooks()); // or getFavouriteBooks()
-        Set<Movie> recommendedMovies = reco.getMovieRecommendation(this.moviePortfolio.getSavedMovies());
+        Set<Book> recommendedBooks = reco.getBookRecommendation(portfolio.getSavedBookList()); // or getFavouriteBooks()
+        Set<Movie> recommendedMovies = reco.getMovieRecommendation(portfolio.getSavedMovieList());
 
         for(Book b : recommendedBooks) {
             String bookInfo = b.getTitle() + " by " + b.getAuthor() + " || Type: " + b.getIdentifier();
