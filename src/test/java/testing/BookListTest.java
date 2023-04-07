@@ -10,11 +10,12 @@ import org.junit.jupiter.api.Assertions;
 
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class BookListTest {
 
-   /* @Test
+    @Test
     public void bookListTest() throws Exception {
         SearchCriteria sc = new SearchCriteria(
                 BookmarkConstants.TYPE_BOOK,
@@ -23,17 +24,11 @@ public class BookListTest {
 
         BookSearchManager bookSearch = new BookSearchManager();
         PortfolioController pc = new PortfolioController(new BookmarkController());
-        Method method = PortfolioController.class.getDeclaredMethod("updateBookPortfolio");
+        Method method = PortfolioController.class.getDeclaredMethod("updateBookPortfolio", BookToPortfolio.class, String.class);
         method.setAccessible(true);
+        //method.invoke(pc,book, "AddToSavedBooks");
 
-        Set<Book> BookSet = bookSearch.searchBook(sc);
-
-        for(Book b : BookSet) {
-            BookToPortfolio book = new BookToPortfolio(b.getIsbn(), "admin", b.getIdentifier(), b.getTitle(), b.getAuthor(), 0);
-            method.invoke(pc,book, "AddToSavedBooks");
-
-        }
     }
 
-     */
+
 }
