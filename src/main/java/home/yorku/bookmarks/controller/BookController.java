@@ -1,22 +1,29 @@
 package home.yorku.bookmarks.controller;
 import home.yorku.bookmarks.model.Book;
 import home.yorku.bookmarks.model.Movie;
+import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
 import java.util.Set;
 
-public class BookController extends MediaController {
+public class BookController {
 
-    public BookController(Set<Book> books, Set<Movie> movies, ListView<String> listView) {
-        super(books, movies, listView);
+    private Set<Book> books;
+    @FXML
+    private ListView<String> listView;
+
+    protected BookController(Set<Book> books, ListView<String> listView) {
+        this.books = books;
+        this.listView = listView;
     }
 
-    @Override
     protected void display() {
-        myListView.getItems().clear();
+        listView.getItems().clear();
+
         for (Book book : books) {
 
             String author = book.getAuthor().toString();
+            author = author.substring(1, author.length() - 1);
             String title = book.getTitle();
 
             if (author.length() > 30) {
@@ -27,8 +34,9 @@ public class BookController extends MediaController {
                 title = title.substring(0, 38) + "..."; // truncate to 30 characters
             }
 
-            myListView.getItems().add(title + " | | " + "Author: " + author);
+            listView.getItems().add(title + " || Author(s): " + author);
         }
+
     }
 
 

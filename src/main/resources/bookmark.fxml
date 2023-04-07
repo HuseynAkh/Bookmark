@@ -151,8 +151,8 @@
                 <ChoiceBox fx:id="sortReco" value="Sort by: " layoutX="125.0" layoutY="33.0" prefHeight="24.0" prefWidth="100.0" onAction="#recoSort">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                           <!-- <String fx:value="Book"/>
-                            <String fx:value="Movie"/> -->
+                            <String fx:value="Books"/>
+                            <String fx:value="Movies"/>
                             <String fx:value="Alphabetical"/>
                         </FXCollections>
                     </items>

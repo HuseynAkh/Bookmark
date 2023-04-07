@@ -202,7 +202,7 @@ public class BookmarkController {
 
                     MovieSearchManager search = new MovieSearchManager();
                     MovieSet = search.searchMovie(searchCriteria);
-                    MovieController movieController = new MovieController(BookSet, MovieSet, myListView);
+                    MovieController movieController = new MovieController(MovieSet, myListView);
                     movieController.display();
 
                     break;
@@ -217,7 +217,7 @@ public class BookmarkController {
 
                     MovieSearchManager search = new MovieSearchManager();
                     MovieSet = search.searchMovie(searchCriteria);
-                    MovieController movieController = new MovieController(BookSet, MovieSet, myListView);
+                    MovieController movieController = new MovieController(MovieSet, myListView);
                     movieController.display();
 
                     break;
@@ -245,7 +245,7 @@ public class BookmarkController {
                     BookSearchManager bookSearch = new BookSearchManager();
                     BookSet = bookSearch.searchBook(searchCriteria);
 
-                    BookController bookController = new BookController(BookSet, MovieSet, myListView);
+                    BookController bookController = new BookController(BookSet, myListView);
                     bookController.display();
 
                     break;
@@ -260,7 +260,7 @@ public class BookmarkController {
                     BookSearchManager bookSearch = new BookSearchManager();
                     BookSet = bookSearch.searchBook(searchCriteria);
 
-                    BookController bookController = new BookController(BookSet, MovieSet, myListView);
+                    BookController bookController = new BookController(BookSet, myListView);
                     bookController.display();
 
                     break;
@@ -275,7 +275,7 @@ public class BookmarkController {
                     BookSearchManager bookSearch = new BookSearchManager();
                     BookSet = bookSearch.searchBook(searchCriteria);
 
-                    BookController bookController = new BookController(BookSet, MovieSet, myListView);
+                    BookController bookController = new BookController(BookSet, myListView);
                     bookController.display();
 
                     break;
@@ -416,22 +416,13 @@ public class BookmarkController {
     public void callRecommendation() { // from books
 
         recommendation.getItems().clear();
-
         recommendation reco = new recommendation();
         Set<Book> recommendedBooks = reco.getBookRecommendation(portfolio.getSavedBookList()); // or getFavouriteBooks()
         Set<Movie> recommendedMovies = reco.getMovieRecommendation(portfolio.getSavedMovieList());
 
-        for(Book b : recommendedBooks) {
-            String bookInfo = b.getTitle() + " by " + b.getAuthor() + " || Type: " + b.getIdentifier();
-            recos.add(bookInfo);
-        }
+        RecoController recoList = new RecoController(recommendedBooks, recommendedMovies, recommendation, recos);
+        recoList.display();
 
-        for(Movie m : recommendedMovies) {
-            String movieInfo = m.getTitle() + " released: " + m.getReleaseDate() + " || Type: " + m.getIdentifier();
-            recos.add(movieInfo);
-        }
-
-        recommendation.setItems(recos);
     }
 
 
@@ -790,11 +781,49 @@ public class BookmarkController {
         list.getItems().addAll(arrayList);
     }
 
+    private void bookSort(ListView<String> list, ObservableList<String> items) {
+
+        ArrayList<String> arrayList = new ArrayList<>(list.getItems());
+        arrayList.sort((s1, s2) -> {
+            if (s1.contains("Book") && !s2.contains("Book")) {
+                return -1;
+            } else if (!s1.contains("Book") && s2.contains("Book")) {
+                return 1;
+            } else {
+                return s1.compareToIgnoreCase(s2);
+            }
+        });
+
+        list.getItems().removeAll(items);
+        list.getItems().addAll(arrayList);
+    }
+
+    private void movieSort(ListView<String> list, ObservableList<String> items) {
+
+        ArrayList<String> arrayList = new ArrayList<>(list.getItems());
+        arrayList.sort((s1, s2) -> {
+            if (s1.contains("Movie") && !s2.contains("Movie")) {
+                return -1;
+            } else if (!s1.contains("Movie") && s2.contains("Movie")) {
+                return 1;
+            } else {
+                return s1.compareToIgnoreCase(s2);
+            }
+        });
+
+        list.getItems().removeAll(items);
+        list.getItems().addAll(arrayList);
+    }
+
     @FXML
     private void recoSort(){
 
         if(sortReco.getValue().equals("Alphabetical")){
             alphaSort(recommendation, recos);
+        } else if(sortReco.getValue().equals("Books")){
+            bookSort(recommendation, recos);
+        } else {
+            movieSort(recommendation, recos);
         }
 
     }
