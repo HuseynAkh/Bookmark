@@ -17,7 +17,7 @@ public class DatabaseController {
 
     private Set<BookCheck> booksToCheck;
     private Set<MovieCheck> moviesToCheck;
-    protected DatabaseController(BookmarkController bookmark, PortfolioController portfolio){
+    public DatabaseController(BookmarkController bookmark, PortfolioController portfolio){
 
         this.bookmark = bookmark;
         this.portfolio = portfolio;

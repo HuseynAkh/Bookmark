@@ -145,13 +145,17 @@ public class BookmarkController {
     private DatabaseController database;
     private InitController initialize;
     private LoginController login;
+    private SortController sort;
 
     public BookmarkController() {
+
         description = new DecsriptionController(this);
         portfolio = new PortfolioController(this);
         initialize = new InitController(this);
         login = new LoginController(this);
+        sort = new SortController(this);
         database = new DatabaseController(this, portfolio);
+
     }
 
     // Initializes all listviews, dynamic buttons, tab views on login,
@@ -161,9 +165,6 @@ public class BookmarkController {
     private void initialize() {
         initialize.initialize();
     }
-
-    // function to disable tabPanes on login/logout
-
 
     // Used to clear the observable Book and Movie set returned from the search
     // Is used when the user starts a new search
@@ -296,35 +297,6 @@ public class BookmarkController {
 
     }
 
-    // Responsible for getting the type "Book" or "Movie" of the selected item (from the user)
-    // Is used to determine which list to add the selected item to "My Book/Movie list"
-    protected String getType(int selectedIndex) {
-
-        String type = "";
-
-        if (MovieSet != null) {
-            int i = 0;
-            for (Movie m : MovieSet) {
-                if (i == selectedIndex) {
-                    type = m.getIdentifier();
-                }
-                i++;
-            }
-        }
-
-        if (BookSet != null) {
-            int i = 0;
-            for (Book b : BookSet) {
-                if (i == selectedIndex) {
-                    type = b.getIdentifier();
-                }
-                i++;
-            }
-        }
-
-        return type;
-    }
-
     // Responsible for the "Save to:" dropdown button which adds Books or Movies to the respective
     // My Book/Movie list OR Future Book/Movie list
     @FXML
@@ -401,6 +373,35 @@ public class BookmarkController {
         });
     }
 
+    // Responsible for getting the type "Book" or "Movie" of the selected item (from the user)
+    // Is used to determine which list to add the selected item to "My Book/Movie list"
+    protected String getType(int selectedIndex) {
+
+        String type = "";
+
+        if (MovieSet != null) {
+            int i = 0;
+            for (Movie m : MovieSet) {
+                if (i == selectedIndex) {
+                    type = m.getIdentifier();
+                }
+                i++;
+            }
+        }
+
+        if (BookSet != null) {
+            int i = 0;
+            for (Book b : BookSet) {
+                if (i == selectedIndex) {
+                    type = b.getIdentifier();
+                }
+                i++;
+            }
+        }
+
+        return type;
+    }
+
     // Updates the description view box with the description of the movie
     // If the selection is a book it will load the cover image of the book
     @FXML
@@ -415,6 +416,7 @@ public class BookmarkController {
 
     public void callRecommendation() { // from books
 
+        sortReco.setValue("Sort by: ");
         recommendation.getItems().clear();
         recommendation reco = new recommendation();
         Set<Book> recommendedBooks = reco.getBookRecommendation(portfolio.getSavedBookList()); // or getFavouriteBooks()
@@ -425,17 +427,8 @@ public class BookmarkController {
 
     }
 
-
-
-    // Used to connect to the database and update the listViews for "my future list" in the "MyList" tab
-    // it updates the list whenever a user adds/deletes movie/book to/from the list
-    private void updateFutureList(ConnectionMethods method) {
-
-        futureList = FXCollections.observableList(method.pullFutureList(validUserId));
-        upNextList.setItems(futureList);
-
-    }
-
+    // Used to display what's in the book portfolio to the user
+    // is called when a user updates (adds, removes, favourite's) a book
     @FXML
     protected void displayBooks() {
 
@@ -457,12 +450,14 @@ public class BookmarkController {
 
         }
 
-        alphaSort(myBookList, bookList);
+        sort.alphaSort(myBookList, bookList);
         ML_myBookList.setItems(MLbookList);
         favourite_books.setItems(MLfavBooks);
 
     }
 
+    // Used to display what's in the movie portfolio to the user
+    // is called when a user updates (adds, removes, favourite's) a movie
     @FXML
     protected void displayMovies() {
 
@@ -484,9 +479,18 @@ public class BookmarkController {
 
         }
 
-        alphaSort(myMovieList, movieList);
+        sort.alphaSort(myMovieList, movieList);
         ML_myMovieList.setItems(MLmovieList);
         favourite_movies.setItems(MLfavMovies);
+
+    }
+
+    // Used to connect to the database and update the listViews for "my future list" in the "MyList" tab
+    // it updates the list whenever a user adds/deletes movie/book to/from the list
+    private void updateFutureList(ConnectionMethods method) {
+
+        futureList = FXCollections.observableList(method.pullFutureList(validUserId));
+        upNextList.setItems(futureList);
 
     }
 
@@ -540,18 +544,6 @@ public class BookmarkController {
             for (Book b : BookSet) {
                 if (i == listViewIndex) {
 
-                    //Check if the book is already in the "My watched list"
-                    /*boolean isDuplicate = portfolio.getSavedBookList()
-                            .stream()
-                            .anyMatch(book -> book.getPbIsbn().equals(b.getIsbn()));
-
-                    if(isDuplicate){
-
-                        method.removeBook(b.getIsbn(), validUserId);
-                    }
-
-                     */
-
                     method.insertFutureList(b.getIsbn(), 0L, validUserId, b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), null, null);
                 }
                 i++;
@@ -593,7 +585,7 @@ public class BookmarkController {
             if (i == selectedIndex) {
 
                 portfolio.updateBookPortfolio(b, "AddToFavouriteBooks");
-                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+                return; // Once found exit the loop otherwise thread is Concurrently modifying the list
 
             }
 
@@ -620,7 +612,7 @@ public class BookmarkController {
             if (i == selectedIndex) {
 
                 portfolio.updateBookPortfolio(b, "RemoveFromFavouriteBooks");
-                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+                return; // Once found exit the loop otherwise thread is Concurrently modifying the list
 
             }
 
@@ -647,7 +639,7 @@ public class BookmarkController {
             if (i == selectedIndex) {
 
                 portfolio.updateBookPortfolio(b, "RemoveFromSavedBooks");
-                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+                return; // Once found exit the loop otherwise thread is Concurrently modifying the list
 
             }
 
@@ -675,7 +667,7 @@ public class BookmarkController {
 
                 System.out.println(m.getGenre());
                 portfolio.updateMoviePortfolio(m, "AddToFavouriteMovies");
-                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+                return; // Once found exit the loop otherwise thread is Concurrently modifying the list
             }
             i++;
 
@@ -699,7 +691,7 @@ public class BookmarkController {
 
             if (i == selectedIndex) {
                 portfolio.updateMoviePortfolio(m, "RemoveFromFavouriteMovies");
-                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+                return; // Once found exit the loop otherwise thread is Concurrently modifying the list
             }
 
             i++;
@@ -724,7 +716,7 @@ public class BookmarkController {
             if (i == selectedIndex) {
 
                 portfolio.updateMoviePortfolio(m, "RemoveFromSavedMovies");
-                return; // Once found exit the loop otherwise java.util.ConcurrentModificationException
+                return; // Once found exit the loop otherwise thread is Concurrently modifying the list
             }
 
             i++;
@@ -757,7 +749,7 @@ public class BookmarkController {
     private void sortAlphaBook() {
 
         portfolio.movieSort();
-        alphaSort(ML_myBookList, MLbookList);
+        sort.alphaSort(ML_myBookList, MLbookList);
     }
 
     // Responsible for sorting the visible Movie list alphabetically as well as the movie portfolio
@@ -765,65 +757,18 @@ public class BookmarkController {
     @FXML
     private void sortAlphaMovie() {
         portfolio.bookSort();
-        alphaSort(ML_myMovieList, MLmovieList);
-    }
-
-    // Responsible actually sorting all the visible Book/Movie lists by converting the observable list to an
-    // array list, sorting it using alphaSort. methods, the returning the sorted array as an observable array
-    private void alphaSort(ListView<String> list, ObservableList<String> items) {
-
-        AlphaSort alphaSort = new AlphaSort();
-
-        ArrayList<String> arrayList = new ArrayList<>(list.getItems());
-        arrayList = alphaSort.sortMovies(arrayList);
-
-        list.getItems().removeAll(items);
-        list.getItems().addAll(arrayList);
-    }
-
-    private void bookSort(ListView<String> list, ObservableList<String> items) {
-
-        ArrayList<String> arrayList = new ArrayList<>(list.getItems());
-        arrayList.sort((s1, s2) -> {
-            if (s1.contains("Book") && !s2.contains("Book")) {
-                return -1;
-            } else if (!s1.contains("Book") && s2.contains("Book")) {
-                return 1;
-            } else {
-                return s1.compareToIgnoreCase(s2);
-            }
-        });
-
-        list.getItems().removeAll(items);
-        list.getItems().addAll(arrayList);
-    }
-
-    private void movieSort(ListView<String> list, ObservableList<String> items) {
-
-        ArrayList<String> arrayList = new ArrayList<>(list.getItems());
-        arrayList.sort((s1, s2) -> {
-            if (s1.contains("Movie") && !s2.contains("Movie")) {
-                return -1;
-            } else if (!s1.contains("Movie") && s2.contains("Movie")) {
-                return 1;
-            } else {
-                return s1.compareToIgnoreCase(s2);
-            }
-        });
-
-        list.getItems().removeAll(items);
-        list.getItems().addAll(arrayList);
+        sort.alphaSort(ML_myMovieList, MLmovieList);
     }
 
     @FXML
     private void recoSort(){
 
         if(sortReco.getValue().equals("Alphabetical")){
-            alphaSort(recommendation, recos);
+            sort.alphaSort(recommendation, recos);
         } else if(sortReco.getValue().equals("Books")){
-            bookSort(recommendation, recos);
+            sort.bookSort(recommendation, recos);
         } else {
-            movieSort(recommendation, recos);
+            sort.movieSort(recommendation, recos);
         }
 
     }

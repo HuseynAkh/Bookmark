@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
+import java.util.Collections;
 import java.util.Set;
 
 public class RecoController {
@@ -16,7 +17,7 @@ public class RecoController {
     @FXML
     protected ListView<String> listView;
 
-    protected RecoController(Set<Book> books, Set<Movie> movies, ListView<String> listView, ObservableList<String> recos) {
+    public RecoController(Set<Book> books, Set<Movie> movies, ListView<String> listView, ObservableList<String> recos) {
         this.books = books;
         this.movies = movies;
         this.listView = listView;
@@ -59,6 +60,7 @@ public class RecoController {
             recos.add(title + " || relese date: " + releaseDate + " || " + type);
         }
 
+        Collections.shuffle(recos);
         listView.setItems(recos);
 
     }

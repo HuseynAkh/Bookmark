@@ -6,7 +6,7 @@ import javafx.scene.control.Tab;
 public class InitController {
 
     private BookmarkController bookmark;
-    protected InitController(BookmarkController bookmark){
+    public InitController(BookmarkController bookmark){
         this.bookmark = bookmark;
     }
     protected void initialize(){

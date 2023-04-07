@@ -15,7 +15,7 @@ public class PortfolioController {
     private ArrayList<BookToPortfolio> removeBooks = new ArrayList<BookToPortfolio>();
     private ArrayList<MovieToPortfolio> removeMovies = new ArrayList<MovieToPortfolio>();
 
-    protected PortfolioController(BookmarkController bookmark){
+    public PortfolioController(BookmarkController bookmark){
         this.bookmark = bookmark;
     }
     protected void updateBookPortfolio(BookToPortfolio book, String update) {
