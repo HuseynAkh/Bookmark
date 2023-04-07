@@ -549,6 +549,18 @@ public class BookmarkController {
             for (Book b : BookSet) {
                 if (i == listViewIndex) {
 
+                    //Check if the book is already in the "My watched list"
+                    /*boolean isDuplicate = portfolio.getSavedBookList()
+                            .stream()
+                            .anyMatch(book -> book.getPbIsbn().equals(b.getIsbn()));
+
+                    if(isDuplicate){
+
+                        method.removeBook(b.getIsbn(), validUserId);
+                    }
+
+                     */
+
                     method.insertFutureList(b.getIsbn(), 0L, validUserId, b.getIdentifier(), b.getTitle(), b.getAuthor().toString(), null, null);
                 }
                 i++;

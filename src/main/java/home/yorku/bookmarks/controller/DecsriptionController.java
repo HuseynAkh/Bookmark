@@ -51,11 +51,18 @@ public class DecsriptionController {
 
             int i = 0;
             for (Movie m : movieSet) {
+
                 if (i == index) {
                     bookmark.descLabel.setText("Description: ");
                     bookmark.descLabel.setPadding(new Insets(1, 1, 5, 5));
+
+                    if(m.getOverview() == null){
+                        bookmark.desc.setText("*There is no description for this movie*");
+                    } else {
+                        bookmark.desc.setText(m.getOverview());
+                    }
+
                     setDescription(m.getTitle(), m.getIdentifier(), "Release date: ", m.getReleaseDate());
-                    bookmark.desc.setText(m.getOverview());
                     bookmark.desc.setPadding(new Insets(5, 5, 5, 5));
                 }
                 i++;
