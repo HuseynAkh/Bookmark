@@ -567,6 +567,33 @@ public class BookmarkController {
         updateFutureList(method);
     }
 
+    // Responsible for removing a book from the "My Book List" by removing the book from the database using its
+    // unique id(isbn) then also calls the updateBooks() method to update the movies list seen by the user
+    @FXML
+    private void removeBook() {
+
+        int selectedIndex = ML_myBookList.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            System.out.println("No Selected Item");
+            return; // exit the method
+        }
+
+        int i = 0;
+        for (BookToPortfolio b : portfolio.getSavedBookList()) {
+
+            if (i == selectedIndex) {
+
+                portfolio.updateBookPortfolio(b, "RemoveFromSavedBooks");
+                return; // Once found exit the loop otherwise thread is Concurrently modifying the list
+
+            }
+
+            i++;
+        }
+
+    }
+
     // Responsible for adding a book to the favourites list by updating the is_favourite flag in the database
     // using method. calls, then also calls the updateBooks() method to update the books list seen by the user
     @FXML
@@ -621,12 +648,12 @@ public class BookmarkController {
 
     }
 
-    // Responsible for removing a book from the "My Book List" by removing the book from the database using its
-    // unique id(isbn) then also calls the updateBooks() method to update the movies list seen by the user
+    // Responsible for removing a movie from the "My Movie List" by removing the movie from the database using its
+    // unique id then also calls the updateMovies() method to update the movies list seen by the user
     @FXML
-    private void removeBook() {
+    private void removeMovie() {
 
-        int selectedIndex = ML_myBookList.getSelectionModel().getSelectedIndex();
+        int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex == -1) {
             System.out.println("No Selected Item");
@@ -634,18 +661,16 @@ public class BookmarkController {
         }
 
         int i = 0;
-        for (BookToPortfolio b : portfolio.getSavedBookList()) {
+        for (MovieToPortfolio m : portfolio.getSavedMovieList()) {
 
             if (i == selectedIndex) {
 
-                portfolio.updateBookPortfolio(b, "RemoveFromSavedBooks");
+                portfolio.updateMoviePortfolio(m, "RemoveFromSavedMovies");
                 return; // Once found exit the loop otherwise thread is Concurrently modifying the list
-
             }
 
             i++;
         }
-
     }
 
     // Responsible for adding a movie to the favourites list by updating the is_favourite flag in the database
@@ -698,31 +723,6 @@ public class BookmarkController {
         }
     }
 
-    // Responsible for removing a movie from the "My Movie List" by removing the movie from the database using its
-    // unique id then also calls the updateMovies() method to update the movies list seen by the user
-    @FXML
-    private void removeMovie() {
-
-        int selectedIndex = ML_myMovieList.getSelectionModel().getSelectedIndex();
-
-        if (selectedIndex == -1) {
-            System.out.println("No Selected Item");
-            return; // exit the method
-        }
-
-        int i = 0;
-        for (MovieToPortfolio m : portfolio.getSavedMovieList()) {
-
-            if (i == selectedIndex) {
-
-                portfolio.updateMoviePortfolio(m, "RemoveFromSavedMovies");
-                return; // Once found exit the loop otherwise thread is Concurrently modifying the list
-            }
-
-            i++;
-        }
-    }
-
     // Responsible for removing a movie/book from the "My Future Movie/Book List" by removing the movie/book
     // from the database using its unique id then also calls the updateFutureList() method to update the
     // movies/books list seen by the user
@@ -760,6 +760,7 @@ public class BookmarkController {
         sort.alphaSort(ML_myMovieList, MLmovieList);
     }
 
+    // Responsible for calling sorting methods regarding the recommendation page
     @FXML
     private void recoSort(){
 
@@ -773,6 +774,7 @@ public class BookmarkController {
 
     }
 
+    // Responsible for handling user account creation
     @FXML
     private void createAccount() throws IOException {
 
@@ -839,12 +841,14 @@ public class BookmarkController {
         });
     }
 
+    // Responsible for clearing everything after a user logs out
     @FXML
     private void clearPane() {
 
         database.sendToDatabase(validUserId);
         portfolio.clearMoviePortfolio();
         portfolio.clearBookPortfolio();
+        sortReco.setValue("Sort by: ");
         searchBy.setValue("Search by");
         myListView.getItems().clear();
         searchType.setValue("Type");
