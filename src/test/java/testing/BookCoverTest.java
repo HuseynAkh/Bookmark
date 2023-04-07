@@ -23,4 +23,5 @@ public class BookCoverTest {
 
         Assertions.assertEquals(expectedJPGUrl,actualJPGUrl);
     }
+
 }

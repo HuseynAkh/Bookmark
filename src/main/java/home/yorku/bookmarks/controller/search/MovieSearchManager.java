@@ -98,6 +98,10 @@ public class MovieSearchManager {
             //get movie overview
             String overview = (String) movie.get("overview");
             //get movie release date
+
+            if(overview == null || overview.equals("")){
+                overview = null; // IF THIS DOES NOT WORK: replace this line with > overview = ""
+            }
             String releaseDate = (String) movie.get("release_date");
             Long id = (Long) movie.get("id");
 
