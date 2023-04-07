@@ -42,39 +42,39 @@ import java.util.stream.Collectors;
 
 public class BookmarkController {
     @FXML
-    private AnchorPane anchorPane;
+    protected AnchorPane anchorPane;
     @FXML
     protected TabPane tabPane;
     @FXML
-    private VBox LoginBox;
+    protected VBox LoginBox;
     @FXML
-    private VBox RecoBox;
+    protected VBox RecoBox;
     @FXML
-    private Tab FavouriteBookTab;
+    protected Tab FavouriteBookTab;
     @FXML
-    private Tab FavouriteMovieTab;
+    protected Tab FavouriteMovieTab;
     @FXML
-    private Button removeBookFavBtn;
+    protected Button removeBookFavBtn;
     @FXML
-    private Button removeBook;
+    protected Button removeBook;
     @FXML
-    private Button addBookToFav;
+    protected Button addBookToFav;
     @FXML
-    private Button bookSort;
+    protected Button bookSort;
     @FXML
-    private Button removeMovieFavBtn;
+    protected Button removeMovieFavBtn;
     @FXML
-    private Button removeMovie;
+    protected Button removeMovie;
     @FXML
-    private Button addMovieToFav;
+    protected Button addMovieToFav;
     @FXML
-    private Button movieSort;
+    protected Button movieSort;
     @FXML
-    private ChoiceBox<String> searchType;
+    protected ChoiceBox<String> searchType;
     @FXML
-    private ChoiceBox<String> searchBy;
+    protected ChoiceBox<String> searchBy;
     @FXML
-    private ChoiceBox<String> sortReco;
+    protected ChoiceBox<String> sortReco;
     @FXML
     private TextField searchText;
     @FXML
@@ -100,29 +100,29 @@ public class BookmarkController {
     @FXML
     private ListView<String> myListView;
     @FXML
-    private ListView<String> myBookList;
-    private final ObservableList<String> bookList = FXCollections.observableArrayList();
+    protected ListView<String> myBookList;
+    protected final ObservableList<String> bookList = FXCollections.observableArrayList();
     @FXML
-    private ListView<String> myMovieList;
-    private final ObservableList<String> movieList = FXCollections.observableArrayList();
+    protected ListView<String> myMovieList;
+    protected final ObservableList<String> movieList = FXCollections.observableArrayList();
     @FXML
-    private ListView<String> ML_myBookList;
-    private final ObservableList<String> MLbookList = FXCollections.observableArrayList();
+    protected ListView<String> ML_myBookList;
+    protected final ObservableList<String> MLbookList = FXCollections.observableArrayList();
     @FXML
-    private ListView<String> favourite_books;
-    private final ObservableList<String> MLfavBooks = FXCollections.observableArrayList();
+    protected ListView<String> favourite_books;
+    protected final ObservableList<String> MLfavBooks = FXCollections.observableArrayList();
     @FXML
-    private ListView<String> ML_myMovieList;
-    private final ObservableList<String> MLmovieList = FXCollections.observableArrayList();
+    protected ListView<String> ML_myMovieList;
+    protected final ObservableList<String> MLmovieList = FXCollections.observableArrayList();
     @FXML
-    private ListView<String> favourite_movies;
-    private final ObservableList<String> MLfavMovies = FXCollections.observableArrayList();
+    protected ListView<String> favourite_movies;
+    protected final ObservableList<String> MLfavMovies = FXCollections.observableArrayList();
     @FXML
-    private ListView<String> upNextList;
-    private ObservableList<String> futureList = FXCollections.observableArrayList();
+    protected ListView<String> upNextList;
+    protected ObservableList<String> futureList = FXCollections.observableArrayList();
     @FXML
-    private ListView<String> recommendation;
-    private ObservableList<String> recos = FXCollections.observableArrayList();
+    protected ListView<String> recommendation;
+    protected ObservableList<String> recos = FXCollections.observableArrayList();
     protected Stage stage;
     protected String validUserId = "";
     private String searchString = "";
@@ -130,24 +130,26 @@ public class BookmarkController {
     private String upNext = "";
     private Set<Book> BookSet;
     private Set<Movie> MovieSet;
-    private double sceneHeight;
-    private double sceneWidth;
+    protected double sceneHeight;
+    protected double sceneWidth;
     protected boolean logout = false;
     protected List<Tab> removedTabs = new ArrayList<>();
-    private final ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
+    protected final ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
             "Title", "Actor"
     );
-    private final ObservableList<String> booksSearchOptions = FXCollections.observableArrayList(
+    protected final ObservableList<String> booksSearchOptions = FXCollections.observableArrayList(
             "Title", "Genre", "Author"
     );
     private DecsriptionController description;
     private PortfolioController portfolio;
     private DatabaseController database;
+    private InitController initialize;
     private LoginController login;
 
     public BookmarkController() {
         description = new DecsriptionController(this);
         portfolio = new PortfolioController(this);
+        initialize = new InitController(this);
         login = new LoginController(this);
         database = new DatabaseController(this, portfolio);
     }
@@ -157,108 +159,11 @@ public class BookmarkController {
     // run time
     @FXML
     private void initialize() {
-
-        myBookList.setItems(bookList);
-        recommendation.setItems(recos);
-        upNextList.setItems(futureList);
-        myMovieList.setItems(movieList);
-        ML_myBookList.setItems(MLbookList);
-        ML_myMovieList.setItems(MLmovieList);
-        favourite_books.setItems(MLfavBooks);
-        favourite_movies.setItems(MLfavMovies);
-
-        Scene scene = anchorPane.getScene();
-        if (scene != null) {
-            sceneHeight = scene.getHeight();
-            sceneWidth = scene.getWidth();
-        }
-
-        // All dynamic login box layouts
-        anchorPane.sceneProperty().addListener((observable, oldScene, newScene) -> {
-
-            if (newScene != null) {
-                newScene.heightProperty().addListener((obs, oldHeight, newHeight) -> {
-                    sceneHeight = newHeight.doubleValue();
-                    LoginBox.setLayoutY((sceneHeight / 2) - (20 + LoginBox.getHeight() / 2)); // 20 for padding between boxes
-                    RecoBox.setLayoutY((sceneHeight / 2) - (20 + RecoBox.getHeight() / 2));
-
-                });
-
-                newScene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-                    sceneWidth = newWidth.doubleValue();
-                    LoginBox.setLayoutX((sceneWidth / 2) - (LoginBox.getWidth() / 2));
-                    RecoBox.setLayoutX((sceneWidth / 2) - (RecoBox.getWidth() / 2));
-
-                });
-            }
-
-        });
-
-        FavouriteBookTab.setOnSelectionChanged(event -> {
-            if (FavouriteBookTab.isSelected()) {
-                removeBookFavBtn.setVisible(true);
-                removeBook.setVisible(false);
-                addBookToFav.setVisible(false);
-                bookSort.setVisible(false);
-
-            } else {
-                removeBookFavBtn.setVisible(false);
-                removeBook.setVisible(true);
-                addBookToFav.setVisible(true);
-                bookSort.setVisible(true);
-            }
-        });
-
-        FavouriteMovieTab.setOnSelectionChanged(event -> {
-            if (FavouriteMovieTab.isSelected()) {
-                removeMovieFavBtn.setVisible(true);
-                removeMovie.setVisible(false);
-                addMovieToFav.setVisible(false);
-                movieSort.setVisible(false);
-
-            } else {
-                removeMovieFavBtn.setVisible(false);
-                removeMovie.setVisible(true);
-                addMovieToFav.setVisible(true);
-                movieSort.setVisible(true);
-            }
-        });
-
-        // Initialize locked Panes
-        setPane();
-
-        // Initialize search options for Books and Movies
-        searchType.setOnAction(event -> {
-
-            if (searchType.getValue().equals("Movies")) {
-                searchBy.setItems(moviesSearchOptions);
-                searchBy.setValue("Search by");
-            } else if (searchType.getValue().equals("Books")) {
-                searchBy.setItems(booksSearchOptions);
-                searchBy.setValue("Search by");
-            }
-
-        });
-
+        initialize.initialize();
     }
 
     // function to disable tabPanes on login/logout
-    private void setPane() {
-        for (Tab tab : tabPane.getTabs()) {
 
-            if (!tab.getId().equals("LoginPane")) {
-                tab.setDisable(true);
-            }
-
-        }
-
-        Tab logoutTab = tabPane.getTabs().stream()
-                .filter(tab -> tab.getId().equals("LogoutPane"))
-                .findFirst()
-                .orElse(null);
-        removedTabs.add(logoutTab);
-        tabPane.getTabs().remove(logoutTab);
-    }
 
     // Used to clear the observable Book and Movie set returned from the search
     // Is used when the user starts a new search
@@ -914,9 +819,6 @@ public class BookmarkController {
         }
 
     }
-    protected void onLogin(){
-
-    }
 
     // Responsible for locking, unlocking and displaying tabs when the user logs out
     public void logout() {
@@ -931,7 +833,7 @@ public class BookmarkController {
         tabPane.getTabs().add(0, removedTabs.get(0));
         removedTabs.clear();
 
-        setPane();
+        initialize.setPane();
         LoginError.setText("");
     }
 
