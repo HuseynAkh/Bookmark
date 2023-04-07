@@ -10,7 +10,7 @@ import javafx.stage.WindowEvent;
 public class LoginController {
 
     private BookmarkController bookmark;
-    public LoginController(BookmarkController bookmark){
+    protected LoginController(BookmarkController bookmark){
         this.bookmark = bookmark;
     }
     protected boolean userLogin(String username, String password){

@@ -13,11 +13,11 @@ import java.util.Set;
 
 public class DecsriptionController {
     private BookmarkController bookmark;
-    public DecsriptionController(BookmarkController bookmark){
+    protected DecsriptionController(BookmarkController bookmark){
         this.bookmark = bookmark;
     }
 
-    public void descriptionType(String type, int index, Set<Book> bookSet, Set<Movie> movieSet) throws IOException {
+    protected void descriptionType(String type, int index, Set<Book> bookSet, Set<Movie> movieSet) throws IOException {
 
         if (type.equals("Book")) {
             CoverUrlExtractor url = new CoverUrlExtractor();
