@@ -41,22 +41,34 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BookmarkController {
-    private final ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
-            "Title", "Actor"
-    );
-    private final ObservableList<String> booksSearchOptions = FXCollections.observableArrayList(
-            "Title", "Genre", "Author"
-    );
-    List<Tab> removedTabs = new ArrayList<>();
     @FXML
     private AnchorPane anchorPane;
     @FXML
-    private TabPane tabPane;
+    protected TabPane tabPane;
     @FXML
     private VBox LoginBox;
     @FXML
     private VBox RecoBox;
-    private Stage stage;
+    @FXML
+    private Tab FavouriteBookTab;
+    @FXML
+    private Tab FavouriteMovieTab;
+    @FXML
+    private Button removeBookFavBtn;
+    @FXML
+    private Button removeBook;
+    @FXML
+    private Button addBookToFav;
+    @FXML
+    private Button bookSort;
+    @FXML
+    private Button removeMovieFavBtn;
+    @FXML
+    private Button removeMovie;
+    @FXML
+    private Button addMovieToFav;
+    @FXML
+    private Button movieSort;
     @FXML
     private ChoiceBox<String> searchType;
     @FXML
@@ -64,17 +76,27 @@ public class BookmarkController {
     @FXML
     private ChoiceBox<String> sortReco;
     @FXML
-    private TextField usernameTxt;
-    @FXML
-    private PasswordField passwordTxt;
-    private String validUserId = "";
-    @FXML
     private TextField searchText;
+    @FXML
+    protected TextField usernameTxt;
+    @FXML
+    protected PasswordField passwordTxt;
     @FXML
     private Label ErrorChecking;
     @FXML
-    private Label LoginError;
-    private String searchString = "";
+    protected Label LoginError;
+    @FXML
+    protected Label titleLabel;
+    @FXML
+    protected Label idLabel;
+    @FXML
+    protected Label authorOrRelease;
+    @FXML
+    protected Label descLabel;
+    @FXML
+    protected Label desc;
+    @FXML
+    protected ImageView coverImageView;
     @FXML
     private ListView<String> myListView;
     @FXML
@@ -98,58 +120,35 @@ public class BookmarkController {
     @FXML
     private ListView<String> upNextList;
     private ObservableList<String> futureList = FXCollections.observableArrayList();
-
     @FXML
     private ListView<String> recommendation;
     private ObservableList<String> recos = FXCollections.observableArrayList();
-    @FXML
-    private ImageView coverImageView;
-    @FXML
-    private Label titleLabel;
-    @FXML
-    private Label idLabel;
-    @FXML
-    private Label authorOrRelease;
-    @FXML
-    private Label descLabel;
-    @FXML
-    private Label description;
-    private Set<Book> BookSet;
-    private Set<Movie> MovieSet;
-
-    private double sceneHeight;
-    private double sceneWidth;
-    private boolean logout = false;
+    protected Stage stage;
+    protected String validUserId = "";
+    private String searchString = "";
     private String myList = "";
     private String upNext = "";
-
-    @FXML
-    private Tab FavouriteBookTab;
-    @FXML
-    private Button removeBookFavBtn;
-    @FXML
-    private Button removeBook;
-    @FXML
-    private Button addBookToFav;
-    @FXML
-    private Button bookSort;
-
-    @FXML
-    private Tab FavouriteMovieTab;
-    @FXML
-    private Button removeMovieFavBtn;
-    @FXML
-    private Button removeMovie;
-    @FXML
-    private Button addMovieToFav;
-    @FXML
-    private Button movieSort;
-
+    private Set<Book> BookSet;
+    private Set<Movie> MovieSet;
+    private double sceneHeight;
+    private double sceneWidth;
+    protected boolean logout = false;
+    protected List<Tab> removedTabs = new ArrayList<>();
+    private final ObservableList<String> moviesSearchOptions = FXCollections.observableArrayList(
+            "Title", "Actor"
+    );
+    private final ObservableList<String> booksSearchOptions = FXCollections.observableArrayList(
+            "Title", "Genre", "Author"
+    );
+    private DecsriptionController description;
     private PortfolioController portfolio;
     private DatabaseController database;
+    private LoginController login;
 
     public BookmarkController() {
+        description = new DecsriptionController(this);
         portfolio = new PortfolioController(this);
+        login = new LoginController(this);
         database = new DatabaseController(this, portfolio);
     }
 
@@ -158,10 +157,7 @@ public class BookmarkController {
     // run time
     @FXML
     private void initialize() {
-        // Initialize portfolios
-        // bookPortfolio = new BookPortfolio();
-       // moviePortfolio = new MoviePortfolio();
-        // Initialize the list when null
+
         myBookList.setItems(bookList);
         recommendation.setItems(recos);
         upNextList.setItems(futureList);
@@ -283,7 +279,7 @@ public class BookmarkController {
     private void onSearchButtonClick(ActionEvent event) {
 
         clearSet();
-        clearDescription();
+        description.clear();
         searchString = searchText.getText();
         ErrorChecking.setTextFill(Color.WHITE);
 
@@ -506,83 +502,34 @@ public class BookmarkController {
     private void callDescription() throws IOException {
 
         final int selectedIndex = myListView.getSelectionModel().getSelectedIndex();
-
-        clearDescription();
-
-        if (getType(selectedIndex).equals("Movie")) {
-
-            int i = 0;
-            for (Movie m : MovieSet) {
-                if (i == selectedIndex) {
-                    descLabel.setText("Description: ");
-                    descLabel.setPadding(new Insets(1, 1, 5, 5));
-                    setDescription(m.getTitle(), m.getIdentifier(), "Release date: ", m.getReleaseDate());
-                    description.setText(m.getOverview());
-                    description.setPadding(new Insets(5, 5, 5, 5));
-                }
-                i++;
-            }
-        }
-
-        if (getType(selectedIndex).equals("Book")) {
-            CoverUrlExtractor url = new CoverUrlExtractor();
-
-            int i = 0;
-            for (Book b : BookSet) {
-                if (i == selectedIndex) {
-                    url.getBookCover(b.getIsbn());
-                    setDescription(b.getTitle(), b.getIdentifier(), "Author(s): ", b.getAuthor().toString());
-
-                    if (url.getBookCover(b.getIsbn())) {
-                        InputStream stream = Files.newInputStream(Paths.get("./temporary.jpg"));
-                        Image coverImage = new Image(stream);
-                        coverImageView.setImage(coverImage);
-                        coverImageView.setFitWidth(100);
-                        coverImageView.setFitHeight(200);
-                    } else {
-                        InputStream stream = Files.newInputStream(Paths.get("images/book-placeholder.jpg"));
-                        Image coverImage = new Image(stream);
-                        coverImageView.setImage(coverImage);
-                        coverImageView.setFitWidth(100);
-                        coverImageView.setFitHeight(200);
-
-                    }
-                }
-                i++;
-            }
-        }
-
-        System.out.println("clicked on " + myListView.getSelectionModel().getSelectedItem());
-    }
-
-    // Responsible for setting, updating and formatting text labels and descriptions for movies and books
-    private void setDescription(String title, String identifier, String dynamicLabel, String dynamicText) {
-
-        titleLabel.setText("Title: " + title);
-        titleLabel.setPadding(new Insets(1, 1, 5, 5));
-        idLabel.setText("Type: " + identifier);
-        idLabel.setPadding(new Insets(1, 1, 5, 5));
-
-        if (identifier.equals("Book")) {
-            String author = dynamicText.substring(1, dynamicText.length() - 1);
-            authorOrRelease.setText(dynamicLabel + author);
-        } else {
-            authorOrRelease.setText(dynamicLabel + ": " + dynamicText);
-        }
-        authorOrRelease.setPadding(new Insets(1, 1, 5, 5));
+        String type = getType(selectedIndex);
+        description.clear();
+        description.descriptionType(type, selectedIndex, BookSet, MovieSet);
 
     }
 
-    private void clearDescription() {
+    public void callRecommendation() { // from books
 
-        titleLabel.setText("");
-        idLabel.setText("");
-        authorOrRelease.setText("");
-        descLabel.setText("");
-        description.setText("");
-        coverImageView.setImage(null);
+        recommendation.getItems().clear();
 
+        recommendation reco = new recommendation();
+        Set<Book> recommendedBooks = reco.getBookRecommendation(portfolio.getSavedBookList()); // or getFavouriteBooks()
+        Set<Movie> recommendedMovies = reco.getMovieRecommendation(portfolio.getSavedMovieList());
+
+        for(Book b : recommendedBooks) {
+            String bookInfo = b.getTitle() + " by " + b.getAuthor() + " || Type: " + b.getIdentifier();
+            recos.add(bookInfo);
+        }
+
+        for(Movie m : recommendedMovies) {
+            String movieInfo = m.getTitle() + " released: " + m.getReleaseDate() + " || Type: " + m.getIdentifier();
+            recos.add(movieInfo);
+        }
+
+        recommendation.setItems(recos);
     }
+
+
 
     // Used to connect to the database and update the listViews for "my future list" in the "MyList" tab
     // it updates the list whenever a user adds/deletes movie/book to/from the list
@@ -594,7 +541,7 @@ public class BookmarkController {
     }
 
     @FXML
-    public void displayBooks() {
+    protected void displayBooks() {
 
         bookList.clear();
         MLbookList.clear();
@@ -621,7 +568,7 @@ public class BookmarkController {
     }
 
     @FXML
-    public void displayMovies() {
+    protected void displayMovies() {
 
         movieList.clear();
         MLmovieList.clear();
@@ -905,7 +852,6 @@ public class BookmarkController {
         alphaSort(ML_myBookList, MLbookList);
     }
 
-
     // Responsible for sorting the visible Movie list alphabetically as well as the movie portfolio
     // so that the references to unique Ids remain intact
     @FXML
@@ -927,75 +873,13 @@ public class BookmarkController {
         list.getItems().addAll(arrayList);
     }
 
-    private void onLogin() {
+    @FXML
+    private void recoSort(){
 
-        database.onLogin(validUserId);
-
-    }
-
-    public void setLoginPane(){
-
-        tabPane.getTabs().addAll(removedTabs);
-        removedTabs.clear();
-
-        for (Tab tab : tabPane.getTabs()) {
-            tab.setDisable(false);
+        if(sortReco.getValue().equals("Alphabetical")){
+            alphaSort(recommendation, recos);
         }
 
-        // Enable and show the login tab
-        Tab loginTab = tabPane.getTabs().stream()
-                .filter(tab -> tab.getId().equals("LoginPane"))
-                .findFirst()
-                .orElse(null);
-        removedTabs.add(loginTab);
-        tabPane.getTabs().remove(loginTab);
-    }
-
-    // Responsible for displaying, locking and unlocking tabs at login as well as updating all users list
-    // on login
-    public void login() {
-
-        ConnectionMethods method = new ConnectionMethods();
-        String username = usernameTxt.getText();
-        String password = passwordTxt.getText();
-
-        if (!username.equals("") && !password.equals("")) {
-
-            int verify = method.checkCrd(username, password);
-
-            if (verify == 1) {
-
-                validUserId = username;
-                logout = false;
-                stage = (Stage) tabPane.getScene().getWindow();
-                stage.setWidth(900);
-                stage.setHeight(680);
-                onLogin();
-                listen();
-
-                setLoginPane();
-
-            } else {
-                // Later feature add for get password or prompt user to creat account
-                LoginError.setTextFill(Color.RED);
-                LoginError.setText("Invalid user name or password");
-
-            }
-
-        } else if (usernameTxt.getText().isEmpty() && !passwordTxt.getText().isEmpty()) {
-
-            LoginError.setTextFill(Color.RED);
-            LoginError.setText("Please enter a username to Login");
-
-        } else if (!usernameTxt.getText().isEmpty() && passwordTxt.getText().isEmpty()) {
-
-            LoginError.setTextFill(Color.RED);
-            LoginError.setText("Please enter a password to Login");
-
-        } else {
-            LoginError.setTextFill(Color.RED);
-            LoginError.setText("Please enter a username & password to Login");
-        }
     }
 
     @FXML
@@ -1016,22 +900,21 @@ public class BookmarkController {
 
     }
 
-    @FXML
-    private void clearPane() {
+    // Responsible for displaying, locking and unlocking tabs at login as well as updating all users list
+    // on login
+    public void login() {
 
-        database.sendToDatabase(validUserId);
-        portfolio.clearMoviePortfolio();
-        portfolio.clearBookPortfolio();
-        searchBy.setValue("Search by");
-        myListView.getItems().clear();
-        searchType.setValue("Type");
-        ErrorChecking.setText("");
-        passwordTxt.clear();
-        usernameTxt.clear();
-        searchText.clear();
-        validUserId = "";
-        clearDescription();
-        clearSet();
+        String username = usernameTxt.getText();
+        String password = passwordTxt.getText();
+        boolean successful = login.userLogin(username, password);
+
+        if(successful){
+            database.onLogin(validUserId);
+            listen();
+        }
+
+    }
+    protected void onLogin(){
 
     }
 
@@ -1053,7 +936,7 @@ public class BookmarkController {
     }
 
     // Responsible for logging the user out if they click the close button instead of logout button
-    public void listen() {
+    protected void listen() {
 
         stage = (Stage) tabPane.getScene().getWindow();
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -1067,35 +950,24 @@ public class BookmarkController {
             }
         });
     }
-    public void callRecommendation() { //fro books
-
-        recommendation.getItems().clear();
-
-        recommendation reco = new recommendation();
-        Set<Book> recommendedBooks = reco.getBookRecommendation(portfolio.getSavedBookList()); // or getFavouriteBooks()
-        Set<Movie> recommendedMovies = reco.getMovieRecommendation(portfolio.getSavedMovieList());
-
-        for(Book b : recommendedBooks) {
-            String bookInfo = b.getTitle() + " by " + b.getAuthor() + " || Type: " + b.getIdentifier();
-            recos.add(bookInfo);
-        }
-
-        for(Movie m : recommendedMovies) {
-            String movieInfo = m.getTitle() + " released: " + m.getReleaseDate() + " || Type: " + m.getIdentifier();
-            recos.add(movieInfo);
-        }
-
-        recommendation.setItems(recos);
-    }
 
     @FXML
-    private void recoSort(){
+    private void clearPane() {
 
-        if(sortReco.getValue().equals("Alphabetical")){
-            alphaSort(recommendation, recos);
-        }
+        database.sendToDatabase(validUserId);
+        portfolio.clearMoviePortfolio();
+        portfolio.clearBookPortfolio();
+        searchBy.setValue("Search by");
+        myListView.getItems().clear();
+        searchType.setValue("Type");
+        ErrorChecking.setText("");
+        description.clear();
+        passwordTxt.clear();
+        usernameTxt.clear();
+        searchText.clear();
+        validUserId = "";
+        clearSet();
 
     }
-
 
 }

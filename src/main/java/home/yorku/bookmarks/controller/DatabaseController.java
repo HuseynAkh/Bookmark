@@ -17,7 +17,7 @@ public class DatabaseController {
 
     private Set<BookCheck> booksToCheck;
     private Set<MovieCheck> moviesToCheck;
-    public DatabaseController(BookmarkController bookmark, PortfolioController portfolio){
+    protected DatabaseController(BookmarkController bookmark, PortfolioController portfolio){
 
         this.bookmark = bookmark;
         this.portfolio = portfolio;
@@ -28,7 +28,7 @@ public class DatabaseController {
     // it also updates the book portfolio whenever a user adds/deletes or moves a book to/from the favourite's tab
     // Used to connect to the database and update the listViews for "my movie list" in the "MyList" tab
     // it also updates the movie portfolio whenever a user adds/deletes or moves a movie to/from the favourite's tab
-    public void onLogin(String user){
+    protected void onLogin(String user){
 
         ConnectionMethods method = new ConnectionMethods();
         method.userLogin(user, "Login");
@@ -126,7 +126,7 @@ public class DatabaseController {
 
     }
 
-    public void sendToDatabase(String user) {
+    protected void sendToDatabase(String user) {
 
         ConnectionMethods method = new ConnectionMethods();
         method.userLogin(user, "Logout");

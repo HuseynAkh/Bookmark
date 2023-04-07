@@ -71,7 +71,7 @@
                         </VBox>
                     </HBox>
                     <Label fx:id="descLabel"/>
-                    <Label fx:id="description" wrapText="true"/>
+                    <Label fx:id="desc" wrapText="true"/>
                 </VBox>
             </ScrollPane>
 

@@ -15,10 +15,10 @@ public class PortfolioController {
     private ArrayList<BookToPortfolio> removeBooks = new ArrayList<BookToPortfolio>();
     private ArrayList<MovieToPortfolio> removeMovies = new ArrayList<MovieToPortfolio>();
 
-    public PortfolioController(BookmarkController bookmark){
+    protected PortfolioController(BookmarkController bookmark){
         this.bookmark = bookmark;
     }
-    public void updateBookPortfolio(BookToPortfolio book, String update) {
+    protected void updateBookPortfolio(BookToPortfolio book, String update) {
 
         switch (update) {
             case "AddToSavedBooks": {
@@ -62,7 +62,7 @@ public class PortfolioController {
 
     }
 
-    public void updateMoviePortfolio(MovieToPortfolio movie, String update) {
+    protected void updateMoviePortfolio(MovieToPortfolio movie, String update) {
 
         switch (update) {
             case "AddToSavedMovies": {
@@ -105,7 +105,7 @@ public class PortfolioController {
         }
     }
 
-    public void bookSort(){
+    protected void bookSort(){
 
         this.bookPortfolio.getSavedBooks().sort(new Comparator<BookToPortfolio>() {
             @Override
@@ -116,7 +116,7 @@ public class PortfolioController {
 
     }
 
-    public void movieSort(){
+    protected void movieSort(){
 
         this.moviePortfolio.getSavedMovies().sort(new Comparator<MovieToPortfolio>() {
             @Override
@@ -128,44 +128,44 @@ public class PortfolioController {
     }
 
     // Methods for BookmarkController Access
-    public ArrayList<BookToPortfolio> getSavedBookList(){
+    protected ArrayList<BookToPortfolio> getSavedBookList(){
         return this.bookPortfolio.getSavedBooks();
     }
-    public ArrayList<BookToPortfolio> getFavouriteBookList(){
+    protected ArrayList<BookToPortfolio> getFavouriteBookList(){
         return this.bookPortfolio.getFavouriteBooks();
     }
-    public ArrayList<MovieToPortfolio> getSavedMovieList(){
+    protected ArrayList<MovieToPortfolio> getSavedMovieList(){
         return this.moviePortfolio.getSavedMovies();
     }
-    public ArrayList<MovieToPortfolio> getFavouriteMovieList(){
+    protected ArrayList<MovieToPortfolio> getFavouriteMovieList(){
         return this.moviePortfolio.getFavouriteMovies();
     }
 
     // Methods for DataBaseController Access
-    public void clearBookPortfolio(){
+    protected void clearBookPortfolio(){
         this.bookPortfolio.getSavedBooks().clear();
         this.bookPortfolio.getFavouriteBooks().clear();
     }
-    public void clearMoviePortfolio(){
+    protected void clearMoviePortfolio(){
         this.moviePortfolio.getSavedMovies().clear();
         this.moviePortfolio.getFavouriteMovies().clear();
     }
-    public void addToSavedBookList(BookToPortfolio book){
+    protected void addToSavedBookList(BookToPortfolio book){
         this.bookPortfolio.AddToSavedBooks(book);
     }
-    public void addToFavBookList(BookToPortfolio book){
+    protected void addToFavBookList(BookToPortfolio book){
         this.bookPortfolio.AddToFavourites(book);
     }
-    public void addToSavedMovieList(MovieToPortfolio movie){
+    protected void addToSavedMovieList(MovieToPortfolio movie){
         this.moviePortfolio.AddToSavedMovies(movie);
     }
-    public void addToFavMovieList(MovieToPortfolio movie){
+    protected void addToFavMovieList(MovieToPortfolio movie){
         this.moviePortfolio.AddToFavourites(movie);
     }
-    public ArrayList<BookToPortfolio> getRemovedBooks(){
+    protected ArrayList<BookToPortfolio> getRemovedBooks(){
         return this.removeBooks;
     }
-    public ArrayList<MovieToPortfolio> getRemovedMovies(){
+    protected ArrayList<MovieToPortfolio> getRemovedMovies(){
         return this.removeMovies;
     }
 }

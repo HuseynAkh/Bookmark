@@ -67,6 +67,8 @@ public class ConnectionMethods {
                 verified = rs.getInt("user_verified");
             }
 
+            connection.closeConnection();
+
         } catch (SQLException e) {
             System.out.println("Error check user verification: " + e.getMessage());
         }
